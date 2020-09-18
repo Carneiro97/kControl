@@ -5,23 +5,47 @@ import './styles.scss';
 function Login() {
   return (
     <>
-      <div className="wrapper fadeInDown">
-        <div id="formContent">
+      <link
+        href="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+        rel="stylesheet"
+        id="bootstrap-css"
+      />
+      <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" />
+      <script src="//code.jquery.com/jquery-1.11.1.min.js" />
 
-          <div className="fadeIn first">
-            <img src="http://danielzawadzki.com/codepen/01/icon.svg" id="icon" alt="User Icon" />
+      <div className="sidenav">
+        <div className="login-main-text">
+          <h2>
+            Empréstimo de kits escolares
+          </h2>
+          <p>Faça seu login aqui.</p>
+        </div>
+      </div>
+      <div className="main">
+        <div className="col-md-6 col-sm-12">
+          <div className="login-form">
+            <form>
+              <div className="form-group">
+                <label>Usuário</label>
+                <input
+                  type="text"
+                  className="form-control"
+                  placeholder="Digite seu usuário"
+                />
+              </div>
+              <div className="form-group">
+                <label>Senha</label>
+                <input
+                  type="password"
+                  className="form-control"
+                  placeholder="Digite sua senha"
+                />
+              </div>
+              <button type="submit" className="btn btn-black">
+                Login
+              </button>
+            </form>
           </div>
-
-          <form>
-            <input type="text" id="login" className="fadeIn second" name="login" placeholder="login" />
-            <input type="text" id="password" className="fadeIn third" name="login" placeholder="password" />
-            <input type="submit" className="fadeIn fourth" value="Log In" />
-          </form>
-
-          <div id="formFooter">
-            <a className="underlineHover" href="#">Forgot Password?</a>
-          </div>
-
         </div>
       </div>
     </>
