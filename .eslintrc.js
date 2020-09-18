@@ -1,35 +1,23 @@
 module.exports = {
   env: {
-      browser: true,
-      es2020: true,
+    browser: true,
+    es6: true,
+    node: true,
   },
-  extends: [
-      'plugin:react/recommended',
-      'airbnb',
-      'prettier',
-      'prettier/react',
-  ],
-  parser: 'babel-eslint',
+  extends: ['prettier', 'plugin:react/recommended', 'airbnb'],
+  globals: {
+    Atomics: 'readonly',
+    SharedArrayBuffer: 'readonly',
+  },
   parserOptions: {
-      ecmaFeatures: {
-          jsx: true,
-      },
-      ecmaVersion: 11,
-      sourceType: 'module',
+    ecmaFeatures: {
+      jsx: true,
+    },
+    ecmaVersion: 2018,
+    sourceType: 'module',
   },
-  plugins: ['react', 'prettier', 'react-hooks'],
+  plugins: ['react', 'prettier'],
   rules: {
-      'prettier/prettier': 'error',
-      'react/jsx-filename-extension': [
-          'warn',
-          { extensions: ['.jsx', '.js'] },
-      ],
-      'import/prefer-default-export': 'off',
-      'no-console': ['error', { allow: ['tron'] }],
-      'react-hooks/rules-of-hooks': 'error',
-      'react-hooks/exhaustive-deps': 'warn',
-      'react/jsx-props-no-spreading': 0,
-      'no-param-reassign': ['error', { props: true, ignorePropertyModificationsFor: ['draft', 'config'] }],
-      "react/prop-types": 0
-  }
+    "prettier/prettier": "error",
+  },
 };
