@@ -1,7 +1,7 @@
 import React from 'react';
 import history from '../../services/history'
 
-import './styles.scss';
+import {Container} from './styles';
 
 function Login() {
 
@@ -9,7 +9,7 @@ function Login() {
     history.push('/');
   }
   return (
-    <>
+    <Container>
       <link
         href="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
         rel="stylesheet"
@@ -23,7 +23,6 @@ function Login() {
           <h2>
             Empréstimo de kits escolares
           </h2>
-          <p>Faça seu login aqui.</p>
         </div>
       </div>
       <div className="main">
@@ -53,7 +52,7 @@ function Login() {
           </div>
         </div>
       </div>
-    </>
+    </Container>
   );
 }
 
