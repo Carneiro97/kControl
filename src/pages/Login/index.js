@@ -1,8 +1,13 @@
 import React from 'react';
+import history from '../../services/history'
 
 import './styles.scss';
 
 function Login() {
+
+  function handleSubmit(){
+    history.push('/');
+  }
   return (
     <>
       <link
@@ -24,7 +29,7 @@ function Login() {
       <div className="main">
         <div className="col-md-6 col-sm-12">
           <div className="login-form">
-            <form>
+            <form onSubmit={handleSubmit}>
               <div className="form-group">
                 <label>Usuário</label>
                 <input
