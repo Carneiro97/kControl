@@ -1,13 +1,28 @@
 import React from 'react';
 import history from '../../services/history'
+import axios from 'axios';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 import {Container} from './styles';
 
 function Login() {
 
-  function handleSubmit(){
-    history.push('/');
+  function handleSubmit(e){
+    e.preventDefault();
+    const res = axios.post('http://localhost:3030/usuarios/login/codigo', {
+      codigo: 0,
+      senha: '1',
+    })
+    .then(function (response) {
+      toast.success("Login efetuado com sucesso.");      
+    })
+    .catch(function(error) {
+      console.log(error);
+      toast.error("Usuário ou senha inválido.");
+    });
   }
+
   return (
     <Container>
       <link
@@ -52,6 +67,7 @@ function Login() {
           </div>
         </div>
       </div>
+      <ToastContainer autoClose={3000} hideProgressBar={true} />
     </Container>
   );
 }
