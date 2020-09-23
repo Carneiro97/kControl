@@ -78,3 +78,7 @@ export const Container = styled.div`
         color: #fff;
     }
 `
+
+export const LoginContainer = styled.div`
+    display: flex;
+`;

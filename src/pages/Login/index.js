@@ -1,16 +1,20 @@
-import React from 'react';
+import React, {useState, useEffect} from 'react';
 import history from '../../services/history'
 import axios from 'axios';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import MySwitch from '../../components/Switch';
 
-import {Container} from './styles';
+import {Container, LoginContainer} from './styles';
 
 function Login() {
 
+  const [checked, setChecked] = useState(false);
+  var loginType = "codigo";
+
   function handleSubmit(e){
     e.preventDefault();
-    const res = axios.post('http://localhost:3030/usuarios/login/codigo', {
+    const res = axios.post('http://localhost:3030/usuarios/login/' + loginType, {
       codigo: 0,
       senha: '1',
     })
@@ -21,7 +25,15 @@ function Login() {
       console.log(error);
       toast.error("Usuário ou senha inválido.");
     });
-  }
+  };
+
+  const handleChecked = (event) => {
+    setChecked(event.target.checked);
+  };
+
+  useEffect(() => {
+    loginType = checked ? 'cpf' : 'codigo';
+}, [checked]);
 
   return (
     <Container>
@@ -49,7 +61,7 @@ function Login() {
                 <input
                   type="text"
                   className="form-control"
-                  placeholder="Digite seu usuário"
+                  placeholder={checked ? "Digite seu CPF" : "Digite seu código de usuário"}
                 />
               </div>
               <div className="form-group">
@@ -60,9 +72,12 @@ function Login() {
                   placeholder="Digite sua senha"
                 />
               </div>
-              <button type="submit" className="btn btn-black">
-                Login
-              </button>
+              <LoginContainer>
+                <button type="submit" className="btn btn-black">
+                  Login
+                </button>
+                <MySwitch checked={checked} onChange={handleChecked} marginLeft="30px" />
+              </LoginContainer>          
             </form>
           </div>
         </div>
