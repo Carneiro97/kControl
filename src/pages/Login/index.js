@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, { useEffect, useState } from 'react';
 import history from '../../services/history'
 import axios from 'axios';
 import { ToastContainer, toast } from 'react-toastify';
@@ -10,16 +10,19 @@ import {Container, LoginContainer} from './styles';
 function Login() {
 
   const [checked, setChecked] = useState(false);
-  var loginType = "codigo";
+  const [usuario, setUsuario] = useState(``);
+  const [senha, setSenha] = useState(``);
+  const [loginType, setLoginType] = useState(``);
+  const [loginParams, setLoginParams] = useState({
+    codigo: usuario, senha: senha
+  });
 
   function handleSubmit(e){
     e.preventDefault();
-    const res = axios.post('http://localhost:3030/usuarios/login/' + loginType, {
-      codigo: 0,
-      senha: '1',
-    })
+    const res = axios.post('http://localhost:3030/usuarios/login/' + loginType, loginParams)
     .then(function (response) {
-      toast.success("Login efetuado com sucesso.");      
+      toast.success("Login efetuado com sucesso.");  
+      console.log(response);    
     })
     .catch(function(error) {
       console.log(error);
@@ -27,13 +30,27 @@ function Login() {
     });
   };
 
+  function handleUsuario(e){
+    setUsuario(e.target.value);
+    setLoginParams(loginType === 'codigo' ? {codigo: e.target.value, senha: senha} : {cpf: e.target.value, senha: senha})
+  }
+
+  function handleSenha(e){
+    setSenha(e.target.value);
+    setLoginParams(loginType === 'codigo' ? {codigo: usuario, senha: e.target.value} : {cpf: usuario, senha: e.target.value})
+  }
+
   const handleChecked = (event) => {
     setChecked(event.target.checked);
   };
 
   useEffect(() => {
-    loginType = checked ? 'cpf' : 'codigo';
-}, [checked]);
+    setLoginType(checked ? 'cpf' : 'codigo');
+  }, [checked]);
+
+  useEffect(() => {
+    setLoginParams(loginType === 'codigo' ? {codigo: usuario, senha: senha} : {cpf: usuario, senha: senha})
+  }, [loginType]);
 
   return (
     <Container>
@@ -62,6 +79,7 @@ function Login() {
                   type="text"
                   className="form-control"
                   placeholder={checked ? "Digite seu CPF" : "Digite seu código de usuário"}
+                  onChange={handleUsuario}
                 />
               </div>
               <div className="form-group">
@@ -70,6 +88,7 @@ function Login() {
                   type="password"
                   className="form-control"
                   placeholder="Digite sua senha"
+                  onChange={handleSenha}
                 />
               </div>
               <LoginContainer>
