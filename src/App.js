@@ -1,4 +1,6 @@
-import React, {useState} from 'react';
+import React, {useState, useContext } from 'react';
+import StoreProvider from './store/Provider';
+import RoutesPrivate from './routes/private/private';
 
 import Login from './pages/Login';
 import Nav from './pages/Nav';
@@ -8,19 +10,17 @@ import history from './services/history'
 import {BrowserRouter as Router, Switch, Route} from 'react-router-dom';
 
 function App(){
-
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-  
   return (
-    <Router>
-      <div className="App">
-        <Switch>
-          <Route path="/nav" component={Nav} />
-          <Route path="/login" component={Login} />
-          <Route path="/" exact component={Home} />
-        </Switch>
-      </div>
-      {!isLoggedIn ? history.push('/login') : null}
+    <Router history={history}>
+      <StoreProvider>
+        <div className="App">
+          <Switch>
+            <Route path="/login" component={Login} />
+            <RoutesPrivate path="/nav" component={Nav} />
+            <RoutesPrivate path="/" exact component={Home} />
+          </Switch>
+        </div> 
+      </StoreProvider>
   </Router>
   );
 }

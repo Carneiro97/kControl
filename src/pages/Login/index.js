@@ -1,14 +1,16 @@
-import React, { useEffect, useState } from 'react';
-import history from '../../services/history'
+import React, { useEffect, useState, useContext } from 'react';
+import { useHistory } from 'react-router-dom';
 import axios from 'axios';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import MySwitch from '../../components/Switch';
+import StoreContext from '../../store/Context';
 
 import {Container, LoginContainer} from './styles';
 
 function Login() {
-
+  const history = useHistory();
+  const { setIsLogged, isLogged } = useContext(StoreContext);
   const [checked, setChecked] = useState(false);
   const [usuario, setUsuario] = useState(``);
   const [senha, setSenha] = useState(``);
@@ -18,15 +20,20 @@ function Login() {
   });
 
   function handleSubmit(e){
+    console.log(isLogged);
     e.preventDefault();
     const res = axios.post('http://localhost:3030/usuarios/login/' + loginType, loginParams)
     .then(function (response) {
       toast.success("Login efetuado com sucesso.");  
-      console.log(response);    
+      setIsLogged(true);
+      setTimeout(function() {
+        history.push('/');
+      }, 1500);
     })
     .catch(function(error) {
       console.log(error);
       toast.error("Usuário ou senha inválido.");
+      setIsLogged(false);
     });
   };
 

@@ -9,7 +9,7 @@ export const routes = [
         isPrivate: false
     },
     {
-        id: 1,
+        id: 2,
         url: '/home',
         component: Home,
         isPrivate: true
