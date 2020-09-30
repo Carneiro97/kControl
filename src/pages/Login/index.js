@@ -10,7 +10,7 @@ import {Container, LoginContainer} from './styles';
 
 function Login() {
   const history = useHistory();
-  const { setIsLogged, isLogged } = useContext(StoreContext);
+  const { setIsLogged, isLogged, setNomeUsuario } = useContext(StoreContext);
   const [checked, setChecked] = useState(false);
   const [usuario, setUsuario] = useState(``);
   const [senha, setSenha] = useState(``);
@@ -20,20 +20,21 @@ function Login() {
   });
 
   function handleSubmit(e){
-    console.log(isLogged);
     e.preventDefault();
     const res = axios.post('http://localhost:3030/usuarios/login/' + loginType, loginParams)
     .then(function (response) {
       toast.success("Login efetuado com sucesso.");  
       setIsLogged(true);
+      setNomeUsuario(response.data.usuario);
       setTimeout(function() {
-        history.push('/');
+        history.push('/home');
       }, 1500);
     })
     .catch(function(error) {
       console.log(error);
       toast.error("Usuário ou senha inválido.");
       setIsLogged(false);
+      setNomeUsuario('');
     });
   };
 
@@ -72,7 +73,7 @@ function Login() {
       <div className="sidenav">
         <div className="login-main-text">
           <h2>
-            Empréstimo de kits escolares
+            Retirada de kits escolares
           </h2>
         </div>
       </div>
