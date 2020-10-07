@@ -19,6 +19,10 @@ function Login() {
     codigo: usuario, senha: senha
   });
 
+  if (isLogged) {
+    history.push('/home')
+  }
+
   function handleSubmit(e){
     e.preventDefault();
     const res = axios.post('http://localhost:3030/usuarios/login/' + loginType, loginParams)

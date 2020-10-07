@@ -7,7 +7,12 @@ import StoreContext from '../../store/Context';
 
 function Navbar() {
 
-  const {nomeUsuario } = useContext(StoreContext);
+  const { removeIsLogged, nomeUsuario, removeNomeUsuario } = useContext(StoreContext);
+
+  function handleLogout(){
+    removeIsLogged();
+    removeNomeUsuario();
+  }
 
   return (
     <NavContainer className="navbar navbar-expand-lg navbar-light">
@@ -22,7 +27,7 @@ function Navbar() {
           {nomeUsuario}
         </UserText>
       </UserContainer>
-      <LogoutContainer>
+      <LogoutContainer onClick={handleLogout}>
         <LogoutText href="#">Log out</LogoutText>
         <FiLogOut />
       </LogoutContainer>
