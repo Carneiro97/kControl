@@ -4,17 +4,19 @@ import styled from 'styled-components';
 import theme from '../../styles/theme'
 
 export const Container = styled.div`
-        /* font-family: "Lato", sans-serif;
-        height: 100%;
-        background: #FFF; */
 `;
 export const HeaderContainer = styled.div`
-    /* background-color: ${theme.mainColor};
-    height: 100% */
+    text-align: -webkit-center;
 `;
 export const BodyContainer = styled.div`
-
+    background-color: blue;
 `;
-export const FooterContainer = styled.div`
-    /* background-color: ${theme.mainColor} */
+export const SideContainer = styled.div`
+    background-color: red;
+`;
+export const SideHeader = styled.div`
+    background-color: orange;
+`;
+export const SideBody = styled.div`
+    background-color: purple;
 `;

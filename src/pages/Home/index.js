@@ -1,16 +1,25 @@
 import React from 'react';
-import { useHistory } from 'react-router-dom';
-import 'react-toastify/dist/ReactToastify.css';
-import Navbar from '../../components/Navbar'
+import Navbar from '../../components/Navbar';
+import InputSearch from '../../components/InputSearch';
 
-import {Container, HeaderContainer, FooterContainer, BodyContainer } from './styles';
+import {Container, HeaderContainer, BodyContainer, SideContainer, SideHeader, SideBody } from './styles';
 
 function Home() {
-  const history = useHistory();
 
   return (
     <Container>
       <Navbar />
+      <HeaderContainer>
+        <InputSearch placeholder="Pesquisa de kits" margin="30px"/>
+      </HeaderContainer>
+      <BodyContainer>
+      </BodyContainer>
+      <SideContainer>
+        <SideHeader>
+        </SideHeader>
+        <SideBody>
+        </SideBody>
+      </SideContainer>
     </Container>
   );
 }
