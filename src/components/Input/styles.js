@@ -18,18 +18,11 @@ export const Container = styled.input`
     &:hover:enabled {
         border: 2px solid ${theme.secondColor};
     }
+
     &:focus{
         border: 2px solid ${theme.secondColor};
     }
 
-    ${({ isInvalid }) => {
-        isInvalid
-            ? css`
-                  background-color: ${lighten(0.46, theme.redLight)};
-                  border: 2px solid ${theme.redLight};
-              `
-            : css``;
-    }}
 
 ${({ margin }) =>
     margin

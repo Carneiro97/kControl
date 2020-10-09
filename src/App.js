@@ -9,7 +9,7 @@ import Home from './pages/Home';
 import history from './services/history';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
-import {BrowserRouter as Router, Switch, Route} from 'react-router-dom';
+import {BrowserRouter as Router, Switch, Route,  Redirect } from 'react-router-dom';
 
 function App(){
   const { isLogged } = useContext(StoreContext);

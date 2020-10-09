@@ -9,14 +9,46 @@ export const HeaderContainer = styled.div`
     text-align: -webkit-center;
 `;
 export const BodyContainer = styled.div`
-    background-color: blue;
+    /* background-color: blue; */
+    display: flex;
+    padding: 0px 10% 0px 10%;
+    justify-content: center;
 `;
+export const KitsContainer = styled.div`
+    /* background-color: green; */
+    height: 600px;
+    width: 67%;
+    padding: 30px;
+    display: flex;
+    justify-content: space-between;
+    border-left: solid;
+    border-width: thin;
+    border-color: blue
+`;
+
 export const SideContainer = styled.div`
-    background-color: red;
+    /* background-color: purple; */
+    height: 600px;
+    width: 35%;
+    padding: 15px;
+    border-left: solid;
+    border-right: solid;
+    border-width: thin;
+    border-color:  ${theme.mainColor};
 `;
 export const SideHeader = styled.div`
-    background-color: orange;
+    padding: 5px;
+    text-align: center;
+    color: ${theme.white};
+    font: 20px Calibri Regular;
+    border: ${theme.mainColor} solid;
+    border-radius: 5px;
+    border-width: thin;
+    background-color: ${theme.mainColor};
 `;
 export const SideBody = styled.div`
-    background-color: purple;
+`;
+
+export const SideFooter = styled.div`
+    text-align: end;
 `;
