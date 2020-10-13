@@ -15,13 +15,17 @@ export const BodyContainer = styled.div`
     justify-content: center;
 `;
 export const KitsContainer = styled.div`
+        width: 100%;
+        display: block;
+`;
+export const KitsRow = styled.div`
     /* background-color: green; */
-    height: 600px;
-    width: 67%;
+    height: fit-content;
     padding: 30px;
     display: flex;
     justify-content: space-between;
     border-left: solid;
+    border-right: solid;
     border-width: thin;
     border-color: blue
 `;
@@ -31,7 +35,6 @@ export const SideContainer = styled.div`
     height: 600px;
     width: 35%;
     padding: 15px;
-    border-left: solid;
     border-right: solid;
     border-width: thin;
     border-color:  ${theme.mainColor};

@@ -17,6 +17,16 @@ export const Container = styled.div`
   font: 20px Calibri Regular;
   border-color: ${theme.mainColor};
 
+  ${({ selected }) =>
+        selected
+            ? css`
+                  background-color: ${theme.blue};
+                  border-color: ${theme.secondColor};
+                  color: ${theme.secondColor};
+                  border-width: medium;
+                  font-weight: bold;
+              `
+            : ''};
 
   &:hover {
     border-width: medium;
@@ -24,5 +34,6 @@ export const Container = styled.div`
     font-weight: bold;
     cursor: pointer;
     background-color: ${theme.red100};
+
   }
 `;
