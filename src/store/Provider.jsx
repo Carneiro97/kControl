@@ -1,11 +1,25 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import Context from './Context';
 import useStorage from '../utils/useStorage'
+import axios from 'axios';
 
 const StoreProvider = ({children}) => {
     const [isLogged, setIsLogged, removeIsLogged] = useStorage('isLogged');
     const [nomeUsuario, setNomeUsuario, removeNomeUsuario] = useStorage('nomeUsuario');
+    const [getUsuarios, setGetUsuarios] = useStorage('usuarios');
 
+
+    
+
+    useEffect(() => {
+        axios.get('http://localhost:3030/usuarios/')
+        .then(function(response) {
+            setGetUsuarios(response.data);
+        })
+        .catch(function(error) {
+          console.log(error);
+        });
+    }, [])
 
     return (
         <Context.Provider
@@ -15,7 +29,8 @@ const StoreProvider = ({children}) => {
                 removeIsLogged,
                 nomeUsuario,
                 setNomeUsuario,
-                removeNomeUsuario
+                removeNomeUsuario,
+                getUsuarios
             }}
         >
             {children}

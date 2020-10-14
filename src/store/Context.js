@@ -7,6 +7,8 @@ const StoreContext = createContext({
     nomeUsuario: '',
     setNomeUsuario: () => {},
     removeNomeUsuario: () => {},
+    getUsuarios: {},
+    setGetUsuarios: () => {},
 });
 
 export default StoreContext;

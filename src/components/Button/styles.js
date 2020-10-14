@@ -5,6 +5,10 @@ import theme from '../../styles/theme';
 export const Container = styled.button`
 
 
+&:hover{
+  font-weight: bold;
+}
+
 ${({ border }) =>
     border
         ? css`
@@ -19,7 +23,7 @@ ${({ font }) =>
         ? css`
               font: ${font};
           `
-        : `font: 15px Calibri Regular`};
+        : `font: 25px Calibri Regular`};
     }
   }
 

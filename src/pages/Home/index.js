@@ -1,9 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import produce from 'immer';
 import Navbar from '../../components/Navbar';
 import InputSearch from '../../components/InputSearch';
 import Button from '../../components/Button';
 import Card from '../../components/Card';
+import StoreContext from '../../store/Context';
+import CollapsibleTable from '../../components/CollapsibleTable';
 
 import {Container, HeaderContainer, BodyContainer, SideContainer, SideHeader, SideBody, KitsRow, KitsContainer, SideFooter } from './styles';
 
@@ -11,6 +13,10 @@ function Home() {
 
   const [searchValue, setSearchValue] = useState('');
   const [selectedKits, setSelectedKits] = useState([]);
+  const { getUsuarios } = useContext(StoreContext);
+  const [usuarios, setUsuarios] = useState(getUsuarios.usuarios);
+  const [countUsuarios, setCountUsuarios] = useState(getUsuarios.count);
+  
 
   const kits = [
     {
@@ -107,9 +113,10 @@ function Home() {
         </KitsContainer>
         <SideContainer>
           <SideHeader>
-            Kits Selecionados
+            {countUsuarios} Usuários cadastrados
           </SideHeader>
           <SideBody>
+            <CollapsibleTable usuarios={usuarios} />
           </SideBody>
           <SideFooter>
             <Button>

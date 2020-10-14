@@ -20,9 +20,9 @@ export const Container = styled.div`
   ${({ selected }) =>
         selected
             ? css`
-                  background-color: ${theme.blue};
+                  background-color: ${theme.red100};
                   border-color: ${theme.secondColor};
-                  color: ${theme.secondColor};
+                  color: ${theme.mainColor};
                   border-width: medium;
                   font-weight: bold;
               `

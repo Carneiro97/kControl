@@ -32,8 +32,7 @@ export const KitsRow = styled.div`
 
 export const SideContainer = styled.div`
     /* background-color: purple; */
-    height: 600px;
-    width: 35%;
+    width: 60%;
     padding: 15px;
     border-right: solid;
     border-width: thin;
@@ -50,6 +49,10 @@ export const SideHeader = styled.div`
     background-color: ${theme.mainColor};
 `;
 export const SideBody = styled.div`
+    height: 90%;
+    overflow: auto;
+    max-height: 700px;
+    margin-bottom: 10px;
 `;
 
 export const SideFooter = styled.div`
