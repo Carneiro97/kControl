@@ -15,6 +15,7 @@ import Paper from '@material-ui/core/Paper';
 import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@material-ui/icons/KeyboardArrowUp';
 import { RowContainer } from './styles';
+import produce from 'immer';
 
 const useRowStyles = makeStyles({
   root: {
@@ -25,29 +26,23 @@ const useRowStyles = makeStyles({
 });
 
 
-function Row(props) {
-  const { row } = props;
+function Row({onClick, key, row, isSelected}) {
   const [open, setOpen] = React.useState(false);
   const classes = useRowStyles();
-  const [isSelected, setIsSelected] = useState(false);
-
-  function handleRowClick(e){
-    setIsSelected(!isSelected);
-  }
 
   return (
     <>
-      <TableRow hover selected={isSelected} className={classes.root}>
+      <TableRow hover onClick={() => onClick(row)} selected={isSelected} className={classes.root}>
         <TableCell>
           <IconButton aria-label="expand row" size="small" onClick={() => setOpen(!open)}>
             {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
           </IconButton>
         </TableCell>
-          <TableCell onClick={handleRowClick} component="th" scope="row">
+          <TableCell  component="th" scope="row">
             {row.nome}
           </TableCell>
-          <TableCell onClick={handleRowClick} align="right">{row.codigo}</TableCell>
-          <TableCell onClick={handleRowClick} align="right">{row.adm == 1 ? 'Administrador' : 'Padrão'} </TableCell>
+          <TableCell  align="right">{row.codigo}</TableCell>
+          <TableCell  align="right">{row.adm == 1 ? 'Administrador' : 'Padrão'} </TableCell>
       </TableRow>
         <TableRow>
         <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
@@ -86,9 +81,10 @@ function Row(props) {
 
 Row.propTypes = {
   row: PropTypes.shape({
-    nome: PropTypes.number.isRequired,
+    nome: PropTypes.string.isRequired,
     codigo: PropTypes.number.isRequired,
     adm: PropTypes.number.isRequired,
+    _id: PropTypes.number.isRequired,
     info: PropTypes.arrayOf(
       PropTypes.shape({
         curso: PropTypes.number.isRequired,
@@ -99,13 +95,14 @@ Row.propTypes = {
   }).isRequired,
 };
 
-export default function CollapsibleTable({usuarios}) {
+export default function CollapsibleTable({usuarios, rowClick, isSelectedRow, clickedRowId }) {
 
-  function createData(nome, codigo, adm, curso, dtNascimento) {
+  function createData(nome, codigo, adm, curso, dtNascimento, _id) {
     return {
       nome,
       codigo,
       adm,
+      _id,
       info: [
         { curso: curso, cpf: '45578878877', dtNascimento: dtNascimento },
       ],
@@ -115,7 +112,7 @@ export default function CollapsibleTable({usuarios}) {
   let rows = [];
 
   usuarios.map((usuario) => {
-    rows.push(createData(usuario.nome, usuario.codigo, usuario.btAdm, usuario.curso, usuario.dtNascimento));
+    rows.push(createData(usuario.nome, usuario.codigo, usuario.btAdm, usuario.curso, usuario.dtNascimento, usuario._id));
   })
 
   return (
@@ -130,8 +127,14 @@ export default function CollapsibleTable({usuarios}) {
           </TableRow>
         </TableHead>
         <TableBody>
-          {rows.map((row) => (
-            <Row key={row.nome} row={row} />
+          {rows.map((row, index) => (
+            <Row  isSelected =
+                              {
+                                row._id === clickedRowId ? isSelectedRow : false 
+                              }
+                  onClick={rowClick}
+                  key={row._id}
+                  row={row} />
           ))}
         </TableBody>
       </Table>

@@ -21,7 +21,7 @@ export const Container = styled.div`
         selected
             ? css`
                   background-color: ${theme.red100};
-                  border-color: ${theme.secondColor};
+                  border-color: ${theme.mainColor};
                   color: ${theme.mainColor};
                   border-width: medium;
                   font-weight: bold;
@@ -34,6 +34,9 @@ export const Container = styled.div`
     font-weight: bold;
     cursor: pointer;
     background-color: ${theme.red100};
+  }
 
+  &:active {
+    color: ${theme.secondColor};
   }
 `;

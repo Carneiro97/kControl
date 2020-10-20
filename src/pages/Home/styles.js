@@ -51,7 +51,7 @@ export const SideHeader = styled.div`
 export const SideBody = styled.div`
     height: 90%;
     overflow: auto;
-    max-height: 700px;
+    max-height: 665px;
     margin-bottom: 10px;
 `;
 

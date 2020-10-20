@@ -16,6 +16,8 @@ function Home() {
   const { getUsuarios } = useContext(StoreContext);
   const [usuarios, setUsuarios] = useState(getUsuarios.usuarios);
   const [countUsuarios, setCountUsuarios] = useState(getUsuarios.count);
+  const [isSelectedRow, setIsSelectedRow] = useState(false);
+  const [selectedUsuario, setSelectedUsuario] = useState();
   
 
   const kits = [
@@ -61,8 +63,13 @@ function Home() {
 
       return draft;
   });
+    setSelectedKits(newSelected);
+  }
 
-  setSelectedKits(newSelected);
+  function rowClick(row) {
+    setSelectedUsuario(row._id);
+    setIsSelectedRow(true);
+    console.log(row._id);
   }
 
   return (
@@ -86,37 +93,37 @@ function Home() {
               ))
             }
           </KitsRow>
-          <KitsRow>
-            {
-              kits.map((kit) => (
-                <Card 
-                  key={kit.id}
-                  onClick={handleCardClick}
-                >
-                  {kit.nome}
-                </Card>
-              ))
-            }
-          </KitsRow>
-          <KitsRow>
-            {
-              kits.map((kit) => (
-                <Card 
-                  key={kit.id}
-                  onClick={handleCardClick}
-                >
-                  {kit.nome}
-                </Card>
-              ))
-            }
-          </KitsRow>
+            <KitsRow>
+              {
+                kits.map((kit) => (
+                  <Card 
+                    key={kit.id}
+                    onClick={handleCardClick}
+                  >
+                    {kit.nome}
+                  </Card>
+                ))
+              }
+            </KitsRow>
+            <KitsRow>
+              {
+                kits.map((kit) => (
+                  <Card 
+                    key={kit.id}
+                    onClick={handleCardClick}
+                  >
+                    {kit.nome}
+                  </Card>
+                ))
+              }
+            </KitsRow>
         </KitsContainer>
         <SideContainer>
           <SideHeader>
             {countUsuarios} Usuários cadastrados
           </SideHeader>
           <SideBody>
-            <CollapsibleTable usuarios={usuarios} />
+            <CollapsibleTable clickedRowId={selectedUsuario} isSelectedRow={isSelectedRow} rowClick={rowClick} usuarios={usuarios} />
           </SideBody>
           <SideFooter>
             <Button>
