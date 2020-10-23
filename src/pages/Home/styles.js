@@ -14,9 +14,30 @@ export const BodyContainer = styled.div`
     padding: 0px 10% 0px 10%;
     justify-content: center;
 `;
+
+export const KitsHeader = styled.div`
+    padding: 5px;
+    text-align: center;
+    color: ${theme.white};
+    font: 20px Calibri Regular;
+    border: ${theme.mainColor} solid;
+    border-radius: 5px;
+    border-width: thin;
+    background-color: ${theme.mainColor};
+`;
+
 export const KitsContainer = styled.div`
         width: 100%;
         display: block;
+        border-left: solid;
+        border-right: solid;
+        border-width: thin;
+        border-color: blue;
+        padding: 15px;
+`;
+export const KitsRows = styled.div`
+        overflow: auto;
+        max-height: 700px;
 `;
 export const KitsRow = styled.div`
     /* background-color: green; */
@@ -24,10 +45,6 @@ export const KitsRow = styled.div`
     padding: 30px;
     display: flex;
     justify-content: space-between;
-    border-left: solid;
-    border-right: solid;
-    border-width: thin;
-    border-color: blue
 `;
 
 export const SideContainer = styled.div`

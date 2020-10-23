@@ -97,14 +97,14 @@ Row.propTypes = {
 
 export default function CollapsibleTable({usuarios, rowClick, isSelectedRow, clickedRowId }) {
 
-  function createData(nome, codigo, adm, curso, dtNascimento, _id) {
+  function createData(nome, codigo, adm, curso, dtNascimento, _id, cpf) {
     return {
       nome,
       codigo,
       adm,
       _id,
       info: [
-        { curso: curso, cpf: '45578878877', dtNascimento: dtNascimento },
+        { curso: curso, cpf: cpf, dtNascimento: dtNascimento },
       ],
     };
   }
@@ -112,7 +112,7 @@ export default function CollapsibleTable({usuarios, rowClick, isSelectedRow, cli
   let rows = [];
 
   usuarios.map((usuario) => {
-    rows.push(createData(usuario.nome, usuario.codigo, usuario.btAdm, usuario.curso, usuario.dtNascimento, usuario._id));
+    rows.push(createData(usuario.nome, usuario.codigo, usuario.btAdm, usuario.curso, usuario.dtNascimento, usuario._id, usuario.cpf));
   })
 
   return (

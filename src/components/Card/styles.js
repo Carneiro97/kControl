@@ -3,7 +3,6 @@ import styled, { css } from 'styled-components';
 import theme from '../../styles/theme';
 
 export const Container = styled.div`
-  /* background-color: purple; */
   height: 200px;
   width: 200px;
   border-radius: 30px;
