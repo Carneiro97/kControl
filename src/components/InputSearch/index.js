@@ -1,9 +1,10 @@
 import React from 'react';
 import { MdSearch } from 'react-icons/md';
+import  Input  from '../Input' 
 
-import { Container, InputSearch, SearchIconContainer } from './styles';
+import { Container, SearchIconContainer } from './styles';
 
-function Inputsearch({
+function InputSearch({
     inputName,
     value,
     handleChange,
@@ -20,13 +21,15 @@ function Inputsearch({
             justifyContent={justifyContent}
             margin={margin}
             marginTop={marginTop}
+            width={width}
         >
-            <InputSearch
+            <Input
                 name={inputName}
                 value={value}
-                onChange={(e) => handleChange(e)}
+                handleChange={(e) => handleChange(e)}
                 placeholder={placeholder}
-                height="40"
+                height="40px"
+                width={width}
             />
             <SearchIconContainer>
                 <MdSearch size="20" color="grey" />
@@ -35,4 +38,4 @@ function Inputsearch({
     );
 }
 
-export default Inputsearch;
+export default InputSearch;

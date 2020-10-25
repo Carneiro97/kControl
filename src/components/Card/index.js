@@ -1,12 +1,20 @@
 import React from 'react';
-import { Container } from './styles';
+import { BsInfoCircle } from 'react-icons/bs';
+import { Container, CardContent, CardIconContainer } from './styles';
 
-const Card = ({children, onClick, selected}) => (
+import theme from '../../styles/theme'
+
+const Card = ({onClick, selected, title, onClickInfo}) => (
     <Container 
         onClick={onClick}
         selected={selected}    
     >
-        {children}
+        <CardContent>
+            {title}
+            <CardIconContainer>
+                <BsInfoCircle color={theme.mainColor} title={"Ver mais..."} onClick={onClickInfo} />
+            </CardIconContainer>
+        </CardContent>
     </Container>
 );
 

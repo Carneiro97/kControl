@@ -4,10 +4,11 @@ import { lighten } from 'polished';
 import theme from '../../styles/theme';
 
 export const Container = styled.input`
-  padding: 10px;
   font: 16px Calibri Regular;
   color: ${theme.grey};
   border: 2px solid;
+  padding: 10px;
+
 
   ::placeholder {
     font: 16px Calibri Regular;
@@ -15,12 +16,19 @@ export const Container = styled.input`
     color: ${theme.grey}
 }
 
-    &:hover:enabled {
-        border: 2px solid ${theme.secondColor};
+    &:hover:enabled {        
+      ${({ lessHover }) =>
+        !lessHover
+          ? css`
+              border: 2px solid ${theme.secondColor};
+            `
+          : css`
+              border: 1px solid ${theme.secondColor};
+            `}
     }
 
     &:focus{
-        border: 2px solid ${theme.secondColor};
+      border-color: ${theme.secondColor} !important;
     }
 
 
@@ -118,16 +126,18 @@ ${({ textAlign }) =>
   ${({ width }) =>
       width
           ? css`
-                width: ${width}px;
+                width: ${width};
             `
-          : null};
+          : css`
+                width: 100%};
+             `
     }
   }
 
   ${({ height }) =>
       height
           ? css`
-                height: ${height}px;
+                height: ${height};
             `
           : null};
     }

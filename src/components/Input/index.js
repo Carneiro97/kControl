@@ -14,31 +14,19 @@ const Input = ({
     type,
     value,
     handleChange = (a) => a,
-    handleInputKeyDown = (a) => a,
-    handleClick = (a) => a,
     width,
     height,
     placeholder,
     disabled,
     margin,
     className,
+    lessHover,
 }) => (
     <Container
         margin={margin}
         marginTop={marginTop}
         name={name}
-        onChange={(event) => {
-            event.stopPropagation();
-            handleChange(event);
-        }}
-        onKeyDown={(event) => {
-            event.stopPropagation();
-            handleInputKeyDown(event);
-        }}
-        onClick={(event) => {
-            event.stopPropagation();
-            handleClick(event);
-        }}
+        onChange={handleChange}
         value={value}
         type={type}
         border={border}
@@ -53,6 +41,7 @@ const Input = ({
         placeholder={placeholder}
         disabled={disabled}
         className={className}
+        lessHover={lessHover}
     />
 );
 

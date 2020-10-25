@@ -9,7 +9,6 @@ export const HeaderContainer = styled.div`
     text-align: -webkit-center;
 `;
 export const BodyContainer = styled.div`
-    /* background-color: blue; */
     display: flex;
     padding: 0px 10% 0px 10%;
     justify-content: center;

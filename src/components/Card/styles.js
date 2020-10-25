@@ -7,14 +7,12 @@ export const Container = styled.div`
   width: 200px;
   border-radius: 30px;
   margin-left: 22px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
   border: ridge;
   color: ${theme.mainColor};
   border-width: thin;
   font: 20px Calibri Regular;
   border-color: ${theme.mainColor};
+  text-align: center;
 
   ${({ selected }) =>
         selected
@@ -38,4 +36,14 @@ export const Container = styled.div`
   &:active {
     color: ${theme.secondColor};
   }
+`;
+
+export const CardContent = styled.div`
+  text-align: -webkit-center;
+  padding-top: 30%;
+`;
+
+export const CardIconContainer = styled.div`
+  margin-top: 15px;
+  width: fit-content;
 `;

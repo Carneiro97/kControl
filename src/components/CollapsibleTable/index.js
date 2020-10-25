@@ -95,7 +95,7 @@ Row.propTypes = {
   }).isRequired,
 };
 
-export default function CollapsibleTable({usuarios, rowClick, isSelectedRow, clickedRowId }) {
+export default function CollapsibleTable({usuarios, rowClick, isSelectedRow, clickedRowId, searchUsuario }) {
 
   function createData(nome, codigo, adm, curso, dtNascimento, _id, cpf) {
     return {
@@ -111,9 +111,11 @@ export default function CollapsibleTable({usuarios, rowClick, isSelectedRow, cli
 
   let rows = [];
 
-  usuarios.map((usuario) => {
-    rows.push(createData(usuario.nome, usuario.codigo, usuario.btAdm, usuario.curso, usuario.dtNascimento, usuario._id, usuario.cpf));
-  })
+  usuarios.filter((usuario) =>
+    usuario.nome.toLowerCase().includes(searchUsuario.toLowerCase()))
+    .map((usuario) => {
+      rows.push(createData(usuario.nome, usuario.codigo, usuario.btAdm, usuario.curso, usuario.dtNascimento, usuario._id, usuario.cpf));
+    })
 
   return (
     <TableContainer component={Paper}>
