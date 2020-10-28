@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 import {
   Modal,
@@ -11,8 +11,17 @@ import Button from '../Button';
 import LabelContainer from '../LabelContainer';
 import theme from '../../styles/theme';
 import Input from '../Input'
+import TextArea from '../TextArea'
+import DropDownStatusKit from '../DropDownStatusKit';
+import { StatusKitEnum } from '../../enums';
 
 function ModalKit({ isOpen, onClick, height, kit }) {
+
+  const [selectedStatus, setSelectedStatus] = useState(kit.status);
+
+  function handleSelectedStatus(e){
+    setSelectedStatus(e.target.dataset.text);
+  }
 
   return (
     <Modal isOpen={isOpen} onClick={onClick} height={height} width="460">
@@ -24,11 +33,13 @@ function ModalKit({ isOpen, onClick, height, kit }) {
           <Input lessHover value={kit.nome}/>
         </LabelContainer>
         <LabelContainer text="Descrição">
-          <Input lessHover value={kit.descricao}/>
+          <TextArea lessHover value={kit.descricao}/>
         </LabelContainer>
-        <LabelContainer text="Status">
-          <Input lessHover value={kit.status}/>
-        </LabelContainer>    
+          <DropDownStatusKit 
+              status={StatusKitEnum.returnName}
+              onClick={handleSelectedStatus}
+              headerText={selectedStatus || 'Selecione o status'}
+              name="status"/>
       </ModalContentWrapper>
       <ModalFooter justifyContent={"space-between"} padding={"20px 40px 20px 40px"}>
         <Button

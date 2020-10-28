@@ -33,6 +33,7 @@ const common = {
     dropdownColorGray: '#A1A1A1',
 
     white: '#FFFFFF',
+    black: '#000000',
 
     redDefault: '#F44336',
     red: '#ED1651',

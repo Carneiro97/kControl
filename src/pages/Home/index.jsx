@@ -7,6 +7,7 @@ import Card from '../../components/Card';
 import StoreContext from '../../store/Context';
 import CollapsibleTable from '../../components/CollapsibleTable';
 import ModalKit from '../../components/ModalKit';
+import { StatusKitEnum } from '../../enums';
 
 import {
   Container, HeaderContainer, BodyContainer, SideContainer, SideHeader, SideBody, KitsRow, KitsRows, KitsHeader, KitsContainer, SideFooter,
@@ -29,19 +30,19 @@ function Home() {
       id: '1',
       nome: 'Solda 1',
       descricao: 'Kit de solda completo com ferro de solda, esponja e fonte inclusa',
-      status: 'Emprestado',
+      status: StatusKitEnum.returnName[1],
     },
     {
       nome: 'kit 2',
       id: '2',
       descricao: 'Kit de solda completo com ferro de solda, esponja e fonte inclusa',
-      status: 'Disponível',
+      status: StatusKitEnum.returnName[2],
     },
     {
       nome: 'Solda 2',
       id: '3',
       descricao: 'Kit de solda completo com ferro de solda, esponja e fonte inclusa',
-      status: 'Em manutenção',
+      status: StatusKitEnum.returnName[3],
     },
     {
       nome: 'Solda 3',

@@ -33,7 +33,7 @@ function LabelContainer({
         text={displayText === 'none' ? '' : text}
         display={displayText}
         color={null}
-        marginTop="9px"
+        marginBottom="5px"
       />
       {children}
     </Container>

@@ -101,9 +101,10 @@ export const ModalHeaderContainer = styled.div`
 `;
 
 export const ModalContentWrapperContainer = styled.div`
+    padding: 20px;
     flex-direction: column;
-    justify-content: center;
-    align-items: center;
+    /* justify-content: center;
+    align-items: center; */
     min-height: 200px;
     min-width: 300px;
     box-shadow: 15px 0px 12px -10px rgba(0, 0, 0, 0.16),
@@ -127,7 +128,7 @@ export const ModalContentWrapperContainer = styled.div`
     ${({ height }) =>
         height
             ? css`
-                  height: ${height}px;
+                  height: ${height};
               `
             : ``};
 `;
