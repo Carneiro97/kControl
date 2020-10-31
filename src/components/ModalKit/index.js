@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 import {
   Modal,
@@ -15,30 +15,55 @@ import TextArea from '../TextArea'
 import DropDownStatusKit from '../DropDownStatusKit';
 import { StatusKitEnum } from '../../enums';
 
-function ModalKit({ isOpen, onClick, height, kit }) {
+function ModalKit({ isOpen, onClick, height, kit, isNewKit }) {
 
-  const [selectedStatus, setSelectedStatus] = useState(kit.status);
+  const [nome, setNome] = useState('');
+  const [descricao, setDescricao] = useState('');
+  const [selectedStatus, setSelectedStatus] = useState('');
 
+  function handleNome(e){
+    setNome(e.target.dataset.text);
+  }
+  
+  function handleDescricao(e){
+    setDescricao(e.target.dataset.text);
+  }
+  
   function handleSelectedStatus(e){
     setSelectedStatus(e.target.dataset.text);
   }
 
+  
+  useEffect(() => {
+    setNome(kit.nome);
+  }, [kit])
+  
+  
+  useEffect(() => {
+    setDescricao(kit.descricao);
+  }, [kit])
+  
+  
+  useEffect(() => {
+    setSelectedStatus(kit.status);
+  }, [kit])
+
   return (
     <Modal isOpen={isOpen} onClick={onClick} height={height} width="460">
       <ModalHeader> 
-        {kit.nome}
+        {!isNewKit ? kit.nome : 'Novo kit'}
       </ModalHeader>
       <ModalContentWrapper>
         <LabelContainer text="Nome">
-          <Input lessHover value={kit.nome}/>
+          <Input handleChange={handleNome} placeholder={!isNewKit ? null : 'Insira o nome do kit'} lessHover value={isNewKit ? null : nome}/>
         </LabelContainer>
         <LabelContainer text="Descrição">
-          <TextArea lessHover value={kit.descricao}/>
+          <TextArea  handleChange={handleDescricao} placeholder={!isNewKit ? null : 'Insira a descrição do kit'} lessHover value={isNewKit ? null : descricao}/>
         </LabelContainer>
           <DropDownStatusKit 
               status={StatusKitEnum.returnName}
               onClick={handleSelectedStatus}
-              headerText={selectedStatus || 'Selecione o status'}
+              headerText={!isNewKit ? selectedStatus || 'Selecione o status' : 'Selecione o status'}
               name="status"/>
       </ModalContentWrapper>
       <ModalFooter justifyContent={"space-between"} padding={"20px 40px 20px 40px"}>

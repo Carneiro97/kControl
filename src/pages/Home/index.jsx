@@ -24,6 +24,7 @@ function Home() {
   const [searchKit, setSearchKit] = useState('');
   const [isOpenModalKit, setIsOpenModalKit] = useState(false);
   const [modalKit, setModalKit] = useState('');
+  const [isNewKit, setIsNewKit] = useState(false);
 
   let kits = [
     {
@@ -35,13 +36,13 @@ function Home() {
     {
       nome: 'kit 2',
       id: '2',
-      descricao: 'Kit de solda completo com ferro de solda, esponja e fonte inclusa',
+      descricao: 'Kit de solda completasso com ferro de solda, esponja e fonte inclusa',
       status: StatusKitEnum.returnName[2],
     },
     {
       nome: 'Solda 2',
       id: '3',
-      descricao: 'Kit de solda completo com ferro de solda, esponja e fonte inclusa',
+      descricao: 'Kit de solda completíssimo com ferro de solda, esponja e fonte inclusa',
       status: StatusKitEnum.returnName[3],
     },
     {
@@ -143,6 +144,12 @@ function Home() {
   }
 
   function handleIsOpenModalKit() {
+    setIsNewKit(false);
+    setIsOpenModalKit(!isOpenModalKit);
+  }
+
+  function handleAddClick() {
+    setIsNewKit(true);
     setIsOpenModalKit(!isOpenModalKit);
   }
 
@@ -157,7 +164,7 @@ function Home() {
             {' '}
             kits cadastrados
           </KitsHeader>
-          <InputSearch padding="15px 0 15px 0" handleChange={handleSearchKit} placeholder="Pesquise pelo nome do kit" />
+          <InputSearch onClickButtonAdd={handleAddClick} padding="15px 0 15px 0" handleChange={handleSearchKit} placeholder="Pesquise pelo nome do kit" />
           <KitsRows>
             {rows.map((row) => (
               <KitsRow>
@@ -182,18 +189,18 @@ function Home() {
             {' '}
             usuários cadastrados
           </SideHeader>
-          <InputSearch padding="15px 0 15px 0" handleChange={handleSearchUsuario} placeholder="Pesquise pelo nome do usuário" />
+          <InputSearch hideAddButton padding="15px 0 15px 0" handleChange={handleSearchUsuario} placeholder="Pesquise pelo nome do usuário" />
           <SideBody>
             <CollapsibleTable searchUsuario={searchUsuario} clickedRowId={selectedUsuario} isSelectedRow={isSelectedRow} rowClick={rowClick} usuarios={usuarios} />
           </SideBody>
           <SideFooter>
             <Button onClick={handleAssociarKits}>
-              Associar kits
+              Realizar empréstimo
             </Button>
           </SideFooter>
         </SideContainer>
       </BodyContainer>
-      <ModalKit kit={modalKit} isOpen={isOpenModalKit} onClick={handleIsOpenModalKit} />
+      <ModalKit isNewKit={isNewKit} kit={modalKit} isOpen={isOpenModalKit} onClick={handleIsOpenModalKit} />
     </Container>
   );
 }

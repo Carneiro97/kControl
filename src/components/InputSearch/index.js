@@ -1,6 +1,7 @@
 import React from 'react';
 import { MdSearch } from 'react-icons/md';
 import  Input  from '../Input' 
+import ButtonAdd from '../../components/ButtonAdd';
 
 import { Container, SearchIconContainer } from './styles';
 
@@ -14,6 +15,8 @@ function InputSearch({
     padding,
     justifyContent,
     marginTop,
+    hideAddButton,
+    onClickButtonAdd,
 }) {
     return (
         <Container
@@ -34,6 +37,7 @@ function InputSearch({
             <SearchIconContainer>
                 <MdSearch size="20" color="grey" />
             </SearchIconContainer>
+            {hideAddButton ? null : <ButtonAdd onClick={onClickButtonAdd}/>}
         </Container>
     );
 }
