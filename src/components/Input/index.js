@@ -21,28 +21,31 @@ const Input = ({
     margin,
     className,
     lessHover,
-}) => (
-    <Container
-        margin={margin}
-        marginTop={marginTop}
-        name={name}
-        onChange={handleChange}
-        value={value}
-        type={type}
-        border={border}
-        background={background}
-        borderRadius={borderRadius}
-        opacity={opacity}
-        color={color}
-        font={font}
-        textAlign={textAlign}
-        width={width}
-        height={height}
-        placeholder={placeholder}
-        disabled={disabled}
-        className={className}
-        lessHover={lessHover}
-    />
-);
+}) => {
+
+    return (
+        <Container
+            margin={margin}
+            marginTop={marginTop}
+            name={name}
+            onChange={handleChange}
+            value={value}
+            type={type}
+            border={border}
+            background={background}
+            borderRadius={borderRadius}
+            opacity={opacity}
+            color={color}
+            font={font}
+            textAlign={textAlign}
+            width={width}
+            height={height}
+            placeholder={placeholder}
+            disabled={disabled}
+            className={className}
+            lessHover={lessHover}
+        />
+    )
+}
 
 export default Input;

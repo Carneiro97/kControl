@@ -11,39 +11,50 @@ import TextArea from '../TextArea';
 import DropDownStatusKit from '../DropDownStatusKit';
 import { StatusKitEnum } from '../../enums';
 
-function ModalKit({ isOpen, onClick, height, kit }) {
-  const [nome, setNome] = useState('');
+function ModalNovoKit({ isOpen, onClick, height }) {
   const [descricao, setDescricao] = useState('');
-  const [selectedStatus, setSelectedStatus] = useState('');
+  const [nome, setNome] = useState('');
+  const [selectedStatus, setSelectedStatus] = useState(null);
+  const [allFieldsOk, setAllFieldsOk] = useState(false);
 
   function handleNome(e) {
-    setNome(e.target.dataset.text);
+    setNome(e.target.value);
   }
-
   function handleDescricao(e) {
-    setDescricao(e.target.dataset.text);
+    setDescricao(e.target.value);
   }
 
   function handleSelectedStatus(e) {
     setSelectedStatus(e.target.dataset.text);
   }
 
-  useEffect(() => {
-    setNome(kit.nome);
-  }, [kit]);
+  function handleSubmit(data) {
+    console.log(data);
+  }
 
   useEffect(() => {
-    setDescricao(kit.descricao);
-  }, [kit]);
+    setSelectedStatus(null);
+    setNome(null);
+    setDescricao(null);
+    setAllFieldsOk(false);
+  }, [isOpen]);
 
   useEffect(() => {
-    setSelectedStatus(kit.status);
-  }, [kit]);
+    setAllFieldsOk(
+      nome !== null &&
+        nome !== '' &&
+        descricao !== null &&
+        descricao !== '' &&
+        selectedStatus !== null
+        ? true
+        : false
+    );
+  }, [nome, descricao, selectedStatus]);
 
   return (
     <Modal isOpen={isOpen} onClick={onClick} height={height} width="460">
-      <ModalHeader>{kit.nome}</ModalHeader>
-      <Form>
+      <ModalHeader>Novo kit</ModalHeader>
+      <Form onSubmit={handleSubmit}>
         <ModalContentWrapper>
           <LabelContainer text="Nome">
             <InputForm
@@ -51,7 +62,6 @@ function ModalKit({ isOpen, onClick, height, kit }) {
               handleChange={handleNome}
               placeholder="Insira o nome do kit"
               lessHover
-              value={nome}
             />
           </LabelContainer>
           <LabelContainer text="Descrição">
@@ -60,38 +70,36 @@ function ModalKit({ isOpen, onClick, height, kit }) {
               handleChange={handleDescricao}
               placeholder="Insira a descrição do kit"
               lessHover
-              value={descricao}
             />
           </LabelContainer>
           <DropDownStatusKit
             status={StatusKitEnum.returnName}
             onClick={handleSelectedStatus}
-            headerText={selectedStatus}
+            headerText={selectedStatus || 'Selecione o status'}
             name="status"
           />
         </ModalContentWrapper>
+        <ModalFooter
+          justifyContent="space-between"
+          padding="20px 40px 20px 40px"
+        >
+          <Button
+            onClick={onClick}
+            text="fechar"
+            marginBottom="30px"
+            display="block"
+          />
+          <Button
+            text="salvar"
+            marginBottom="30px"
+            display="salvar"
+            type="submit"
+            disabled={!allFieldsOk}
+          />
+        </ModalFooter>
       </Form>
-
-      <ModalFooter
-        justifyContent={'space-between'}
-        padding={'20px 40px 20px 40px'}
-      >
-        <Button
-          onClick={onClick}
-          text="fechar"
-          marginBottom="30px"
-          display="block"
-        />
-        <Button
-          onClick={onClick}
-          text="salvar"
-          marginBottom="30px"
-          display="atualizar"
-          type="submit"
-        />
-      </ModalFooter>
     </Modal>
   );
 }
 
-export default ModalKit;
+export default ModalNovoKit;

@@ -7,10 +7,21 @@ import Card from '../../components/Card';
 import StoreContext from '../../store/Context';
 import CollapsibleTable from '../../components/CollapsibleTable';
 import ModalKit from '../../components/ModalKit';
+import ModalNovoKit from '../../components/ModalNovoKit';
 import { StatusKitEnum } from '../../enums';
 
 import {
-  Container, HeaderContainer, BodyContainer, SideContainer, SideHeader, SideBody, KitsRow, KitsRows, KitsHeader, KitsContainer, SideFooter,
+  Container,
+  HeaderContainer,
+  BodyContainer,
+  SideContainer,
+  SideHeader,
+  SideBody,
+  KitsRow,
+  KitsRows,
+  KitsHeader,
+  KitsContainer,
+  SideFooter,
 } from './styles';
 
 function Home() {
@@ -23,6 +34,7 @@ function Home() {
   const [searchUsuario, setSearchUsuario] = useState('');
   const [searchKit, setSearchKit] = useState('');
   const [isOpenModalKit, setIsOpenModalKit] = useState(false);
+  const [isOpenModalNovoKit, setIsOpenModalNovoKit] = useState(false);
   const [modalKit, setModalKit] = useState('');
   const [isNewKit, setIsNewKit] = useState(false);
 
@@ -30,19 +42,22 @@ function Home() {
     {
       id: '1',
       nome: 'Solda 1',
-      descricao: 'Kit de solda completo com ferro de solda, esponja e fonte inclusa',
+      descricao:
+        'Kit de solda completo com ferro de solda, esponja e fonte inclusa',
       status: StatusKitEnum.returnName[1],
     },
     {
       nome: 'kit 2',
       id: '2',
-      descricao: 'Kit de solda completasso com ferro de solda, esponja e fonte inclusa',
+      descricao:
+        'Kit de solda completasso com ferro de solda, esponja e fonte inclusa',
       status: StatusKitEnum.returnName[2],
     },
     {
       nome: 'Solda 2',
       id: '3',
-      descricao: 'Kit de solda completíssimo com ferro de solda, esponja e fonte inclusa',
+      descricao:
+        'Kit de solda completíssimo com ferro de solda, esponja e fonte inclusa',
       status: StatusKitEnum.returnName[3],
     },
     {
@@ -91,8 +106,11 @@ function Home() {
     },
   ];
 
+  const [countKits, setCountKits] = useState(kits.length);
   const rows = [];
-  kits = kits.filter((kit) => kit.nome.toLowerCase().includes(searchKit.toLowerCase()));
+  kits = kits.filter((kit) =>
+    kit.nome.toLowerCase().includes(searchKit.toLowerCase())
+  );
 
   const qtKits = kits.length;
   const kitsPerRow = 3;
@@ -102,9 +120,7 @@ function Home() {
   }
 
   useEffect(() => {
-    kits.map((kit) => (
-      selectedKits.push(false)
-    ));
+    kits.map((kit) => selectedKits.push(false));
   }, []);
 
   function handleSearchUsuario(e) {
@@ -148,9 +164,12 @@ function Home() {
     setIsOpenModalKit(!isOpenModalKit);
   }
 
+  function handleIsOpenModalNovoKit() {
+    setIsOpenModalNovoKit(!isOpenModalNovoKit);
+  }
+
   function handleAddClick() {
-    setIsNewKit(true);
-    setIsOpenModalKit(!isOpenModalKit);
+    setIsOpenModalNovoKit(!isOpenModalNovoKit);
   }
 
   return (
@@ -159,48 +178,62 @@ function Home() {
       <HeaderContainer />
       <BodyContainer>
         <KitsContainer>
-          <KitsHeader>
-            {qtKits}
-            {' '}
-            kits cadastrados
-          </KitsHeader>
-          <InputSearch onClickButtonAdd={handleAddClick} padding="15px 0 15px 0" handleChange={handleSearchKit} placeholder="Pesquise pelo nome do kit" />
+          <KitsHeader>{countKits} kits cadastrados</KitsHeader>
+          <InputSearch
+            inputName="searchKit"
+            onClickButtonAdd={handleAddClick}
+            padding="15px 0 15px 0"
+            handleChange={handleSearchKit}
+            placeholder="Pesquise pelo nome do kit"
+          />
           <KitsRows>
             {rows.map((row) => (
               <KitsRow>
-                {
-                      row.map((kit) => (
-                        <Card
-                          key={kit.id}
-                          onClick={() => handleCardClick(kit)}
-                          selected={selectedKits[kit.id - 1]}
-                          title={kit.nome}
-                          onClickInfo={() => handleOnClickInfo(kit)}
-                        />
-                      ))
-                    }
+                {row.map((kit) => (
+                  <Card
+                    key={kit.id}
+                    onClick={() => handleCardClick(kit)}
+                    selected={selectedKits[kit.id - 1]}
+                    title={kit.nome}
+                    onClickInfo={() => handleOnClickInfo(kit)}
+                  />
+                ))}
               </KitsRow>
             ))}
           </KitsRows>
         </KitsContainer>
         <SideContainer>
-          <SideHeader>
-            {countUsuarios}
-            {' '}
-            usuários cadastrados
-          </SideHeader>
-          <InputSearch hideAddButton padding="15px 0 15px 0" handleChange={handleSearchUsuario} placeholder="Pesquise pelo nome do usuário" />
+          <SideHeader>{countUsuarios} usuários cadastrados</SideHeader>
+          <InputSearch
+            inputName="searchUsuario"
+            hideAddButton
+            padding="15px 0 15px 0"
+            handleChange={handleSearchUsuario}
+            placeholder="Pesquise pelo nome do usuário"
+          />
           <SideBody>
-            <CollapsibleTable searchUsuario={searchUsuario} clickedRowId={selectedUsuario} isSelectedRow={isSelectedRow} rowClick={rowClick} usuarios={usuarios} />
+            <CollapsibleTable
+              searchUsuario={searchUsuario}
+              clickedRowId={selectedUsuario}
+              isSelectedRow={isSelectedRow}
+              rowClick={rowClick}
+              usuarios={usuarios}
+            />
           </SideBody>
           <SideFooter>
-            <Button onClick={handleAssociarKits}>
-              Realizar empréstimo
-            </Button>
+            <Button onClick={handleAssociarKits}>Realizar empréstimo</Button>
           </SideFooter>
         </SideContainer>
       </BodyContainer>
-      <ModalKit isNewKit={isNewKit} kit={modalKit} isOpen={isOpenModalKit} onClick={handleIsOpenModalKit} />
+      <ModalKit
+        kit={modalKit}
+        isOpen={isOpenModalKit}
+        onClick={handleIsOpenModalKit}
+      />
+      <ModalNovoKit
+        isOpen={isOpenModalNovoKit}
+        onClick={handleIsOpenModalNovoKit}
+      />
     </Container>
   );
 }

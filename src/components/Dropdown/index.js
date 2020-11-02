@@ -1,5 +1,5 @@
 ﻿import React, { useState, useContext, useRef, useEffect } from 'react';
-import { useField } from '@rocketseat/unform';
+import { useField } from '@unform/core';
 import PropTypes from 'prop-types';
 
 import { MdKeyboardArrowDown } from 'react-icons/md';
