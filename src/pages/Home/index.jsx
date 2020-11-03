@@ -28,6 +28,74 @@ function Home() {
   const [selectedKits, setSelectedKits] = useState([]);
   const { getUsuarios } = useContext(StoreContext);
   const [usuarios, setUsuarios] = useState(getUsuarios.usuarios);
+  const kits = [
+    {
+      nome: 'Solda 1',
+      descricao:
+        'Kit de solda completo com ferro de solda, esponja e fonte inclusa',
+      status: StatusKitEnum.returnName[1],
+      id: 'idbd1',
+    },
+    {
+      nome: 'kit 2',
+      descricao:
+        'Kit de solda completasso com ferro de solda, esponja e fonte inclusa',
+      status: StatusKitEnum.returnName[2],
+      id: 'idbd2',
+    },
+    {
+      nome: 'Solda 2',
+      descricao:
+        'Kit de solda completíssimo com ferro de solda, esponja e fonte inclusa',
+      status: StatusKitEnum.returnName[3],
+      id: 'idbd3',
+    },
+    {
+      nome: 'Solda 3',
+      id: 'idbd4',
+    },
+    {
+      nome: 'Cabos 1',
+      id: 'idbd5',
+    },
+    {
+      nome: 'Cabos 2',
+      id: 'idbd6',
+    },
+    {
+      nome: 'Cabos 3',
+      id: 'idbd7',
+    },
+    {
+      nome: 'Fonte 1',
+      id: 'idbd8',
+    },
+    {
+      nome: 'Fonte 2',
+      id: 'idbd9',
+    },
+    {
+      nome: 'Fonte 3',
+      id: 'idbd10',
+    },
+    {
+      nome: 'kit 11',
+      id: 'idbd11',
+    },
+    {
+      nome: 'kit 12',
+      id: 'idbd12',
+    },
+    {
+      nome: 'kit 13',
+      id: 'idbd13',
+    },
+    {
+      nome: 'kit 14',
+      id: 'idbd14',
+    },
+  ];
+
   const [countUsuarios, setCountUsuarios] = useState(getUsuarios.count);
   const [isSelectedRow, setIsSelectedRow] = useState(false);
   const [selectedUsuario, setSelectedUsuario] = useState();
@@ -36,100 +104,30 @@ function Home() {
   const [isOpenModalKit, setIsOpenModalKit] = useState(false);
   const [isOpenModalNovoKit, setIsOpenModalNovoKit] = useState(false);
   const [modalKit, setModalKit] = useState('');
-  const [isNewKit, setIsNewKit] = useState(false);
-
-  let kits = [
-    {
-      id: '1',
-      nome: 'Solda 1',
-      descricao:
-        'Kit de solda completo com ferro de solda, esponja e fonte inclusa',
-      status: StatusKitEnum.returnName[1],
-      idBd: 'idbd1',
-    },
-    {
-      nome: 'kit 2',
-      id: '2',
-      descricao:
-        'Kit de solda completasso com ferro de solda, esponja e fonte inclusa',
-      status: StatusKitEnum.returnName[2],
-      idBd: 'idbd2',
-    },
-    {
-      nome: 'Solda 2',
-      id: '3',
-      descricao:
-        'Kit de solda completíssimo com ferro de solda, esponja e fonte inclusa',
-      status: StatusKitEnum.returnName[3],
-      idBd: 'idbd3',
-    },
-    {
-      nome: 'Solda 3',
-      id: '4',
-      idBd: 'idbd4',
-    },
-    {
-      nome: 'Cabos 1',
-      id: '5',
-      idBd: 'idbd5',
-    },
-    {
-      nome: 'Cabos 2',
-      id: '6',
-      idBd: 'idbd6',
-    },
-    {
-      nome: 'Cabos 3',
-      id: '7',
-      idBd: 'idbd7',
-    },
-    {
-      nome: 'Fonte 1',
-      id: '8',
-      idBd: 'idbd8',
-    },
-    {
-      nome: 'Fonte 2',
-      id: '9',
-    },
-    {
-      nome: 'Fonte 3',
-      id: '10',
-    },
-    {
-      nome: 'kit 11',
-      id: '11',
-    },
-    {
-      nome: 'kit 12',
-      id: '12',
-    },
-    {
-      nome: 'kit 13',
-      id: '13',
-    },
-    {
-      nome: 'kit 14',
-      id: '14',
-    },
-  ];
-
+  const [selectedParametersOk, setSelectedParametersOk] = useState(false);
   const [countKits, setCountKits] = useState(kits.length);
-  const rows = [];
-  kits = kits.filter((kit) =>
-    kit.nome.toLowerCase().includes(searchKit.toLowerCase())
-  );
+  const editedKits = [];
+  let rows = [];
+  let filteredEditedKits;
 
-  const qtKits = kits.length;
+  kits.map((kit) => {
+    editedKits.push(produce(kit, (draft) => {
+      draft.frontId = editedKits.length + 1;
+
+      return draft;
+    }));
+  })
+
+  filteredEditedKits = editedKits.filter((kit) =>
+    kit.nome.toLowerCase().includes(searchKit.toLowerCase())
+    );
+
+  const qtKits = filteredEditedKits.length;
   const kitsPerRow = 3;
   const qtRows = parseInt((qtKits + kitsPerRow - 1) / 3, 10);
   for (let i = 0; i < qtRows; i++) {
-    rows.push(kits.splice(0, 3));
+    rows.push(filteredEditedKits.splice(0, 3));
   }
-
-  useEffect(() => {
-    kits.map((kit) => selectedKits.push({ id: kit.idBd, selected: false }));
-  }, []);
 
   function handleSearchUsuario(e) {
     setSearchUsuario(e.target.value);
@@ -146,9 +144,9 @@ function Home() {
 
   function handleCardClick(kit) {
     const newSelected = produce(selectedKits, (draft) => {
-      draft[kit.id - 1] = {
-        id: kit.idBd,
-        selected: !selectedKits[kit.id - 1]?.selected,
+      draft[kit.frontId - 1] = {
+        id: kit.id,
+        selected: !selectedKits[kit.frontId - 1]?.selected,
       };
 
       return draft;
@@ -174,10 +172,10 @@ function Home() {
 
   function clearUsuarioSelection() {
     setIsSelectedRow(false);
+    setSelectedUsuario(null);
   }
 
   function handleIsOpenModalKit() {
-    setIsNewKit(false);
     setIsOpenModalKit(!isOpenModalKit);
   }
 
@@ -188,6 +186,18 @@ function Home() {
   function handleAddClick() {
     setIsOpenModalNovoKit(!isOpenModalNovoKit);
   }
+
+  useEffect(() => {
+    editedKits.map((kit) => selectedKits.push({ id: kit.id, selected: false }));
+  }, []);
+
+  useEffect(() => {
+    let hasOneSelected = false;
+    selectedKits.map((kit) => {
+      hasOneSelected = hasOneSelected || kit.selected;
+    })
+    setSelectedParametersOk(selectedUsuario && hasOneSelected ? true : false);
+  }, [selectedUsuario, selectedKits]);
 
   return (
     <Container>
@@ -208,9 +218,9 @@ function Home() {
               <KitsRow>
                 {row.map((kit) => (
                   <Card
-                    key={kit.id}
+                    key={kit.frontId}
                     onClick={() => handleCardClick(kit)}
-                    selected={selectedKits[kit.id - 1]?.selected}
+                    selected={selectedKits[kit.frontId - 1]?.selected}
                     title={kit.nome}
                     onClickInfo={() => handleOnClickInfo(kit)}
                   />
@@ -238,7 +248,7 @@ function Home() {
             />
           </SideBody>
           <SideFooter>
-            <Button onClick={handleAssociarKits}>Realizar empréstimo</Button>
+            <Button disabled={!selectedParametersOk} onClick={handleAssociarKits}>Realizar empréstimo</Button>
           </SideFooter>
         </SideContainer>
       </BodyContainer>

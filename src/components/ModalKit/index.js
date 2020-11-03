@@ -78,18 +78,8 @@ function ModalKit({ onClick, isOpen, height, kit }) {
           justifyContent={'space-between'}
           padding={'20px 40px 20px 40px'}
         >
-          <Button
-            onClick={onClick}
-            text="fechar"
-            marginBottom="30px"
-            display="block"
-          />
-          <Button
-            text="salvar"
-            marginBottom="30px"
-            display="atualizar"
-            type="submit"
-          />
+          <Button onClick={onClick} text="fechar" marginBottom="30px" />
+          <Button text="atualizar" marginBottom="30px" type="submit" />
         </ModalFooter>
       </Form>
     </Modal>
