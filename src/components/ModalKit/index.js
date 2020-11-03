@@ -11,7 +11,7 @@ import TextArea from '../TextArea';
 import DropDownStatusKit from '../DropDownStatusKit';
 import { StatusKitEnum } from '../../enums';
 
-function ModalKit({ isOpen, onClick, height, kit }) {
+function ModalKit({ onClick, isOpen, height, kit }) {
   const [nome, setNome] = useState('');
   const [descricao, setDescricao] = useState('');
   const [selectedStatus, setSelectedStatus] = useState('');
@@ -26,6 +26,10 @@ function ModalKit({ isOpen, onClick, height, kit }) {
 
   function handleSelectedStatus(e) {
     setSelectedStatus(e.target.dataset.text);
+  }
+
+  function handleSubmit(data) {
+    console.log(data);
   }
 
   useEffect(() => {
@@ -43,7 +47,7 @@ function ModalKit({ isOpen, onClick, height, kit }) {
   return (
     <Modal isOpen={isOpen} onClick={onClick} height={height} width="460">
       <ModalHeader>{kit.nome}</ModalHeader>
-      <Form>
+      <Form onSubmit={handleSubmit}>
         <ModalContentWrapper>
           <LabelContainer text="Nome">
             <InputForm
@@ -70,26 +74,24 @@ function ModalKit({ isOpen, onClick, height, kit }) {
             name="status"
           />
         </ModalContentWrapper>
+        <ModalFooter
+          justifyContent={'space-between'}
+          padding={'20px 40px 20px 40px'}
+        >
+          <Button
+            onClick={onClick}
+            text="fechar"
+            marginBottom="30px"
+            display="block"
+          />
+          <Button
+            text="salvar"
+            marginBottom="30px"
+            display="atualizar"
+            type="submit"
+          />
+        </ModalFooter>
       </Form>
-
-      <ModalFooter
-        justifyContent={'space-between'}
-        padding={'20px 40px 20px 40px'}
-      >
-        <Button
-          onClick={onClick}
-          text="fechar"
-          marginBottom="30px"
-          display="block"
-        />
-        <Button
-          onClick={onClick}
-          text="salvar"
-          marginBottom="30px"
-          display="atualizar"
-          type="submit"
-        />
-      </ModalFooter>
     </Modal>
   );
 }

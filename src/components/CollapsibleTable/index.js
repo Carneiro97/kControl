@@ -25,26 +25,36 @@ const useRowStyles = makeStyles({
   },
 });
 
-
-function Row({onClick, key, row, isSelected}) {
+function Row({ onClick, key, row, isSelected }) {
   const [open, setOpen] = React.useState(false);
   const classes = useRowStyles();
 
   return (
     <>
-      <TableRow hover onClick={() => onClick(row)} selected={isSelected} className={classes.root}>
+      <TableRow
+        hover
+        onClick={() => onClick(row)}
+        selected={isSelected}
+        className={classes.root}
+      >
         <TableCell>
-          <IconButton aria-label="expand row" size="small" onClick={() => setOpen(!open)}>
+          <IconButton
+            aria-label="expand row"
+            size="small"
+            onClick={() => setOpen(!open)}
+          >
             {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
           </IconButton>
         </TableCell>
-          <TableCell  component="th" scope="row">
-            {row.nome}
-          </TableCell>
-          <TableCell  align="right">{row.codigo}</TableCell>
-          <TableCell  align="right">{row.adm == 1 ? 'Administrador' : 'Padrão'} </TableCell>
+        <TableCell component="th" scope="row">
+          {row.nome}
+        </TableCell>
+        <TableCell align="right">{row.codigo}</TableCell>
+        <TableCell align="right">
+          {row.adm == 1 ? 'Administrador' : 'Padrão'}{' '}
+        </TableCell>
       </TableRow>
-        <TableRow>
+      <TableRow>
         <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
           <Collapse in={open} timeout="auto" unmountOnExit>
             <Box margin={1}>
@@ -66,7 +76,9 @@ function Row({onClick, key, row, isSelected}) {
                         {infoRow.curso}
                       </TableCell>
                       <TableCell>{infoRow.cpf}</TableCell>
-                      <TableCell align="right">{infoRow.dtNascimento}</TableCell>
+                      <TableCell align="right">
+                        {infoRow.dtNascimento}
+                      </TableCell>
                     </TableRow>
                   ))}
                 </TableBody>
@@ -90,32 +102,47 @@ Row.propTypes = {
         curso: PropTypes.number.isRequired,
         cpf: PropTypes.string.isRequired,
         dtNascimento: PropTypes.string.isRequired,
-      }),
+      })
     ).isRequired,
   }).isRequired,
 };
 
-export default function CollapsibleTable({usuarios, rowClick, isSelectedRow, clickedRowId, searchUsuario }) {
-
+export default function CollapsibleTable({
+  usuarios,
+  rowClick,
+  isSelectedRow,
+  clickedRowId,
+  searchUsuario,
+}) {
   function createData(nome, codigo, adm, curso, dtNascimento, _id, cpf) {
     return {
       nome,
       codigo,
       adm,
       _id,
-      info: [
-        { curso: curso, cpf: cpf, dtNascimento: dtNascimento },
-      ],
+      info: [{ curso: curso, cpf: cpf, dtNascimento: dtNascimento }],
     };
   }
 
   let rows = [];
 
-  usuarios.filter((usuario) =>
-    usuario.nome.toLowerCase().includes(searchUsuario.toLowerCase()))
+  usuarios
+    .filter((usuario) =>
+      usuario.nome.toLowerCase().includes(searchUsuario.toLowerCase())
+    )
     .map((usuario) => {
-      rows.push(createData(usuario.nome, usuario.codigo, usuario.btAdm, usuario.curso, usuario.dtNascimento, usuario._id, usuario.cpf));
-    })
+      rows.push(
+        createData(
+          usuario.nome,
+          usuario.codigo,
+          usuario.btAdm,
+          usuario.curso,
+          usuario.dtNascimento,
+          usuario._id,
+          usuario.cpf
+        )
+      );
+    });
 
   return (
     <TableContainer component={Paper}>
@@ -130,13 +157,12 @@ export default function CollapsibleTable({usuarios, rowClick, isSelectedRow, cli
         </TableHead>
         <TableBody>
           {rows.map((row, index) => (
-            <Row  isSelected =
-                              {
-                                row._id === clickedRowId ? isSelectedRow : false 
-                              }
-                  onClick={rowClick}
-                  key={row._id}
-                  row={row} />
+            <Row
+              isSelected={row._id === clickedRowId ? isSelectedRow : false}
+              onClick={rowClick}
+              key={row._id}
+              row={row}
+            />
           ))}
         </TableBody>
       </Table>

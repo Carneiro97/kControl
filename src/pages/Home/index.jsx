@@ -45,6 +45,7 @@ function Home() {
       descricao:
         'Kit de solda completo com ferro de solda, esponja e fonte inclusa',
       status: StatusKitEnum.returnName[1],
+      idBd: 'idbd1',
     },
     {
       nome: 'kit 2',
@@ -52,6 +53,7 @@ function Home() {
       descricao:
         'Kit de solda completasso com ferro de solda, esponja e fonte inclusa',
       status: StatusKitEnum.returnName[2],
+      idBd: 'idbd2',
     },
     {
       nome: 'Solda 2',
@@ -59,26 +61,32 @@ function Home() {
       descricao:
         'Kit de solda completíssimo com ferro de solda, esponja e fonte inclusa',
       status: StatusKitEnum.returnName[3],
+      idBd: 'idbd3',
     },
     {
       nome: 'Solda 3',
       id: '4',
+      idBd: 'idbd4',
     },
     {
       nome: 'Cabos 1',
       id: '5',
+      idBd: 'idbd5',
     },
     {
       nome: 'Cabos 2',
       id: '6',
+      idBd: 'idbd6',
     },
     {
       nome: 'Cabos 3',
       id: '7',
+      idBd: 'idbd7',
     },
     {
       nome: 'Fonte 1',
       id: '8',
+      idBd: 'idbd8',
     },
     {
       nome: 'Fonte 2',
@@ -120,7 +128,7 @@ function Home() {
   }
 
   useEffect(() => {
-    kits.map((kit) => selectedKits.push(false));
+    kits.map((kit) => selectedKits.push({ id: kit.idBd, selected: false }));
   }, []);
 
   function handleSearchUsuario(e) {
@@ -138,10 +146,14 @@ function Home() {
 
   function handleCardClick(kit) {
     const newSelected = produce(selectedKits, (draft) => {
-      draft[kit.id - 1] = !selectedKits[kit.id - 1];
+      draft[kit.id - 1] = {
+        id: kit.idBd,
+        selected: !selectedKits[kit.id - 1]?.selected,
+      };
 
       return draft;
     });
+
     setSelectedKits(newSelected);
   }
 
@@ -151,8 +163,13 @@ function Home() {
   }
 
   function handleAssociarKits() {
-    console.log(selectedKits);
-    console.log(selectedUsuario);
+    let selectedKitsIds = [];
+    selectedKits.filter((selectedKit) => selectedKit.selected === true).map((selectedKit) => selectedKitsIds.push(selectedKit.id));
+    const associarParams = {
+      kits: selectedKitsIds,
+      idUsuario: selectedUsuario,
+    };
+    console.log(associarParams);
   }
 
   function clearUsuarioSelection() {
@@ -193,7 +210,7 @@ function Home() {
                   <Card
                     key={kit.id}
                     onClick={() => handleCardClick(kit)}
-                    selected={selectedKits[kit.id - 1]}
+                    selected={selectedKits[kit.id - 1]?.selected}
                     title={kit.nome}
                     onClickInfo={() => handleOnClickInfo(kit)}
                   />
