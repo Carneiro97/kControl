@@ -14,28 +14,38 @@ export const Container = styled.div`
   border-color: ${theme.mainColor};
   text-align: center;
 
+  ${({ disabled }) =>
+    disabled
+      ? css`
+          cursor: default;
+          color: ${theme.secondColor};
+          border-color: ${theme.secondColor};
+          background-color: ${theme.greyDisable};
+        `
+      : css`
+          &:hover {
+            border-width: medium;
+            border-color: ${theme.secondColor};
+            font-weight: bold;
+            cursor: pointer;
+            background-color: ${theme.red100};
+          }
+
+          &:active {
+            color: ${theme.secondColor};
+          }
+        `};
+
   ${({ selected }) =>
-        selected
-            ? css`
-                  background-color: ${theme.red100};
-                  border-color: ${theme.mainColor};
-                  color: ${theme.mainColor};
-                  border-width: medium;
-                  font-weight: bold;
-              `
-            : ''};
-
-  &:hover {
-    border-width: medium;
-    border-color: ${theme.secondColor};
-    font-weight: bold;
-    cursor: pointer;
-    background-color: ${theme.red100};
-  }
-
-  &:active {
-    color: ${theme.secondColor};
-  }
+    selected
+      ? css`
+          background-color: ${theme.red100};
+          border-color: ${theme.mainColor};
+          color: ${theme.mainColor};
+          border-width: medium;
+          font-weight: bold;
+        `
+      : ''};
 `;
 
 export const CardContent = styled.div`
@@ -46,4 +56,5 @@ export const CardContent = styled.div`
 export const CardIconContainer = styled.div`
   margin-top: 15px;
   width: fit-content;
+  cursor: pointer;
 `;

@@ -14,7 +14,8 @@ import {
   Container,
   HeaderContainer,
   BodyContainer,
-  SideContainer,
+  UsuariosContainer,
+  EmprestimosContainer,
   SideHeader,
   SideBody,
   KitsRow,
@@ -53,48 +54,61 @@ function Home() {
     {
       nome: 'Solda 3',
       id: 'idbd4',
+      status: StatusKitEnum.returnName[3],
     },
     {
       nome: 'Cabos 1',
       id: 'idbd5',
+      status: StatusKitEnum.returnName[2],
     },
     {
       nome: 'Cabos 2',
       id: 'idbd6',
+      status: StatusKitEnum.returnName[3],
     },
     {
       nome: 'Cabos 3',
       id: 'idbd7',
+      status: StatusKitEnum.returnName[2],
     },
     {
       nome: 'Fonte 1',
       id: 'idbd8',
+      status: StatusKitEnum.returnName[3],
     },
     {
       nome: 'Fonte 2',
       id: 'idbd9',
+      status: StatusKitEnum.returnName[3],
     },
     {
       nome: 'Fonte 3',
       id: 'idbd10',
+      status: StatusKitEnum.returnName[3],
     },
     {
       nome: 'kit 11',
       id: 'idbd11',
+      status: StatusKitEnum.returnName[2],
     },
     {
       nome: 'kit 12',
       id: 'idbd12',
+      status: StatusKitEnum.returnName[2],
     },
     {
       nome: 'kit 13',
       id: 'idbd13',
+      status: StatusKitEnum.returnName[2],
     },
     {
       nome: 'kit 14',
       id: 'idbd14',
+      status: StatusKitEnum.returnName[2],
     },
   ];
+
+  // DELETE ICON REQUEST
 
   const [countUsuarios, setCountUsuarios] = useState(getUsuarios.count);
   const [isSelectedRow, setIsSelectedRow] = useState(false);
@@ -219,17 +233,18 @@ function Home() {
                 {row.map((kit) => (
                   <Card
                     key={kit.frontId}
-                    onClick={() => handleCardClick(kit)}
+                    onClick={kit.status === 'Emprestado' ? null : () => handleCardClick(kit)}
                     selected={selectedKits[kit.frontId - 1]?.selected}
                     title={kit.nome}
                     onClickInfo={() => handleOnClickInfo(kit)}
+                    disabled={kit.status === 'Emprestado' ? true : false}
                   />
                 ))}
               </KitsRow>
             ))}
           </KitsRows>
         </KitsContainer>
-        <SideContainer>
+        <UsuariosContainer>
           <SideHeader>{countUsuarios} usuários cadastrados</SideHeader>
           <InputSearch
             inputName="searchUsuario"
@@ -250,7 +265,23 @@ function Home() {
           <SideFooter>
             <Button disabled={!selectedParametersOk} onClick={handleAssociarKits}>Realizar empréstimo</Button>
           </SideFooter>
-        </SideContainer>
+        </UsuariosContainer>
+        {/* <EmprestimosContainer>
+          <SideHeader> Empréstimos </SideHeader>
+          <InputSearch
+            inputName="searchUsuario"
+            hideAddButton
+            padding="15px 0 15px 0"
+            handleChange={handleSearchUsuario}
+            placeholder="Pesquise pelo nome do usuário"
+          />
+          <SideBody>
+            
+          </SideBody>
+          <SideFooter>
+            <Button disabled={!selectedParametersOk} onClick={handleAssociarKits}>Finalizar empréstimo</Button>
+          </SideFooter>
+        </EmprestimosContainer> */}
       </BodyContainer>
       <ModalKit
         kit={modalKit}

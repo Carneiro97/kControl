@@ -2,13 +2,14 @@ import styled from 'styled-components';
 
 import theme from '../../styles/theme';
 
-export const Container = styled.div``;
+export const Container = styled.div`
+  padding: 0 2% 0 2%;
+`;
 export const HeaderContainer = styled.div`
   text-align: -webkit-center;
 `;
 export const BodyContainer = styled.div`
   display: flex;
-  padding: 0px 10% 0px 10%;
   justify-content: center;
 `;
 
@@ -24,7 +25,8 @@ export const KitsHeader = styled.div`
 `;
 
 export const KitsContainer = styled.div`
-  width: 100%;
+  /* width: 100%; */
+  width: 70%;
   display: block;
   border-left: solid;
   border-right: solid;
@@ -44,9 +46,15 @@ export const KitsRow = styled.div`
   justify-content: space-between;
 `;
 
-export const SideContainer = styled.div`
+export const UsuariosContainer = styled.div`
   /* background-color: purple; */
-  width: 60%;
+  padding: 15px;
+  border-right: solid;
+  border-width: thin;
+  border-color: ${theme.mainColor};
+`;
+export const EmprestimosContainer = styled.div`
+  /* background-color: purple; */
   padding: 15px;
   border-right: solid;
   border-width: thin;
