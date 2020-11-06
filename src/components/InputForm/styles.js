@@ -4,7 +4,10 @@ import { lighten } from 'polished';
 import theme from '../../styles/theme';
 
 export const Container = styled.input.attrs((props) => ({
-  readonly: props.readonly,
+  readOnly: props.readOnly,
+  autoFocus: props.autoFocus,
+  id: props.id,
+  name: props.name,
 }))`
   font: 16px Calibri Regular;
   color: ${theme.grey};
@@ -12,26 +15,33 @@ export const Container = styled.input.attrs((props) => ({
   outline: none;
 
 
-  ::placeholder {
-    font: 16px Calibri Regular;
-    letter-spacing: 0.52px;
-    color: ${theme.grey}
-}
-
-    &:hover:enabled {        
-      ${({ lessHover }) =>
-        !lessHover
-          ? css`
-              border: 2px solid ${theme.secondColor};
-            `
-          : css`
-              border: 1px solid ${theme.secondColor};
-            `}
-    }
-
-    &:focus{
-      border: 2px solid ${theme.mainColor} !important;
-    }
+    ${({ hide }) =>
+      !hide
+        ? css`
+            &:focus {
+              border: 2px solid ${theme.mainColor} !important;
+            }
+            &:hover:enabled {
+              ${({ lessHover }) =>
+                !lessHover
+                  ? css`
+                      border: 2px solid ${theme.secondColor};
+                    `
+                  : css`
+                      border: 1px solid ${theme.secondColor};
+                    `}
+              ::placeholder {
+                font: 16px Calibri Regular;
+                letter-spacing: 0.52px;
+                color: ${theme.grey};
+              }
+            }
+          `
+        : css`
+            border: none !important;
+            color: transparent;
+            text-shadow: 0 0 0 ${theme.secondColor};
+          `}
 
 
 ${({ margin }) =>

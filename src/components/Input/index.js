@@ -26,13 +26,9 @@ const Input = ({
   display,
 }) => {
   let textInput = null;
-  useEffect(() => {
-    if (autoFocus) {
-      textInput.focus();
-    }
-  }, []);
   return (
     <Container
+      autoFocus={autoFocus}
       hide={hide}
       ref={(inputRef) => {
         textInput = inputRef;

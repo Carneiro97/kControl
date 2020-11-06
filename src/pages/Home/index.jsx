@@ -229,14 +229,14 @@ function Home() {
     setIsBiometria(e.target.checked);
   };
 
-  function handleChangeAutenticacaoAluno(e) {
-    setAutenticacaoAluno(e.target.value);
-  };
-
-  function handleModalEmprestimoValidationSubmit(e) {
-    console.log(autenticacaoAluno);
+  function handleModalEmprestimoValidationSubmit(data) {
+    setAutenticacaoAluno(data.autenticacao);
   };
   
+  useEffect(() => {
+    console.log(autenticacaoAluno);
+  }, [autenticacaoAluno]);
+
   useEffect(() => {
     editedKits.map((kit) => selectedKits.push({ id: kit.id, selected: false }));
   }, []);
@@ -351,7 +351,6 @@ function Home() {
         textHeader='Autenticação do aluno'
         textTitle="Daniel Carneiro"
         text="Aguardando autenticação do aluno..."
-        onChangeInput={handleChangeAutenticacaoAluno}
         onSubmit={handleModalEmprestimoValidationSubmit}
         >
       </ModalEmprestimoValidation>

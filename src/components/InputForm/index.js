@@ -23,6 +23,8 @@ const InputForm = ({
   className,
   lessHover,
   readonly,
+  autoFocus,
+  id,
   ...rest
 }) => {
   const inputRef = useRef(null);
@@ -38,6 +40,8 @@ const InputForm = ({
 
   return (
     <Container
+      id={id}
+      autoFocus={autoFocus}
       defaultValue={defaultValue}
       ref={inputRef}
       margin={margin}

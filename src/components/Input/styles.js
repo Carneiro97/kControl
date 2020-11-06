@@ -6,6 +6,7 @@ import theme from '../../styles/theme';
 export const Container = styled.input.attrs((props) => ({
   disabled: props.disabled,
   type: props.type,
+  autoFocus: props.autoFocus,
 }))`
 
   font: 16px Calibri Regular;

@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 
-import Input from '../Input';
+import InputForm from '../InputForm';
 import LoadingIcon from '../../components/LoadingIcon';
 import Button from '../Button';
 import {
@@ -23,20 +23,36 @@ function ModalEmprestimoValidation({
   text,
   textHeader,
   textTitle,
-  onChangeInput,
   onSubmit,
 }) {
+  function handleOnInValid(e) {
+    e.target.setCustomValidity('É necessário autenticar o usuário.');
+  }
+
+  function handleInputChange(e) {
+    e.target.setCustomValidity('');
+  }
+
   return (
     <Modal isOpen={isOpen} onClick={onClick} height="345" width="460">
       <ModalHeader padding="10px">{textHeader}</ModalHeader>
-      <Form onSubmit={onSubmit}>
+      <Form onInvalid={handleOnInValid} autoComplete="off" onSubmit={onSubmit}>
         <ModalContentWrapper paddingTop="50px">
           <ModalContent>
             <Container>
               <LoadingIcon size="50px" />
               <TextTitle text={textTitle} />
               <ContentText>{text}</ContentText>
-              <Input type="text" hide autoFocus handleChange={onChangeInput} />
+              <InputForm
+                name="autenticacao"
+                type="text"
+                autoFocus
+                hide
+                handleChange={handleInputChange}
+                textAlign="center"
+                required
+                title=""
+              />
             </Container>
           </ModalContent>
         </ModalContentWrapper>
