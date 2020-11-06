@@ -50,11 +50,25 @@ export const Container = styled.div`
 
 export const CardContent = styled.div`
   text-align: -webkit-center;
-  padding-top: 30%;
 `;
 
 export const CardIconContainer = styled.div`
   margin-top: 15px;
   width: fit-content;
   cursor: pointer;
+`;
+
+export const CardDeleteIconContainer = styled.div`
+  width: fit-content;
+  margin-bottom: 15%;
+  width: 100%;
+  text-align: end;
+  padding: 5%;
+
+  ${({ emprestado }) =>
+    !emprestado
+      ? css`
+          cursor: pointer;
+        `
+      : ``};
 `;

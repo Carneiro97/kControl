@@ -6,7 +6,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import MySwitch from '../../components/Switch';
 import StoreContext from '../../store/Context';
 
-import {Container, LoginContainer} from './styles';
+import { Container, LoginContainer } from './styles';
 
 function Login() {
   const history = useHistory();
@@ -16,40 +16,50 @@ function Login() {
   const [senha, setSenha] = useState(``);
   const [loginType, setLoginType] = useState(``);
   const [loginParams, setLoginParams] = useState({
-    codigo: usuario, senha: senha
+    codigo: usuario,
+    senha: senha,
   });
 
   if (isLogged) {
-    history.push('/home')
+    history.push('/home');
   }
 
-  function handleSubmit(e){
+  function handleSubmit(e) {
     e.preventDefault();
-    const res = axios.post('http://localhost:3030/usuarios/login/' + loginType, loginParams)
-    .then(function (response) {
-      toast.success("Login efetuado com sucesso.");  
-      setIsLogged(true);
-      setNomeUsuario(response.data.usuario);
-      setTimeout(function() {
-        history.push('/home');
-      }, 1500);
-    })
-    .catch(function(error) {
-      console.log(error);
-      toast.error("Usuário ou senha inválido.");
-      setIsLogged(false);
-      setNomeUsuario('');
-    });
-  };
-
-  function handleUsuario(e){
-    setUsuario(e.target.value);
-    setLoginParams(loginType === 'codigo' ? {codigo: e.target.value, senha: senha} : {cpf: e.target.value, senha: senha})
+    const res = axios
+      .post('http://localhost:3030/usuarios/login/' + loginType, loginParams)
+      .then(function (response) {
+        toast.success('Login efetuado com sucesso.');
+        setIsLogged(true);
+        setNomeUsuario(response.data.usuario);
+        setTimeout(function () {
+          history.push('/home');
+        }, 1500);
+      })
+      .catch(function (error) {
+        console.log(error);
+        toast.error('Usuário ou senha inválido.');
+        setIsLogged(false);
+        setNomeUsuario('');
+      });
   }
 
-  function handleSenha(e){
+  function handleUsuario(e) {
+    setUsuario(e.target.value);
+    setLoginParams(
+      loginType === 'codigo'
+        ? { codigo: e.target.value, senha: senha }
+        : { cpf: e.target.value, senha: senha }
+    );
+  }
+
+  function handleSenha(e) {
     setSenha(e.target.value);
-    setLoginParams(loginType === 'codigo' ? {codigo: usuario, senha: e.target.value} : {cpf: usuario, senha: e.target.value})
+    setLoginParams(
+      loginType === 'codigo'
+        ? { codigo: usuario, senha: e.target.value }
+        : { cpf: usuario, senha: e.target.value }
+    );
   }
 
   const handleChecked = (event) => {
@@ -61,7 +71,11 @@ function Login() {
   }, [checked]);
 
   useEffect(() => {
-    setLoginParams(loginType === 'codigo' ? {codigo: usuario, senha: senha} : {cpf: usuario, senha: senha})
+    setLoginParams(
+      loginType === 'codigo'
+        ? { codigo: usuario, senha: senha }
+        : { cpf: usuario, senha: senha }
+    );
   }, [loginType]);
 
   return (
@@ -76,9 +90,7 @@ function Login() {
 
       <div className="sidenav">
         <div className="login-main-text">
-          <h2>
-            Retirada de kits escolares
-          </h2>
+          <h2>Retirada de kits escolares</h2>
         </div>
       </div>
       <div className="main">
@@ -90,7 +102,9 @@ function Login() {
                 <input
                   type="text"
                   className="form-control"
-                  placeholder={checked ? "Digite seu CPF" : "Digite seu código de usuário"}
+                  placeholder={
+                    checked ? 'Digite seu CPF' : 'Digite seu código de usuário'
+                  }
                   onChange={handleUsuario}
                 />
               </div>
@@ -107,8 +121,13 @@ function Login() {
                 <button type="submit" className="btn btn-black">
                   Login
                 </button>
-                <MySwitch checked={checked} onChange={handleChecked} marginLeft="30px" />
-              </LoginContainer>          
+                <MySwitch
+                  checked={checked}
+                  onChange={handleChecked}
+                  marginLeft="30px"
+                  label="Login por CPF"
+                />
+              </LoginContainer>
             </form>
           </div>
         </div>

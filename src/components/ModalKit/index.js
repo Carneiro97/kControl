@@ -56,6 +56,7 @@ function ModalKit({ onClick, isOpen, height, kit }) {
               placeholder="Insira o nome do kit"
               lessHover
               value={nome}
+              disabled={kit.status === 'Emprestado'}
             />
           </LabelContainer>
           <LabelContainer text="Descrição">
@@ -65,6 +66,7 @@ function ModalKit({ onClick, isOpen, height, kit }) {
               placeholder="Insira a descrição do kit"
               lessHover
               value={descricao}
+              disabled={kit.status === 'Emprestado'}
             />
           </LabelContainer>
           <DropDownStatusKit
@@ -72,6 +74,7 @@ function ModalKit({ onClick, isOpen, height, kit }) {
             onClick={handleSelectedStatus}
             headerText={selectedStatus}
             name="status"
+            disable={kit.status === 'Emprestado'}
           />
         </ModalContentWrapper>
         <ModalFooter
@@ -79,7 +82,12 @@ function ModalKit({ onClick, isOpen, height, kit }) {
           padding={'20px 40px 20px 40px'}
         >
           <Button onClick={onClick} text="fechar" marginBottom="30px" />
-          <Button text="atualizar" marginBottom="30px" type="submit" />
+          <Button
+            disabled={kit.status === 'Emprestado'}
+            text="atualizar"
+            marginBottom="30px"
+            type="submit"
+          />
         </ModalFooter>
       </Form>
     </Modal>

@@ -1,7 +1,7 @@
 import React, { useContext } from 'react';
 
 import { MdClose } from 'react-icons/md';
-import ModalContext  from '../../context/ModalContext';
+import ModalContext from '../../context/ModalContext';
 
 import {
   ModalContainer,
@@ -68,6 +68,25 @@ const ModalContentWrapper = ({ children, height, display, paddingTop }) => {
   );
 };
 
+const ModalContent = ({
+  children,
+  isModalWithWarning,
+  overflow,
+  maxHeight,
+  ref,
+}) => {
+  return (
+    <ModalContentContainer
+      isModalWithWarning={isModalWithWarning}
+      overflow={overflow}
+      maxHeight={maxHeight}
+      ref={ref}
+    >
+      {children}
+    </ModalContentContainer>
+  );
+};
+
 const ModalBody = ({
   children,
   isModalWithWarning,
@@ -108,4 +127,11 @@ const ModalFooter = ({
   );
 };
 
-export { Modal, ModalHeader, ModalContentWrapper, ModalBody, ModalFooter };
+export {
+  Modal,
+  ModalHeader,
+  ModalContentWrapper,
+  ModalContent,
+  ModalBody,
+  ModalFooter,
+};

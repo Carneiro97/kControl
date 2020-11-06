@@ -28,13 +28,15 @@ function DropDownStatusKit({
         </DropDownHeader>
         <DropDownListContainer>
           <Dropdown maxHeight={maxHeight}>
-            {Object.values(status).map((singleStatus, index) => (
-              <Option
-                key={`${index}_${singleStatus}`}
-                onClick={onClick}
-                text={singleStatus}
-              />
-            ))}
+            {Object.values(status)
+              .filter((singleStatus) => singleStatus !== 'Emprestado')
+              .map((singleStatus, index) => (
+                <Option
+                  key={`${index}_${singleStatus}`}
+                  onClick={onClick}
+                  text={singleStatus}
+                />
+              ))}
           </Dropdown>
         </DropDownListContainer>
       </DropDownContainer>

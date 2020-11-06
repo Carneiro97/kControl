@@ -8,6 +8,9 @@ import StoreContext from '../../store/Context';
 import CollapsibleTable from '../../components/CollapsibleTable';
 import ModalKit from '../../components/ModalKit';
 import ModalNovoKit from '../../components/ModalNovoKit';
+import ModalCancelAction from '../../components/ModalCancelAction';
+import ModalEmprestimoValidation from '../../components/ModalEmprestimoValidation';
+import MySwitch from '../../components/Switch';
 import { StatusKitEnum } from '../../enums';
 
 import {
@@ -108,8 +111,6 @@ function Home() {
     },
   ];
 
-  // DELETE ICON REQUEST
-
   const [countUsuarios, setCountUsuarios] = useState(getUsuarios.count);
   const [isSelectedRow, setIsSelectedRow] = useState(false);
   const [selectedUsuario, setSelectedUsuario] = useState();
@@ -117,9 +118,14 @@ function Home() {
   const [searchKit, setSearchKit] = useState('');
   const [isOpenModalKit, setIsOpenModalKit] = useState(false);
   const [isOpenModalNovoKit, setIsOpenModalNovoKit] = useState(false);
+  const [isOpenModalCancelAction, setIsOpenModalCancelAction] = useState(false);
   const [modalKit, setModalKit] = useState('');
   const [selectedParametersOk, setSelectedParametersOk] = useState(false);
   const [countKits, setCountKits] = useState(kits.length);
+  const [kitToBeDeleted, setKitToBeDeleted] = useState([]);
+  const [isBiometria, setIsBiometria] = useState(false);
+  const [isOpenModalEmprestimoValidation, setIsOpenModalEmprestimoValidation] = useState(false);
+  const [autenticacaoAluno, setAutenticacaoAluno] = useState('');
   const editedKits = [];
   let rows = [];
   let filteredEditedKits;
@@ -151,7 +157,8 @@ function Home() {
     setSearchKit(e.target.value);
   }
 
-  function handleOnClickInfo(kit) {
+  function handleOnClickInfo(kit, e){
+    e.stopPropagation();
     setModalKit(kit);
     handleIsOpenModalKit();
   }
@@ -197,10 +204,39 @@ function Home() {
     setIsOpenModalNovoKit(!isOpenModalNovoKit);
   }
 
+  function handleIsOpenModalCancelAction(e, kit) {
+    e.stopPropagation();
+    setKitToBeDeleted(kit);
+    if (isOpenModalCancelAction){
+      setKitToBeDeleted(null);
+    }
+    setIsOpenModalCancelAction(!isOpenModalCancelAction);
+  }
+
+  function handleIsOpenModalEmprestimoValidation() {
+    setIsOpenModalEmprestimoValidation(!isOpenModalEmprestimoValidation);
+  }
+
   function handleAddClick() {
     setIsOpenModalNovoKit(!isOpenModalNovoKit);
   }
 
+  function handleOnClickDelete(){
+    console.log(kitToBeDeleted);
+  }
+  
+  function handleIsBiometria(e) {
+    setIsBiometria(e.target.checked);
+  };
+
+  function handleChangeAutenticacaoAluno(e) {
+    setAutenticacaoAluno(e.target.value);
+  };
+
+  function handleModalEmprestimoValidationSubmit(e) {
+    console.log(autenticacaoAluno);
+  };
+  
   useEffect(() => {
     editedKits.map((kit) => selectedKits.push({ id: kit.id, selected: false }));
   }, []);
@@ -236,8 +272,9 @@ function Home() {
                     onClick={kit.status === 'Emprestado' ? null : () => handleCardClick(kit)}
                     selected={selectedKits[kit.frontId - 1]?.selected}
                     title={kit.nome}
-                    onClickInfo={() => handleOnClickInfo(kit)}
-                    disabled={kit.status === 'Emprestado' ? true : false}
+                    onClickInfo={e => handleOnClickInfo(kit, e)}
+                    emprestado={kit.status === 'Emprestado' ? true : false}
+                    onClickDelete={e => handleIsOpenModalCancelAction(e, kit)}
                   />
                 ))}
               </KitsRow>
@@ -263,7 +300,13 @@ function Home() {
             />
           </SideBody>
           <SideFooter>
-            <Button disabled={!selectedParametersOk} onClick={handleAssociarKits}>Realizar empréstimo</Button>
+            <Button disabled={!selectedParametersOk} onClick={handleIsOpenModalEmprestimoValidation}>Realizar empréstimo</Button>
+            <MySwitch
+              checked={isBiometria}
+              onChange={handleIsBiometria}
+              marginLeft="30px"
+              label="Autenticação biométrica"
+            />
           </SideFooter>
         </UsuariosContainer>
         {/* <EmprestimosContainer>
@@ -292,8 +335,27 @@ function Home() {
         isOpen={isOpenModalNovoKit}
         onClick={handleIsOpenModalNovoKit}
       />
+      <ModalCancelAction
+        isOpen={isOpenModalCancelAction}
+        onClick={handleIsOpenModalCancelAction}
+        onClickOk={handleOnClickDelete}
+        textHeader='Exclusão de kit'
+        textTitle={kitToBeDeleted?.nome}
+        text="Deseja realmente excluir esse kit?"
+        >
+      </ModalCancelAction>
+      <ModalEmprestimoValidation
+        isOpen={isOpenModalEmprestimoValidation}
+        onClick={handleIsOpenModalEmprestimoValidation}
+        onClickOk={handleAssociarKits}
+        textHeader='Autenticação do aluno'
+        textTitle="Daniel Carneiro"
+        text="Aguardando autenticação do aluno..."
+        onChangeInput={handleChangeAutenticacaoAluno}
+        onSubmit={handleModalEmprestimoValidationSubmit}
+        >
+      </ModalEmprestimoValidation>
     </Container>
-  );
-}
+  )};
 
 export default Home;

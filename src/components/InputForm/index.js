@@ -22,6 +22,7 @@ const InputForm = ({
   margin,
   className,
   lessHover,
+  readonly,
   ...rest
 }) => {
   const inputRef = useRef(null);
@@ -58,6 +59,7 @@ const InputForm = ({
       disabled={disabled}
       className={className}
       lessHover={lessHover}
+      readonly={readonly}
       {...rest}
     />
   );

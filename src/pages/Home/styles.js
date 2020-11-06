@@ -78,5 +78,6 @@ export const SideBody = styled.div`
 `;
 
 export const SideFooter = styled.div`
-  text-align: end;
+  display: flex;
+  justify-content: space-between;
 `;

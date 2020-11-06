@@ -1,12 +1,32 @@
 import React from 'react';
 import { BsInfoCircle } from 'react-icons/bs';
-import { Container, CardContent, CardIconContainer } from './styles';
+import { MdDeleteForever } from 'react-icons/md';
+import {
+  Container,
+  CardContent,
+  CardIconContainer,
+  CardDeleteIconContainer,
+} from './styles';
 
 import theme from '../../styles/theme';
 
-const Card = ({ onClick, selected, title, onClickInfo, disabled }) => (
-  <Container disabled={disabled} onClick={onClick} selected={selected}>
+const Card = ({
+  onClick,
+  selected,
+  title,
+  onClickInfo,
+  onClickDelete,
+  emprestado,
+}) => (
+  <Container disabled={emprestado} onClick={onClick} selected={selected}>
     <CardContent>
+      <CardDeleteIconContainer emprestado={emprestado}>
+        <MdDeleteForever
+          color={emprestado ? theme.grey : theme.secondColor}
+          title={'Deletar kit'}
+          onClick={emprestado ? null : onClickDelete}
+        />
+      </CardDeleteIconContainer>
       {title}
       <CardIconContainer>
         <BsInfoCircle
