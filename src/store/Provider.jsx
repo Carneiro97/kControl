@@ -3,7 +3,13 @@ import Context from './Context';
 import useStorage from '../utils/useStorage';
 import axios from 'axios';
 import { toast } from 'react-toastify';
-import { ErrorToast, SuccessToast } from '../components/Toast';
+import {
+  ErrorToast,
+  SuccessToast,
+  DeleteToast,
+  AddToast,
+  UpdateToast,
+} from '../components/Toast';
 
 const StoreProvider = ({ children }) => {
   const [isLogged, setIsLogged, removeIsLogged] = useStorage('isLogged');
@@ -27,6 +33,11 @@ const StoreProvider = ({ children }) => {
       })
       .catch(function (error) {
         console.log(error);
+        toast.error(
+          <ErrorToast size="40">
+            <strong> Erro ao carregar usuários. </strong>
+          </ErrorToast>
+        );
       });
   };
 
@@ -39,6 +50,11 @@ const StoreProvider = ({ children }) => {
       })
       .catch(function (error) {
         console.log(error);
+        toast.error(
+          <ErrorToast size="40">
+            <strong> Erro ao carregar kits. </strong>
+          </ErrorToast>
+        );
       });
   };
 
@@ -47,14 +63,19 @@ const StoreProvider = ({ children }) => {
       .patch(`http://localhost:3030/kits/${kit._id}`, params)
       .then(function (response) {
         toast.error(
-          <SuccessToast size="40">
+          <UpdateToast size="40">
             <strong> Kit atualizado com sucesso! </strong>
-          </SuccessToast>
+          </UpdateToast>
         );
         handleGetKits();
       })
       .catch(function (error) {
         console.log(error);
+        toast.error(
+          <ErrorToast size="40">
+            <strong> Erro ao atualizar kit. </strong>
+          </ErrorToast>
+        );
       });
   };
 
@@ -63,14 +84,40 @@ const StoreProvider = ({ children }) => {
       .post('http://localhost:3030/kits', params)
       .then(function (response) {
         toast.error(
-          <SuccessToast size="40">
+          <AddToast size="40">
             <strong> Kit criado com sucesso. </strong>
-          </SuccessToast>
+          </AddToast>
         );
         handleGetKits();
       })
       .catch(function (error) {
         console.log(error);
+        toast.error(
+          <ErrorToast size="40">
+            <strong> Erro ao criar kit. </strong>
+          </ErrorToast>
+        );
+      });
+  };
+
+  const handleDeleteKit = (id) => {
+    axios
+      .delete(`http://localhost:3030/kits/${id}`)
+      .then(function (response) {
+        toast.error(
+          <DeleteToast size="40">
+            <strong> Kit excluído com sucesso. </strong>
+          </DeleteToast>
+        );
+        handleGetKits();
+      })
+      .catch(function (error) {
+        console.log(error);
+        toast.error(
+          <ErrorToast size="40">
+            <strong> Erro ao deletar kit. </strong>
+          </ErrorToast>
+        );
       });
   };
 
@@ -89,6 +136,7 @@ const StoreProvider = ({ children }) => {
         handleGetKits,
         handlePatchKit,
         handleNewKit,
+        handleDeleteKit,
       }}
     >
       {children}

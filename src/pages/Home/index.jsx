@@ -32,7 +32,7 @@ import {
 
 function Home() {
   const [selectedKits, setSelectedKits] = useState([]);
-  const { handleGetUsuarios, getUsuarios, handleGetKits, getKits } = useContext(StoreContext);
+  const { handleGetUsuarios, getUsuarios, handleGetKits, getKits, handleDeleteKit } = useContext(StoreContext);
   const usuarios = getUsuarios.usuarios;
   const kits = getKits.kits;
 
@@ -237,7 +237,8 @@ function Home() {
   }
 
   function handleOnClickDelete() {
-    console.log(kitToBeDeleted);
+    handleDeleteKit(kitToBeDeleted._id);
+    setIsOpenModalCancelAction(!isOpenModalCancelAction);
   }
 
   function handleIsBiometria(e) {

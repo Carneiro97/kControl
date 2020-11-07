@@ -4,6 +4,9 @@ import { ToastContainer } from 'react-toastify';
 import { RiErrorWarningLine } from 'react-icons/ri';
 import { GiCancel } from 'react-icons/gi';
 import { MdDoneAll } from 'react-icons/md';
+import { RiDeleteBin2Line } from 'react-icons/ri';
+import { GoDiffAdded } from 'react-icons/go';
+import { MdUpdate } from 'react-icons/md';
 
 import theme from '../../styles/theme';
 
@@ -32,12 +35,31 @@ export const Container = styled(ToastContainer).attrs((props) => ({
   }
 `;
 
-export const SuccessToastContainer = styled(MdDoneAll).attrs((props) => ({
+export const UpdateToastContainer = styled(MdUpdate).attrs((props) => ({
   size: props.size,
-  color: 'green',
+  color: theme.mainColor,
 }))`
   margin: 0;
 `;
+export const SuccessToastContainer = styled(MdDoneAll).attrs((props) => ({
+  size: props.size,
+  color: theme.mainColor,
+}))`
+  margin: 0;
+`;
+export const DeleteToastContainer = styled(RiDeleteBin2Line).attrs((props) => ({
+  size: props.size,
+  color: theme.mainColor,
+}))`
+  margin: 0;
+`;
+export const AddToastContainer = styled(GoDiffAdded).attrs((props) => ({
+  size: props.size,
+  color: theme.mainColor,
+}))`
+  margin: 0;
+`;
+
 export const WarningToastContainer = styled(RiErrorWarningLine).attrs(
   (props) => ({
     size: props.size,
