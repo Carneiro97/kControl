@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { Form } from '@unform/web';
 
 import { Modal, ModalHeader, ModalContentWrapper, ModalFooter } from '../Modal';
@@ -10,12 +10,14 @@ import InputForm from '../InputForm';
 import TextArea from '../TextArea';
 import DropDownStatusKit from '../DropDownStatusKit';
 import { StatusKitEnum } from '../../enums';
+import StoreContext from '../../store/Context';
 
-function ModalNovoKit({ isOpen, onClick, height }) {
+function ModalNovoKit({ setIsOpen, isOpen, onClick, height }) {
   const [descricao, setDescricao] = useState('');
   const [nome, setNome] = useState('');
   const [selectedStatus, setSelectedStatus] = useState(null);
   const [allFieldsOk, setAllFieldsOk] = useState(false);
+  const { handleNewKit } = useContext(StoreContext);
 
   function handleNome(e) {
     setNome(e.target.value);
@@ -29,7 +31,14 @@ function ModalNovoKit({ isOpen, onClick, height }) {
   }
 
   function handleSubmit(data) {
-    console.log(data);
+    const params = {
+      nome: data.nome,
+      descricao: data.descricao,
+      status: data.status,
+    };
+    console.log(params);
+    handleNewKit(params);
+    setIsOpen(false);
   }
 
   useEffect(() => {

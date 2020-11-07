@@ -42,15 +42,32 @@ const StoreProvider = ({ children }) => {
       });
   };
 
-  const handlePatchKit = (id, params) => {
+  const handlePatchKit = (kit, params) => {
     axios
-      .patch(`http://localhost:3030/kits/${id}`, params)
+      .patch(`http://localhost:3030/kits/${kit._id}`, params)
       .then(function (response) {
         toast.error(
           <SuccessToast size="40">
             <strong> Kit atualizado com sucesso! </strong>
           </SuccessToast>
         );
+        handleGetKits();
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+  };
+
+  const handleNewKit = (params) => {
+    axios
+      .post('http://localhost:3030/kits', params)
+      .then(function (response) {
+        toast.error(
+          <SuccessToast size="40">
+            <strong> Kit criado com sucesso. </strong>
+          </SuccessToast>
+        );
+        handleGetKits();
       })
       .catch(function (error) {
         console.log(error);
@@ -71,6 +88,7 @@ const StoreProvider = ({ children }) => {
         getKits,
         handleGetKits,
         handlePatchKit,
+        handleNewKit,
       }}
     >
       {children}

@@ -25,7 +25,7 @@ const Card = ({
       <CardDeleteIconContainer disableCursor={status === 'Emprestado'}>
         <MdDeleteForever
           color={disableDelete ? theme.grey : theme.secondColor}
-          title={'Deletar kit'}
+          title={'Excluir kit'}
           onClick={disableDelete ? null : onClickDelete}
         />
       </CardDeleteIconContainer>

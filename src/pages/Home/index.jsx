@@ -211,7 +211,6 @@ function Home() {
 
   function handleIsOpenModalKit() {
     if (isOpenModalKit){
-      handleGetKits();
     }
     setIsOpenModalKit(!isOpenModalKit);
   }
@@ -379,10 +378,12 @@ function Home() {
         kit={modalKit}
         isOpen={isOpenModalKit}
         onClick={handleIsOpenModalKit}
+        setIsOpen={setIsOpenModalKit}
       />
       <ModalNovoKit
         isOpen={isOpenModalNovoKit}
         onClick={handleIsOpenModalNovoKit}
+        setIsOpen={setIsOpenModalNovoKit}
       />
       <ModalCancelAction
         isOpen={isOpenModalCancelAction}

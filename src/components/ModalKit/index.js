@@ -12,22 +12,23 @@ import DropDownStatusKit from '../DropDownStatusKit';
 import { StatusKitEnum } from '../../enums';
 import StoreContext from '../../store/Context';
 
-function ModalKit({ onClick, isOpen, height, kit }) {
+function ModalKit({ onClick, isOpen, height, kit, setIsOpen }) {
   const [nome, setNome] = useState('');
   const [descricao, setDescricao] = useState('');
-  const [selectedStatus, setSelectedStatus] = useState('');
+  const [status, setStatus] = useState('');
   const { handlePatchKit } = useContext(StoreContext);
+  const [isDataOkToUpdate, setIsDataOkToUpdate] = useState(false);
 
   function handleNome(e) {
-    setNome(e.target.dataset.text);
+    setNome(e.target.value);
   }
 
   function handleDescricao(e) {
-    setDescricao(e.target.dataset.text);
+    setDescricao(e.target.value);
   }
 
   function handleSelectedStatus(e) {
-    setSelectedStatus(e.target.dataset.text);
+    setStatus(e.target.dataset.text);
   }
 
   function handleSubmit(data) {
@@ -38,7 +39,8 @@ function ModalKit({ onClick, isOpen, height, kit }) {
         value: data[campo],
       };
     });
-    handlePatchKit(kit._id, params);
+    handlePatchKit(kit, params);
+    setIsOpen(false);
   }
 
   useEffect(() => {
@@ -50,7 +52,26 @@ function ModalKit({ onClick, isOpen, height, kit }) {
   }, [kit]);
 
   useEffect(() => {
-    setSelectedStatus(kit.status);
+    setStatus(kit.status);
+  }, [kit]);
+
+  useEffect(() => {
+    const dataHasChanged = !(
+      kit.nome === nome &&
+      kit.descricao === descricao &&
+      kit.status === status
+    );
+    if (nome === '' || descricao === '' || status === '') {
+      setIsDataOkToUpdate(false);
+    } else if (nome !== '' && descricao !== '' && status !== '') {
+      setIsDataOkToUpdate(true && dataHasChanged);
+    }
+  }, [nome, descricao, status]);
+
+  useEffect(() => {
+    setNome(kit.nome);
+    setDescricao(kit.descricao);
+    setStatus(kit.status);
   }, [kit]);
 
   return (
@@ -81,7 +102,7 @@ function ModalKit({ onClick, isOpen, height, kit }) {
           <DropDownStatusKit
             status={StatusKitEnum.returnName}
             onClick={handleSelectedStatus}
-            headerText={selectedStatus}
+            headerText={status}
             name="status"
             disable={kit.status === 'Emprestado'}
           />
@@ -97,7 +118,7 @@ function ModalKit({ onClick, isOpen, height, kit }) {
             marginBottom="30px"
           />
           <Button
-            disabled={kit.status === 'Emprestado'}
+            disabled={kit.status === 'Emprestado' || !isDataOkToUpdate}
             text="atualizar"
             marginBottom="30px"
             type="submit"
