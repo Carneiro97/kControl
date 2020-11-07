@@ -12,6 +12,8 @@ import ModalCancelAction from '../../components/ModalCancelAction';
 import ModalEmprestimoValidation from '../../components/ModalEmprestimoValidation';
 import MySwitch from '../../components/Switch';
 import { StatusKitEnum } from '../../enums';
+import { toast } from 'react-toastify';
+import { ErrorToast, SuccessToast } from '../../components/Toast';
 
 import {
   Container,
@@ -30,86 +32,88 @@ import {
 
 function Home() {
   const [selectedKits, setSelectedKits] = useState([]);
-  const { getUsuarios } = useContext(StoreContext);
-  const [usuarios, setUsuarios] = useState(getUsuarios.usuarios);
-  const kits = [
-    {
-      nome: 'Solda 1',
-      descricao:
-        'Kit de solda completo com ferro de solda, esponja e fonte inclusa',
-      status: StatusKitEnum.returnName[1],
-      id: 'idbd1',
-    },
-    {
-      nome: 'kit 2',
-      descricao:
-        'Kit de solda completasso com ferro de solda, esponja e fonte inclusa',
-      status: StatusKitEnum.returnName[2],
-      id: 'idbd2',
-    },
-    {
-      nome: 'Solda 2',
-      descricao:
-        'Kit de solda completíssimo com ferro de solda, esponja e fonte inclusa',
-      status: StatusKitEnum.returnName[3],
-      id: 'idbd3',
-    },
-    {
-      nome: 'Solda 3',
-      id: 'idbd4',
-      status: StatusKitEnum.returnName[3],
-    },
-    {
-      nome: 'Cabos 1',
-      id: 'idbd5',
-      status: StatusKitEnum.returnName[2],
-    },
-    {
-      nome: 'Cabos 2',
-      id: 'idbd6',
-      status: StatusKitEnum.returnName[3],
-    },
-    {
-      nome: 'Cabos 3',
-      id: 'idbd7',
-      status: StatusKitEnum.returnName[2],
-    },
-    {
-      nome: 'Fonte 1',
-      id: 'idbd8',
-      status: StatusKitEnum.returnName[3],
-    },
-    {
-      nome: 'Fonte 2',
-      id: 'idbd9',
-      status: StatusKitEnum.returnName[3],
-    },
-    {
-      nome: 'Fonte 3',
-      id: 'idbd10',
-      status: StatusKitEnum.returnName[3],
-    },
-    {
-      nome: 'kit 11',
-      id: 'idbd11',
-      status: StatusKitEnum.returnName[2],
-    },
-    {
-      nome: 'kit 12',
-      id: 'idbd12',
-      status: StatusKitEnum.returnName[2],
-    },
-    {
-      nome: 'kit 13',
-      id: 'idbd13',
-      status: StatusKitEnum.returnName[2],
-    },
-    {
-      nome: 'kit 14',
-      id: 'idbd14',
-      status: StatusKitEnum.returnName[2],
-    },
-  ];
+  const { handleGetUsuarios, getUsuarios, handleGetKits, getKits } = useContext(StoreContext);
+  const usuarios = getUsuarios.usuarios;
+  const kits = getKits.kits;
+
+  // const kits = [
+  //   {
+  //     nome: 'Solda 1',
+  //     descricao:
+  //       'Kit de solda completo com ferro de solda, esponja e fonte inclusa',
+  //     status: StatusKitEnum.returnName[1],
+  //     id: 'idbd1',
+  //   },
+  //   {
+  //     nome: 'kit 2',
+  //     descricao:
+  //       'Kit de solda completasso com ferro de solda, esponja e fonte inclusa',
+  //     status: StatusKitEnum.returnName[2],
+  //     id: 'idbd2',
+  //   },
+  //   {
+  //     nome: 'Solda 2',
+  //     descricao:
+  //       'Kit de solda completíssimo com ferro de solda, esponja e fonte inclusa',
+  //     status: StatusKitEnum.returnName[3],
+  //     id: 'idbd3',
+  //   },
+  //   {
+  //     nome: 'Solda 3',
+  //     id: 'idbd4',
+  //     status: StatusKitEnum.returnName[3],
+  //   },
+  //   {
+  //     nome: 'Cabos 1',
+  //     id: 'idbd5',
+  //     status: StatusKitEnum.returnName[2],
+  //   },
+  //   {
+  //     nome: 'Cabos 2',
+  //     id: 'idbd6',
+  //     status: StatusKitEnum.returnName[3],
+  //   },
+  //   {
+  //     nome: 'Cabos 3',
+  //     id: 'idbd7',
+  //     status: StatusKitEnum.returnName[2],
+  //   },
+  //   {
+  //     nome: 'Fonte 1',
+  //     id: 'idbd8',
+  //     status: StatusKitEnum.returnName[3],
+  //   },
+  //   {
+  //     nome: 'Fonte 2',
+  //     id: 'idbd9',
+  //     status: StatusKitEnum.returnName[3],
+  //   },
+  //   {
+  //     nome: 'Fonte 3',
+  //     id: 'idbd10',
+  //     status: StatusKitEnum.returnName[3],
+  //   },
+  //   {
+  //     nome: 'kit 11',
+  //     id: 'idbd11',
+  //     status: StatusKitEnum.returnName[2],
+  //   },
+  //   {
+  //     nome: 'kit 12',
+  //     id: 'idbd12',
+  //     status: StatusKitEnum.returnName[2],
+  //   },
+  //   {
+  //     nome: 'kit 13',
+  //     id: 'idbd13',
+  //     status: StatusKitEnum.returnName[2],
+  //   },
+  //   {
+  //     nome: 'kit 14',
+  //     id: 'idbd14',
+  //     status: StatusKitEnum.returnName[2],
+  //   },
+  // ];
 
   const [countUsuarios, setCountUsuarios] = useState(getUsuarios.count);
   const [isSelectedRow, setIsSelectedRow] = useState(false);
@@ -124,23 +128,28 @@ function Home() {
   const [countKits, setCountKits] = useState(kits.length);
   const [kitToBeDeleted, setKitToBeDeleted] = useState([]);
   const [isBiometria, setIsBiometria] = useState(false);
-  const [isOpenModalEmprestimoValidation, setIsOpenModalEmprestimoValidation] = useState(false);
+  const [
+    isOpenModalEmprestimoValidation,
+    setIsOpenModalEmprestimoValidation,
+  ] = useState(false);
   const [autenticacaoAluno, setAutenticacaoAluno] = useState('');
   const editedKits = [];
   let rows = [];
   let filteredEditedKits;
 
   kits.map((kit) => {
-    editedKits.push(produce(kit, (draft) => {
-      draft.frontId = editedKits.length + 1;
+    editedKits.push(
+      produce(kit, (draft) => {
+        draft.frontId = editedKits.length + 1;
 
-      return draft;
-    }));
-  })
+        return draft;
+      })
+    );
+  });
 
   filteredEditedKits = editedKits.filter((kit) =>
     kit.nome.toLowerCase().includes(searchKit.toLowerCase())
-    );
+  );
 
   const qtKits = filteredEditedKits.length;
   const kitsPerRow = 3;
@@ -157,7 +166,7 @@ function Home() {
     setSearchKit(e.target.value);
   }
 
-  function handleOnClickInfo(kit, e){
+  function handleOnClickInfo(kit, e) {
     e.stopPropagation();
     setModalKit(kit);
     handleIsOpenModalKit();
@@ -177,13 +186,17 @@ function Home() {
   }
 
   function rowClick(row) {
-    setSelectedUsuario(row._id);
+    setSelectedUsuario(
+      usuarios.filter((usuario) => usuario._id === row._id)[0]
+    );
     setIsSelectedRow(true);
   }
 
   function handleAssociarKits() {
     let selectedKitsIds = [];
-    selectedKits.filter((selectedKit) => selectedKit.selected === true).map((selectedKit) => selectedKitsIds.push(selectedKit.id));
+    selectedKits
+      .filter((selectedKit) => selectedKit.selected === true)
+      .map((selectedKit) => selectedKitsIds.push(selectedKit.id));
     const associarParams = {
       kits: selectedKitsIds,
       idUsuario: selectedUsuario,
@@ -197,6 +210,9 @@ function Home() {
   }
 
   function handleIsOpenModalKit() {
+    if (isOpenModalKit){
+      handleGetKits();
+    }
     setIsOpenModalKit(!isOpenModalKit);
   }
 
@@ -207,7 +223,7 @@ function Home() {
   function handleIsOpenModalCancelAction(e, kit) {
     e.stopPropagation();
     setKitToBeDeleted(kit);
-    if (isOpenModalCancelAction){
+    if (isOpenModalCancelAction) {
       setKitToBeDeleted(null);
     }
     setIsOpenModalCancelAction(!isOpenModalCancelAction);
@@ -221,21 +237,17 @@ function Home() {
     setIsOpenModalNovoKit(!isOpenModalNovoKit);
   }
 
-  function handleOnClickDelete(){
+  function handleOnClickDelete() {
     console.log(kitToBeDeleted);
   }
-  
+
   function handleIsBiometria(e) {
     setIsBiometria(e.target.checked);
-  };
+  }
 
   function handleModalEmprestimoValidationSubmit(data) {
     setAutenticacaoAluno(data.autenticacao);
-  };
-  
-  useEffect(() => {
-    console.log(autenticacaoAluno);
-  }, [autenticacaoAluno]);
+  }
 
   useEffect(() => {
     editedKits.map((kit) => selectedKits.push({ id: kit.id, selected: false }));
@@ -245,9 +257,35 @@ function Home() {
     let hasOneSelected = false;
     selectedKits.map((kit) => {
       hasOneSelected = hasOneSelected || kit.selected;
-    })
+    });
     setSelectedParametersOk(selectedUsuario && hasOneSelected ? true : false);
   }, [selectedUsuario, selectedKits]);
+
+  useEffect(() => {
+    if (selectedUsuario) {
+      if (autenticacaoAluno !== selectedUsuario?._id) {
+        toast.error(
+          <ErrorToast size="40">
+            <strong> Autenticação inválida. </strong>
+          </ErrorToast>
+        );       
+      } else {
+        console.log(selectedUsuario);
+        // toastSucesso viria da response do post empréstimo e patch do kit
+        toast.error(
+          <SuccessToast size="40">
+            <strong> Empréstimo criado com sucesso. </strong>
+          </SuccessToast>
+        );
+      }
+      handleIsOpenModalEmprestimoValidation();
+    }
+  }, [autenticacaoAluno]);
+
+  useEffect(() => {
+    handleGetUsuarios();
+    handleGetKits();
+  }, []);
 
   return (
     <Container>
@@ -269,12 +307,18 @@ function Home() {
                 {row.map((kit) => (
                   <Card
                     key={kit.frontId}
-                    onClick={kit.status === 'Emprestado' ? null : () => handleCardClick(kit)}
+                    onClick={
+                      kit.status !== 'Disponível'
+                        ? null
+                        : () => handleCardClick(kit)
+                    }
                     selected={selectedKits[kit.frontId - 1]?.selected}
                     title={kit.nome}
-                    onClickInfo={e => handleOnClickInfo(kit, e)}
-                    emprestado={kit.status === 'Emprestado' ? true : false}
-                    onClickDelete={e => handleIsOpenModalCancelAction(e, kit)}
+                    onClickInfo={(e) => handleOnClickInfo(kit, e)}
+                    naoDisponivel={kit.status !== 'Disponível' ? true : false}
+                    onClickDelete={(e) => handleIsOpenModalCancelAction(e, kit)}
+                    status={kit.status}
+                    disableDelete={kit.status === "Emprestado"}
                   />
                 ))}
               </KitsRow>
@@ -293,14 +337,19 @@ function Home() {
           <SideBody>
             <CollapsibleTable
               searchUsuario={searchUsuario}
-              clickedRowId={selectedUsuario}
+              clickedRowId={selectedUsuario?._id}
               isSelectedRow={isSelectedRow}
               rowClick={rowClick}
               usuarios={usuarios}
             />
           </SideBody>
           <SideFooter>
-            <Button disabled={!selectedParametersOk} onClick={handleIsOpenModalEmprestimoValidation}>Realizar empréstimo</Button>
+            <Button
+              disabled={!selectedParametersOk}
+              onClick={handleIsOpenModalEmprestimoValidation}
+            >
+              Realizar empréstimo
+            </Button>
             <MySwitch
               checked={isBiometria}
               onChange={handleIsBiometria}
@@ -339,22 +388,21 @@ function Home() {
         isOpen={isOpenModalCancelAction}
         onClick={handleIsOpenModalCancelAction}
         onClickOk={handleOnClickDelete}
-        textHeader='Exclusão de kit'
+        textHeader="Exclusão de kit"
         textTitle={kitToBeDeleted?.nome}
         text="Deseja realmente excluir esse kit?"
-        >
-      </ModalCancelAction>
+      ></ModalCancelAction>
       <ModalEmprestimoValidation
         isOpen={isOpenModalEmprestimoValidation}
         onClick={handleIsOpenModalEmprestimoValidation}
         onClickOk={handleAssociarKits}
-        textHeader='Autenticação do aluno'
-        textTitle="Daniel Carneiro"
-        text="Aguardando autenticação do aluno..."
+        textHeader="Autenticação do aluno"
+        textTitle={selectedUsuario?.nome}
+        text="Aguardando autenticação via QR-Code ou Impressão Digital(APP)."
         onSubmit={handleModalEmprestimoValidationSubmit}
-        >
-      </ModalEmprestimoValidation>
+      ></ModalEmprestimoValidation>
     </Container>
-  )};
+  );
+}
 
 export default Home;

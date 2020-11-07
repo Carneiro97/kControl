@@ -3,6 +3,7 @@ import { BsInfoCircle } from 'react-icons/bs';
 import { MdDeleteForever } from 'react-icons/md';
 import {
   Container,
+  CardHeader,
   CardContent,
   CardIconContainer,
   CardDeleteIconContainer,
@@ -16,17 +17,20 @@ const Card = ({
   title,
   onClickInfo,
   onClickDelete,
-  emprestado,
+  status,
+  disableDelete,
 }) => (
-  <Container disabled={emprestado} onClick={onClick} selected={selected}>
-    <CardContent>
-      <CardDeleteIconContainer emprestado={emprestado}>
+  <Container status={status} onClick={onClick} selected={selected}>
+    <CardHeader>
+      <CardDeleteIconContainer disableCursor={status === 'Emprestado'}>
         <MdDeleteForever
-          color={emprestado ? theme.grey : theme.secondColor}
+          color={disableDelete ? theme.grey : theme.secondColor}
           title={'Deletar kit'}
-          onClick={emprestado ? null : onClickDelete}
+          onClick={disableDelete ? null : onClickDelete}
         />
       </CardDeleteIconContainer>
+    </CardHeader>
+    <CardContent>
       {title}
       <CardIconContainer>
         <BsInfoCircle

@@ -34,16 +34,15 @@ export const ContentText = styled.div`
 `;
 
 export const TextTitle = styled(Text)`
-  margin: 16px 0 16px 0;
-  text-align: left;
+  margin: 20px 0 16px 0;
   font: 600 34px 'unimed_slabregular';
   letter-spacing: 0px;
   color: #5a5a5a;
   opacity: 1;
+  text-align: center;
 `;
 
 export const ButtonFooter = styled(Button)`
-    width: 121px;
-    height: 40px;
-    display block;
+  width: 121px;
+  height: 40px;
 `;

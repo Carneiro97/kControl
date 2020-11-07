@@ -1,10 +1,11 @@
 import React, { useEffect, useState, useContext } from 'react';
 import { useHistory } from 'react-router-dom';
 import axios from 'axios';
-import { ToastContainer, toast } from 'react-toastify';
+import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import MySwitch from '../../components/Switch';
 import StoreContext from '../../store/Context';
+import { ErrorToast } from '../../components/Toast';
 
 import { Container, LoginContainer } from './styles';
 
@@ -29,7 +30,6 @@ function Login() {
     const res = axios
       .post('http://localhost:3030/usuarios/login/' + loginType, loginParams)
       .then(function (response) {
-        toast.success('Login efetuado com sucesso.');
         setIsLogged(true);
         setNomeUsuario(response.data.usuario);
         setTimeout(function () {
@@ -38,7 +38,11 @@ function Login() {
       })
       .catch(function (error) {
         console.log(error);
-        toast.error('Usuário ou senha inválido.');
+        toast.error(
+          <ErrorToast size="40">
+            <strong> Erro nos dados inseridos. </strong>
+          </ErrorToast>
+        );
         setIsLogged(false);
         setNomeUsuario('');
       });
@@ -132,7 +136,6 @@ function Login() {
           </div>
         </div>
       </div>
-      <ToastContainer autoClose={3000} hideProgressBar={true} />
     </Container>
   );
 }

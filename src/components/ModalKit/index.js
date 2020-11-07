@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { Form } from '@unform/web';
 
 import { Modal, ModalHeader, ModalContentWrapper, ModalFooter } from '../Modal';
@@ -10,11 +10,13 @@ import InputForm from '../InputForm';
 import TextArea from '../TextArea';
 import DropDownStatusKit from '../DropDownStatusKit';
 import { StatusKitEnum } from '../../enums';
+import StoreContext from '../../store/Context';
 
 function ModalKit({ onClick, isOpen, height, kit }) {
   const [nome, setNome] = useState('');
   const [descricao, setDescricao] = useState('');
   const [selectedStatus, setSelectedStatus] = useState('');
+  const { handlePatchKit } = useContext(StoreContext);
 
   function handleNome(e) {
     setNome(e.target.dataset.text);
@@ -29,7 +31,14 @@ function ModalKit({ onClick, isOpen, height, kit }) {
   }
 
   function handleSubmit(data) {
-    console.log(data);
+    const camposForm = ['descricao', 'nome', 'status'];
+    const params = camposForm.map((campo) => {
+      return {
+        propName: campo,
+        value: data[campo],
+      };
+    });
+    handlePatchKit(kit._id, params);
   }
 
   useEffect(() => {
@@ -81,7 +90,12 @@ function ModalKit({ onClick, isOpen, height, kit }) {
           justifyContent={'space-between'}
           padding={'20px 40px 20px 40px'}
         >
-          <Button onClick={onClick} text="fechar" marginBottom="30px" />
+          <Button
+            onClick={onClick}
+            type="button"
+            text="fechar"
+            marginBottom="30px"
+          />
           <Button
             disabled={kit.status === 'Emprestado'}
             text="atualizar"

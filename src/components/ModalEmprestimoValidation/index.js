@@ -56,7 +56,7 @@ function ModalEmprestimoValidation({
             </Container>
           </ModalContent>
         </ModalContentWrapper>
-        <ModalFooter>
+        <ModalFooter padding="10px 20px 20px 20px">
           <Button
             onClick={onClick}
             text="cancelar"

@@ -1,4 +1,4 @@
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 
 import theme from '../../styles/theme';
 
@@ -43,7 +43,15 @@ export const KitsRow = styled.div`
   height: fit-content;
   padding: 30px;
   display: flex;
-  justify-content: space-between;
+
+  ${({ justifyContent }) =>
+    justifyContent
+      ? css`
+          justify-content: ${justifyContent};
+        `
+      : css`
+          justify-content: space-evenly;
+        `}
 `;
 
 export const UsuariosContainer = styled.div`

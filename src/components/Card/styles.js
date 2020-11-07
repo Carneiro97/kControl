@@ -14,15 +14,9 @@ export const Container = styled.div`
   border-color: ${theme.mainColor};
   text-align: center;
 
-  ${({ disabled }) =>
-    disabled
+  ${({ status }) =>
+    status === 'Disponível'
       ? css`
-          cursor: default;
-          color: ${theme.secondColor};
-          border-color: ${theme.secondColor};
-          background-color: ${theme.greyDisable};
-        `
-      : css`
           &:hover {
             border-width: medium;
             border-color: ${theme.secondColor};
@@ -34,7 +28,22 @@ export const Container = styled.div`
           &:active {
             color: ${theme.secondColor};
           }
-        `};
+        `
+      : status === 'Emprestado'
+      ? css`
+          cursor: default;
+          color: ${theme.mainColor};
+          border-color: ${theme.mainColor};
+          background-color: ${theme.blueLight};
+        `
+      : status === 'Em manutenção'
+      ? css`
+          cursor: default;
+          color: ${theme.secondColor};
+          border-color: ${theme.secondColor};
+          background-color: ${theme.greyDisable};
+        `
+      : ``};
 
   ${({ selected }) =>
     selected
@@ -46,6 +55,10 @@ export const Container = styled.div`
           font-weight: bold;
         `
       : ''};
+`;
+
+export const CardHeader = styled.div`
+  text-align: -webkit-right;
 `;
 
 export const CardContent = styled.div`
@@ -61,12 +74,11 @@ export const CardIconContainer = styled.div`
 export const CardDeleteIconContainer = styled.div`
   width: fit-content;
   margin-bottom: 15%;
-  width: 100%;
   text-align: end;
   padding: 5%;
 
-  ${({ emprestado }) =>
-    !emprestado
+  ${({ disableCursor }) =>
+    !disableCursor
       ? css`
           cursor: pointer;
         `
