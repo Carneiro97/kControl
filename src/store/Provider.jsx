@@ -9,6 +9,8 @@ import {
   DeleteToast,
   AddToast,
   UpdateToast,
+  WarningToast,
+  AuthToast,
 } from '../components/Toast';
 
 const StoreProvider = ({ children }) => {
@@ -24,6 +26,20 @@ const StoreProvider = ({ children }) => {
     handleGetKits();
   }, []);
 
+  const resetarFlagsUsuario = (usuario) => {
+    const params = [
+      {
+        propName: 'btKit',
+        value: false,
+      },
+      {
+        propName: 'btDigital',
+        value: false,
+      },
+    ];
+    handlePatchUsuario(usuario, params);
+  };
+
   const handleGetUsuarios = () => {
     axios
       .get('http://localhost:3030/usuarios/')
@@ -36,6 +52,88 @@ const StoreProvider = ({ children }) => {
         toast.error(
           <ErrorToast size="40">
             <strong> Erro ao carregar usuários. </strong>
+          </ErrorToast>
+        );
+      });
+  };
+
+  const handlePostNovoEmprestimo = (params) => {
+    console.log(params);
+    params.kits.map((kitId) => {
+      const kitParams = [
+        {
+          propName: 'status',
+          value: 'Emprestado',
+        },
+      ];
+      handlePatchAssociarKits(kitId, kitParams);
+    });
+  };
+
+  const handleGetBtDigitalUsuario = (
+    usuario,
+    clearInterval,
+    handleAssociarKits
+  ) => {
+    axios
+      .get(`http://localhost:3030/usuarios/btdigital/id/${usuario._id}`)
+      .then(function (response) {
+        const btDigital = response.data.btDigital;
+        if (btDigital) {
+          toast.error(
+            <AuthToast size="40">
+              <strong> Autenticação por digital concluída! </strong>
+            </AuthToast>
+          );
+          clearInterval();
+          resetarFlagsUsuario(usuario);
+          handleAssociarKits();
+        }
+      })
+      .catch(function (error) {
+        console.log(error);
+        toast.error(
+          <ErrorToast size="40">
+            <strong>
+              {' '}
+              Erro ao carregar autenticação por digital do usuário.{' '}
+            </strong>
+          </ErrorToast>
+        );
+        clearInterval();
+        resetarFlagsUsuario(usuario);
+      });
+  };
+
+  const handlePatchUsuario = (usuario, params) => {
+    axios
+      .patch(`http://localhost:3030/usuarios/${usuario._id}`, params)
+      .then(function (response) {
+        console.log('desligado');
+        handleGetUsuarios();
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+  };
+  const handlePatchDigitalUsuario = (usuario, params) => {
+    axios
+      .patch(`http://localhost:3030/usuarios/${usuario._id}`, params)
+      .then(function (response) {
+        if (params[0]['value']) {
+          toast.error(
+            <WarningToast size="40">
+              <strong> Empréstimo habilitado no aplicativo. </strong>
+            </WarningToast>
+          );
+        }
+        handleGetUsuarios();
+      })
+      .catch(function (error) {
+        console.log(error);
+        toast.error(
+          <ErrorToast size="40">
+            <strong> Erro ao habilitar empréstimo no aplicativo. </strong>
           </ErrorToast>
         );
       });
@@ -58,9 +156,24 @@ const StoreProvider = ({ children }) => {
       });
   };
 
-  const handlePatchKit = (kit, params) => {
+  const handlePatchAssociarKits = (kitId, params) => {
     axios
-      .patch(`http://localhost:3030/kits/${kit._id}`, params)
+      .patch(`http://localhost:3030/kits/${kitId}`, params)
+      .then(function (response) {
+        handleGetKits();
+      })
+      .catch(function (error) {
+        console.log(error);
+        toast.error(
+          <ErrorToast size="40">
+            <strong> Erro ao atualizar kit. </strong>
+          </ErrorToast>
+        );
+      });
+  };
+  const handlePatchKit = (kitId, params) => {
+    axios
+      .patch(`http://localhost:3030/kits/${kitId}`, params)
       .then(function (response) {
         toast.error(
           <UpdateToast size="40">
@@ -132,11 +245,14 @@ const StoreProvider = ({ children }) => {
         removeNomeUsuario,
         getUsuarios,
         handleGetUsuarios,
+        handlePatchDigitalUsuario,
+        handleGetBtDigitalUsuario,
         getKits,
         handleGetKits,
         handlePatchKit,
         handleNewKit,
         handleDeleteKit,
+        handlePostNovoEmprestimo,
       }}
     >
       {children}

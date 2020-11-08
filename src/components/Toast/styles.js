@@ -1,12 +1,14 @@
 import styled from 'styled-components';
 import { ToastContainer } from 'react-toastify';
 
-import { RiErrorWarningLine } from 'react-icons/ri';
+import {
+  RiErrorWarningLine,
+  RiShieldCheckLine,
+  RiDeleteBin2Line,
+} from 'react-icons/ri';
 import { GiCancel } from 'react-icons/gi';
-import { MdDoneAll } from 'react-icons/md';
-import { RiDeleteBin2Line } from 'react-icons/ri';
+import { MdDoneAll, MdUpdate } from 'react-icons/md';
 import { GoDiffAdded } from 'react-icons/go';
-import { MdUpdate } from 'react-icons/md';
 
 import theme from '../../styles/theme';
 
@@ -33,6 +35,13 @@ export const Container = styled(ToastContainer).attrs((props) => ({
   }
   .Toastify__progress-bar {
   }
+`;
+
+export const AuthToastContainer = styled(RiShieldCheckLine).attrs((props) => ({
+  size: props.size,
+  color: theme.mainColor,
+}))`
+  margin: 0;
 `;
 
 export const UpdateToastContainer = styled(MdUpdate).attrs((props) => ({

@@ -132,14 +132,6 @@ export const ModalContentWrapperContainer = styled.div`
       : ``};
 `;
 export const ModalContentContainer = styled.div`
-  ${({ isModalWithWarning }) =>
-    isModalWithWarning === true
-      ? css`
-          max-height: 370px;
-        `
-      : css`
-          max-height: 300px;
-        `}
   ${({ overflow }) =>
     overflow
       ? css`
@@ -148,13 +140,13 @@ export const ModalContentContainer = styled.div`
       : css`
           overflow: auto;
         `}
-    ${({ maxHeight }) =>
+  ${({ maxHeight }) =>
     maxHeight
       ? css`
           max-height: ${maxHeight};
         `
       : css`
-          max-height: 300px;
+          max-height: 350;
         `}
 `;
 

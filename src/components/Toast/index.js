@@ -9,6 +9,7 @@ import {
   AddToastContainer,
   DeleteToastContainer,
   UpdateToastContainer,
+  AuthToastContainer,
 } from './styles';
 
 function Toast(props) {
@@ -61,6 +62,14 @@ export const UpdateToast = ({ children, size }) => {
   return (
     <InfoContainer>
       <UpdateToastContainer size={size} />
+      <span>{children}</span>
+    </InfoContainer>
+  );
+};
+export const AuthToast = ({ children, size }) => {
+  return (
+    <InfoContainer>
+      <AuthToastContainer size={size} />
       <span>{children}</span>
     </InfoContainer>
   );

@@ -31,10 +31,19 @@ import {
 } from './styles';
 
 function Home() {
+  const {
+    handleGetUsuarios,
+    getUsuarios,
+    handlePatchDigitalUsuario,
+    handleGetBtDigitalUsuario,
+    handleGetKits,
+    getKits,
+    handleDeleteKit,
+    handlePostNovoEmprestimo,
+  } = useContext(StoreContext);
   const [selectedKits, setSelectedKits] = useState([]);
-  const { handleGetUsuarios, getUsuarios, handleGetKits, getKits, handleDeleteKit } = useContext(StoreContext);
-  const usuarios = getUsuarios.usuarios;
   const kits = getKits.kits;
+  const usuarios = getUsuarios.usuarios;
 
   // const kits = [
   //   {
@@ -125,7 +134,7 @@ function Home() {
   const [isOpenModalCancelAction, setIsOpenModalCancelAction] = useState(false);
   const [modalKit, setModalKit] = useState('');
   const [selectedParametersOk, setSelectedParametersOk] = useState(false);
-  const [countKits, setCountKits] = useState(kits.length);
+  const [countKits, setCountKits] = useState(getKits.count);
   const [kitToBeDeleted, setKitToBeDeleted] = useState([]);
   const [isBiometria, setIsBiometria] = useState(false);
   const [
@@ -136,6 +145,7 @@ function Home() {
   const editedKits = [];
   let rows = [];
   let filteredEditedKits;
+  let interval;
 
   kits.map((kit) => {
     editedKits.push(
@@ -175,7 +185,7 @@ function Home() {
   function handleCardClick(kit) {
     const newSelected = produce(selectedKits, (draft) => {
       draft[kit.frontId - 1] = {
-        id: kit.id,
+        id: kit._id,
         selected: !selectedKits[kit.frontId - 1]?.selected,
       };
 
@@ -201,7 +211,9 @@ function Home() {
       kits: selectedKitsIds,
       idUsuario: selectedUsuario,
     };
-    console.log(associarParams);
+    handlePostNovoEmprestimo(associarParams);
+    setIsOpenModalEmprestimoValidation(false);
+    setSelectedKits([]);
   }
 
   function clearUsuarioSelection() {
@@ -210,7 +222,7 @@ function Home() {
   }
 
   function handleIsOpenModalKit() {
-    if (isOpenModalKit){
+    if (isOpenModalKit) {
     }
     setIsOpenModalKit(!isOpenModalKit);
   }
@@ -241,12 +253,29 @@ function Home() {
     setIsOpenModalCancelAction(!isOpenModalCancelAction);
   }
 
-  function handleIsBiometria(e) {
-    setIsBiometria(e.target.checked);
-  }
-
   function handleModalEmprestimoValidationSubmit(data) {
     setAutenticacaoAluno(data.autenticacao);
+  }
+
+  function handleDigitalUsuario() {
+    const params = [
+      {
+        propName: 'btKit',
+        value: true,
+      },
+    ];
+    handlePatchDigitalUsuario(selectedUsuario, params);
+    interval = setInterval(() => {
+      handleGetBtDigitalUsuario(
+        selectedUsuario,
+        () => clearInterval(interval),
+        handleAssociarKits
+      );
+    }, 5000);
+  }
+
+  function handleIsBiometria(e) {
+    setIsBiometria(e.target.checked);
   }
 
   useEffect(() => {
@@ -268,24 +297,29 @@ function Home() {
           <ErrorToast size="40">
             <strong> Autenticação inválida. </strong>
           </ErrorToast>
-        );       
+        );
+        setIsOpenModalEmprestimoValidation(false);
       } else {
-        console.log(selectedUsuario);
+        // console.log(selectedUsuario);
         // toastSucesso viria da response do post empréstimo e patch do kit
+        handleAssociarKits();
         toast.error(
           <SuccessToast size="40">
             <strong> Empréstimo criado com sucesso. </strong>
           </SuccessToast>
         );
       }
-      handleIsOpenModalEmprestimoValidation();
     }
   }, [autenticacaoAluno]);
-
+  
   useEffect(() => {
     handleGetUsuarios();
     handleGetKits();
   }, []);
+  
+  useEffect(() => {
+    setCountKits(getKits.count);
+  }, [kits]);
 
   return (
     <Container>
@@ -318,7 +352,7 @@ function Home() {
                     naoDisponivel={kit.status !== 'Disponível' ? true : false}
                     onClickDelete={(e) => handleIsOpenModalCancelAction(e, kit)}
                     status={kit.status}
-                    disableDelete={kit.status === "Emprestado"}
+                    disableDelete={kit.status === 'Emprestado'}
                   />
                 ))}
               </KitsRow>
@@ -346,7 +380,10 @@ function Home() {
           <SideFooter>
             <Button
               disabled={!selectedParametersOk}
-              onClick={handleIsOpenModalEmprestimoValidation}
+              onClick={() => {
+                handleIsOpenModalEmprestimoValidation();
+                if (isBiometria) handleDigitalUsuario();
+              }}
             >
               Realizar empréstimo
             </Button>
@@ -397,11 +434,11 @@ function Home() {
       <ModalEmprestimoValidation
         isOpen={isOpenModalEmprestimoValidation}
         onClick={handleIsOpenModalEmprestimoValidation}
-        onClickOk={handleAssociarKits}
-        textHeader="Autenticação do aluno"
+        textHeader={isBiometria ? "Autenticação do aluno via biometria digital." : "Autenticação do aluno via QR-Code"}
         textTitle={selectedUsuario?.nome}
-        text="Aguardando autenticação via QR-Code ou Impressão Digital(APP)."
+        text={isBiometria ? "Aguardando autenticação do aluno via biometria digital (APP)." : "Aguardando autenticação do aluno via QR-Code"}
         onSubmit={handleModalEmprestimoValidationSubmit}
+        isBiometria={isBiometria}
       ></ModalEmprestimoValidation>
     </Container>
   );

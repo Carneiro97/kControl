@@ -39,7 +39,7 @@ function ModalKit({ onClick, isOpen, height, kit, setIsOpen }) {
         value: data[campo],
       };
     });
-    handlePatchKit(kit, params);
+    handlePatchKit(kit._id, params);
     setIsOpen(false);
   }
 

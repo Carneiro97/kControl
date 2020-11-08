@@ -55,14 +55,13 @@ export const KitsRow = styled.div`
 `;
 
 export const UsuariosContainer = styled.div`
-  /* background-color: purple; */
   padding: 15px;
   border-right: solid;
   border-width: thin;
   border-color: ${theme.mainColor};
+  min-height: 497px;
 `;
 export const EmprestimosContainer = styled.div`
-  /* background-color: purple; */
   padding: 15px;
   border-right: solid;
   border-width: thin;
@@ -83,6 +82,9 @@ export const SideBody = styled.div`
   overflow: auto;
   max-height: 665px;
   margin-bottom: 10px;
+  min-width: 497px;
+  width: 497px;
+  min-height: 700px;
 `;
 
 export const SideFooter = styled.div`
