@@ -1,31 +1,43 @@
 import React, { useContext } from 'react';
 import { FiLogOut } from 'react-icons/fi';
 import { FaUser } from 'react-icons/fa';
-import { NavContainer, TitleContainer, LogoutContainer, LogoutText, UserContainer, UserText, IconContainer } from './styles';
-import theme from '../../styles/theme'
+import {
+  NavContainer,
+  TitleContainer,
+  LogoutContainer,
+  LogoutText,
+  UserContainer,
+  UserText,
+  IconContainer,
+} from './styles';
+import theme from '../../styles/theme';
 import StoreContext from '../../store/Context';
 
 function Navbar() {
+  const {
+    removeIsLogged,
+    usuarioLogado,
+    removeUsuarioLogado,
+    removeGetKits,
+    removeGetUsuarios,
+  } = useContext(StoreContext);
 
-  const { removeIsLogged, nomeUsuario, removeNomeUsuario } = useContext(StoreContext);
-
-  function handleLogout(){
+  function handleLogout() {
     removeIsLogged();
-    removeNomeUsuario();
+    removeUsuarioLogado();
+    removeGetKits();
+    removeGetUsuarios();
+    window.location.reload(false);
   }
 
   return (
     <NavContainer className="navbar navbar-expand-lg navbar-light">
-      <TitleContainer>
-         Retirada de kits 
-      </TitleContainer>
+      <TitleContainer>Retirada de kits</TitleContainer>
       <UserContainer>
         <IconContainer>
-          <FaUser/>
+          <FaUser />
         </IconContainer>
-        <UserText>
-          {nomeUsuario}
-        </UserText>
+        <UserText>{usuarioLogado?.nome}</UserText>
       </UserContainer>
       <LogoutContainer onClick={handleLogout}>
         <LogoutText href="#">Log out</LogoutText>

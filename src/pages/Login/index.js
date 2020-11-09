@@ -11,7 +11,7 @@ import { Container, LoginContainer } from './styles';
 
 function Login() {
   const history = useHistory();
-  const { setIsLogged, isLogged, setNomeUsuario } = useContext(StoreContext);
+  const { setIsLogged, isLogged, setUsuarioLogado } = useContext(StoreContext);
   const [checked, setChecked] = useState(false);
   const [usuario, setUsuario] = useState(``);
   const [senha, setSenha] = useState(``);
@@ -31,7 +31,7 @@ function Login() {
       .post('http://localhost:3030/usuarios/login/' + loginType, loginParams)
       .then(function (response) {
         setIsLogged(true);
-        setNomeUsuario(response.data.usuario);
+        setUsuarioLogado(response.data.usuario);
         setTimeout(function () {
           history.push('/home');
         }, 1500);
@@ -44,7 +44,7 @@ function Login() {
           </ErrorToast>
         );
         setIsLogged(false);
-        setNomeUsuario('');
+        setUsuarioLogado(null);
       });
   }
 

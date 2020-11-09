@@ -36,95 +36,17 @@ function Home() {
     getUsuarios,
     handlePatchDigitalUsuario,
     handleGetBtDigitalUsuario,
+    resetarFlagsDigitalUsuario,
     handleGetKits,
     getKits,
     handleDeleteKit,
     handlePostNovoEmprestimo,
   } = useContext(StoreContext);
   const [selectedKits, setSelectedKits] = useState([]);
-  const kits = getKits.kits;
-  const usuarios = getUsuarios.usuarios;
+  const kits = getKits?.kits;
+  const usuarios = getUsuarios?.usuarios;
 
-  // const kits = [
-  //   {
-  //     nome: 'Solda 1',
-  //     descricao:
-  //       'Kit de solda completo com ferro de solda, esponja e fonte inclusa',
-  //     status: StatusKitEnum.returnName[1],
-  //     id: 'idbd1',
-  //   },
-  //   {
-  //     nome: 'kit 2',
-  //     descricao:
-  //       'Kit de solda completasso com ferro de solda, esponja e fonte inclusa',
-  //     status: StatusKitEnum.returnName[2],
-  //     id: 'idbd2',
-  //   },
-  //   {
-  //     nome: 'Solda 2',
-  //     descricao:
-  //       'Kit de solda completíssimo com ferro de solda, esponja e fonte inclusa',
-  //     status: StatusKitEnum.returnName[3],
-  //     id: 'idbd3',
-  //   },
-  //   {
-  //     nome: 'Solda 3',
-  //     id: 'idbd4',
-  //     status: StatusKitEnum.returnName[3],
-  //   },
-  //   {
-  //     nome: 'Cabos 1',
-  //     id: 'idbd5',
-  //     status: StatusKitEnum.returnName[2],
-  //   },
-  //   {
-  //     nome: 'Cabos 2',
-  //     id: 'idbd6',
-  //     status: StatusKitEnum.returnName[3],
-  //   },
-  //   {
-  //     nome: 'Cabos 3',
-  //     id: 'idbd7',
-  //     status: StatusKitEnum.returnName[2],
-  //   },
-  //   {
-  //     nome: 'Fonte 1',
-  //     id: 'idbd8',
-  //     status: StatusKitEnum.returnName[3],
-  //   },
-  //   {
-  //     nome: 'Fonte 2',
-  //     id: 'idbd9',
-  //     status: StatusKitEnum.returnName[3],
-  //   },
-  //   {
-  //     nome: 'Fonte 3',
-  //     id: 'idbd10',
-  //     status: StatusKitEnum.returnName[3],
-  //   },
-  //   {
-  //     nome: 'kit 11',
-  //     id: 'idbd11',
-  //     status: StatusKitEnum.returnName[2],
-  //   },
-  //   {
-  //     nome: 'kit 12',
-  //     id: 'idbd12',
-  //     status: StatusKitEnum.returnName[2],
-  //   },
-  //   {
-  //     nome: 'kit 13',
-  //     id: 'idbd13',
-  //     status: StatusKitEnum.returnName[2],
-  //   },
-  //   {
-  //     nome: 'kit 14',
-  //     id: 'idbd14',
-  //     status: StatusKitEnum.returnName[2],
-  //   },
-  // ];
-
-  const [countUsuarios, setCountUsuarios] = useState(getUsuarios.count);
+  const [countUsuarios, setCountUsuarios] = useState(getUsuarios?.count);
   const [isSelectedRow, setIsSelectedRow] = useState(false);
   const [selectedUsuario, setSelectedUsuario] = useState();
   const [searchUsuario, setSearchUsuario] = useState('');
@@ -134,9 +56,10 @@ function Home() {
   const [isOpenModalCancelAction, setIsOpenModalCancelAction] = useState(false);
   const [modalKit, setModalKit] = useState('');
   const [selectedParametersOk, setSelectedParametersOk] = useState(false);
-  const [countKits, setCountKits] = useState(getKits.count);
+  const [countKits, setCountKits] = useState(getKits?.count);
   const [kitToBeDeleted, setKitToBeDeleted] = useState([]);
   const [isBiometria, setIsBiometria] = useState(false);
+  const [showEmprestimos, setShowEmprestimos] = useState(false);
   const [
     isOpenModalEmprestimoValidation,
     setIsOpenModalEmprestimoValidation,
@@ -209,7 +132,7 @@ function Home() {
       .map((selectedKit) => selectedKitsIds.push(selectedKit.id));
     const associarParams = {
       kits: selectedKitsIds,
-      idUsuario: selectedUsuario,
+      idAluno: selectedUsuario,
     };
     handlePostNovoEmprestimo(associarParams);
     setIsOpenModalEmprestimoValidation(false);
@@ -241,6 +164,9 @@ function Home() {
   }
 
   function handleIsOpenModalEmprestimoValidation() {
+    if (isBiometria && isOpenModalEmprestimoValidation) {
+      resetarFlagsDigitalUsuario(selectedUsuario);
+    }
     setIsOpenModalEmprestimoValidation(!isOpenModalEmprestimoValidation);
   }
 
@@ -255,6 +181,8 @@ function Home() {
 
   function handleModalEmprestimoValidationSubmit(data) {
     setAutenticacaoAluno(data.autenticacao);
+    if (isBiometria)
+      handleGetBtDigitalUsuario(selectedUsuario, handleAssociarKits);
   }
 
   function handleDigitalUsuario() {
@@ -265,13 +193,6 @@ function Home() {
       },
     ];
     handlePatchDigitalUsuario(selectedUsuario, params);
-    interval = setInterval(() => {
-      handleGetBtDigitalUsuario(
-        selectedUsuario,
-        () => clearInterval(interval),
-        handleAssociarKits
-      );
-    }, 5000);
   }
 
   function handleIsBiometria(e) {
@@ -291,7 +212,7 @@ function Home() {
   }, [selectedUsuario, selectedKits]);
 
   useEffect(() => {
-    if (selectedUsuario) {
+    if (selectedUsuario && autenticacaoAluno) {
       if (autenticacaoAluno !== selectedUsuario?._id) {
         toast.error(
           <ErrorToast size="40">
@@ -300,25 +221,18 @@ function Home() {
         );
         setIsOpenModalEmprestimoValidation(false);
       } else {
-        // console.log(selectedUsuario);
-        // toastSucesso viria da response do post empréstimo e patch do kit
         handleAssociarKits();
-        toast.error(
-          <SuccessToast size="40">
-            <strong> Empréstimo criado com sucesso. </strong>
-          </SuccessToast>
-        );
       }
     }
   }, [autenticacaoAluno]);
-  
+
   useEffect(() => {
     handleGetUsuarios();
     handleGetKits();
   }, []);
-  
+
   useEffect(() => {
-    setCountKits(getKits.count);
+    setCountKits(getKits?.count);
   }, [kits]);
 
   return (
@@ -359,58 +273,41 @@ function Home() {
             ))}
           </KitsRows>
         </KitsContainer>
-        <UsuariosContainer>
-          <SideHeader>{countUsuarios} usuários cadastrados</SideHeader>
-          <InputSearch
-            inputName="searchUsuario"
-            hideAddButton
-            padding="15px 0 15px 0"
-            handleChange={handleSearchUsuario}
-            placeholder="Pesquise pelo nome do usuário"
+        {!showEmprestimos ? (
+          <SideUsuarios
+            searchUsuario={searchUsuario}
+            selectedUsuario={selectedUsuario}
+            isSelectedRow={isSelectedRow}
+            rowClick={rowClick}
+            usuarios={usuarios}
+            selectedParametersOk={selectedParametersOk}
+            handleIsOpenModalEmprestimoValidation={
+              handleIsOpenModalEmprestimoValidation
+            }
+            isBiometria={isBiometria}
+            handleDigitalUsuario={handleDigitalUsuario}
+            handleIsBiometria={handleIsBiometria}
+            countUsuarios={countUsuarios}
+            handleSearchUsuario={handleSearchUsuario}
           />
-          <SideBody>
-            <CollapsibleTable
-              searchUsuario={searchUsuario}
-              clickedRowId={selectedUsuario?._id}
-              isSelectedRow={isSelectedRow}
-              rowClick={rowClick}
-              usuarios={usuarios}
-            />
-          </SideBody>
-          <SideFooter>
-            <Button
-              disabled={!selectedParametersOk}
-              onClick={() => {
-                handleIsOpenModalEmprestimoValidation();
-                if (isBiometria) handleDigitalUsuario();
-              }}
-            >
-              Realizar empréstimo
-            </Button>
-            <MySwitch
-              checked={isBiometria}
-              onChange={handleIsBiometria}
-              marginLeft="30px"
-              label="Autenticação biométrica"
-            />
-          </SideFooter>
-        </UsuariosContainer>
-        {/* <EmprestimosContainer>
-          <SideHeader> Empréstimos </SideHeader>
-          <InputSearch
-            inputName="searchUsuario"
-            hideAddButton
-            padding="15px 0 15px 0"
-            handleChange={handleSearchUsuario}
-            placeholder="Pesquise pelo nome do usuário"
+        ) : (
+          <SideEmprestimos
+            searchUsuario={searchUsuario}
+            selectedUsuario={selectedUsuario}
+            isSelectedRow={isSelectedRow}
+            rowClick={rowClick}
+            usuarios={usuarios}
+            selectedParametersOk={selectedParametersOk}
+            handleIsOpenModalEmprestimoValidation={
+              handleIsOpenModalEmprestimoValidation
+            }
+            isBiometria={isBiometria}
+            handleDigitalUsuario={handleDigitalUsuario}
+            handleIsBiometria={handleIsBiometria}
+            countUsuarios={countUsuarios}
+            handleSearchUsuario={handleSearchUsuario}
           />
-          <SideBody>
-            
-          </SideBody>
-          <SideFooter>
-            <Button disabled={!selectedParametersOk} onClick={handleAssociarKits}>Finalizar empréstimo</Button>
-          </SideFooter>
-        </EmprestimosContainer> */}
+        )}
       </BodyContainer>
       <ModalKit
         kit={modalKit}
@@ -434,14 +331,123 @@ function Home() {
       <ModalEmprestimoValidation
         isOpen={isOpenModalEmprestimoValidation}
         onClick={handleIsOpenModalEmprestimoValidation}
-        textHeader={isBiometria ? "Autenticação do aluno via biometria digital." : "Autenticação do aluno via QR-Code"}
+        textHeader={
+          isBiometria
+            ? 'Autenticação do aluno via biometria digital.'
+            : 'Autenticação do aluno via QR-Code'
+        }
         textTitle={selectedUsuario?.nome}
-        text={isBiometria ? "Aguardando autenticação do aluno via biometria digital (APP)." : "Aguardando autenticação do aluno via QR-Code"}
+        text={
+          isBiometria
+            ? 'Aguardando autenticação no app.'
+            : 'Aguardando leitura do QR-Code'
+        }
         onSubmit={handleModalEmprestimoValidationSubmit}
         isBiometria={isBiometria}
       ></ModalEmprestimoValidation>
     </Container>
   );
 }
+
+const SideUsuarios = ({
+  searchUsuario,
+  selectedUsuario,
+  isSelectedRow,
+  rowClick,
+  usuarios,
+  selectedParametersOk,
+  handleIsOpenModalEmprestimoValidation,
+  isBiometria,
+  handleDigitalUsuario,
+  handleIsBiometria,
+  countUsuarios,
+  handleSearchUsuario,
+}) => {
+  return (
+    <UsuariosContainer>
+      <SideHeader>{countUsuarios} usuários cadastrados</SideHeader>
+      <InputSearch
+        inputName="searchUsuario"
+        hideAddButton
+        padding="15px 0 15px 0"
+        handleChange={handleSearchUsuario}
+        placeholder="Pesquise pelo nome do usuário"
+      />
+      <SideBody>
+        <CollapsibleTable
+          searchUsuario={searchUsuario}
+          clickedRowId={selectedUsuario?._id}
+          isSelectedRow={isSelectedRow}
+          rowClick={rowClick}
+          usuarios={usuarios}
+        />
+      </SideBody>
+      <SideFooter>
+        <Button
+          disabled={!selectedParametersOk}
+          onClick={() => {
+            handleIsOpenModalEmprestimoValidation();
+            if (isBiometria) handleDigitalUsuario();
+          }}
+        >
+          Realizar empréstimo
+        </Button>
+        <MySwitch
+          checked={isBiometria}
+          onChange={handleIsBiometria}
+          marginLeft="30px"
+          label="Autenticação biométrica"
+        />
+      </SideFooter>
+    </UsuariosContainer>
+  );
+};
+const SideEmprestimos = ({
+  searchUsuario,
+  selectedUsuario,
+  isSelectedRow,
+  rowClick,
+  usuarios,
+  selectedParametersOk,
+  handleIsOpenModalEmprestimoValidation,
+  isBiometria,
+  handleDigitalUsuario,
+  handleIsBiometria,
+  countUsuarios,
+  handleSearchUsuario,
+}) => {
+  return (
+    <UsuariosContainer>
+      <SideHeader>{countUsuarios} empréstimos cadastrados</SideHeader>
+      <InputSearch
+        inputName="searchUsuario"
+        hideAddButton
+        padding="15px 0 15px 0"
+        handleChange={handleSearchUsuario}
+        placeholder="Pesquise pelo nome do usuário"
+      />
+      <SideBody>
+        <CollapsibleTable
+          searchUsuario={searchUsuario}
+          clickedRowId={selectedUsuario?._id}
+          isSelectedRow={isSelectedRow}
+          rowClick={rowClick}
+          usuarios={usuarios}
+        />
+      </SideBody>
+      <SideFooter>
+        <Button
+          disabled={!selectedParametersOk}
+          onClick={() => {
+            handleIsOpenModalEmprestimoValidation();
+            if (isBiometria) handleDigitalUsuario();
+          }}
+        >
+          Finalizar empréstimo
+        </Button>
+      </SideFooter>
+    </UsuariosContainer>
+  );
+};
 
 export default Home;

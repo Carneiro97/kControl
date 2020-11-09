@@ -151,7 +151,7 @@ export default function CollapsibleTable({
           <TableRow>
             <TableCell />
             <TableCell>Nome</TableCell>
-            <TableCell align="right">Código</TableCell>
+            <TableCell align="right">RA</TableCell>
             <TableCell align="right">Perfil</TableCell>
           </TableRow>
         </TableHead>

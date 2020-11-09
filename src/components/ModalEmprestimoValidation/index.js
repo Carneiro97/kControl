@@ -2,6 +2,11 @@ import React, { useEffect } from 'react';
 
 import InputForm from '../InputForm';
 import LoadingIcon from '../../components/LoadingIcon';
+import { MdFingerprint } from 'react-icons/md';
+import { ImMobile } from 'react-icons/im';
+import { AiOutlineScan } from 'react-icons/ai';
+import { BsShieldLock } from 'react-icons/bs';
+
 import Button from '../Button';
 import {
   Modal,
@@ -15,7 +20,7 @@ import { Form } from '@unform/web';
 
 import theme from '../../styles/theme';
 
-import { Container, ContentText, TextTitle } from './styles';
+import { Container, ContentText, TextTitle, IconsContainer } from './styles';
 
 function ModalEmprestimoValidation({
   isOpen,
@@ -24,6 +29,7 @@ function ModalEmprestimoValidation({
   textHeader,
   textTitle,
   onSubmit,
+  isBiometria,
 }) {
   function handleOnInValid(e) {
     e.target.setCustomValidity('É necessário autenticar o usuário.');
@@ -43,16 +49,38 @@ function ModalEmprestimoValidation({
               <LoadingIcon size="50px" />
               <TextTitle text={textTitle} />
               <ContentText>{text}</ContentText>
-              <InputForm
-                name="autenticacao"
-                type="text"
-                autoFocus
-                hide
-                handleChange={handleInputChange}
-                textAlign="center"
-                required
-                title=""
-              />
+              {!isBiometria ? (
+                <>
+                  <AiOutlineScan
+                    title="Scan QR-Code"
+                    color={theme.mainColor}
+                    size="70"
+                  ></AiOutlineScan>
+                  <InputForm
+                    name="autenticacao"
+                    type="text"
+                    autoFocus
+                    hide
+                    handleChange={handleInputChange}
+                    textAlign="center"
+                    required
+                    title=""
+                  />
+                </>
+              ) : (
+                <iconsContainer>
+                  <ImMobile
+                    title="App e-Carteirinha"
+                    color={theme.mainColor}
+                    size="50"
+                  />
+                  <MdFingerprint
+                    title="Biometria digital"
+                    color={theme.mainColor}
+                    size="50"
+                  />
+                </iconsContainer>
+              )}
             </Container>
           </ModalContent>
         </ModalContentWrapper>
@@ -66,6 +94,9 @@ function ModalEmprestimoValidation({
             alignCenter
             width="121"
           />
+          {isBiometria ? (
+            <BsShieldLock color={theme.mainColor} size="40" />
+          ) : null}
           <Button
             text="confirmar"
             marginLeft="14px"
@@ -73,6 +104,7 @@ function ModalEmprestimoValidation({
             justifyCenter
             alignCenter
             width="121"
+            display={isBiometria ? false : 'none'}
           />
         </ModalFooter>
       </Form>

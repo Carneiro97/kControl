@@ -107,4 +107,12 @@ ${({ disabled }) =>
       : ''};
     }
   }
+  ${({ display }) =>
+    display
+      ? css`
+          display: ${display};
+        `
+      : ''};
+    }
+  }
 `;

@@ -42,6 +42,10 @@ export const TextTitle = styled(Text)`
   text-align: center;
 `;
 
+export const IconsContainer = styled.div`
+  display: flex;
+`;
+
 export const ButtonFooter = styled(Button)`
   width: 121px;
   height: 40px;

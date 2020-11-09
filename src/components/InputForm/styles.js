@@ -40,8 +40,10 @@ export const Container = styled.input.attrs((props) => ({
         : css`
             border: none !important;
             color: transparent;
-            text-shadow: 0 0 0 ${theme.secondColor};
+            width: 0px !important;
+            height: 0px !important;
           `}
+
 
 
 ${({ margin }) =>

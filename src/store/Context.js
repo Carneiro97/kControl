@@ -4,13 +4,15 @@ const StoreContext = createContext({
   isLogged: false,
   setIsLogged: () => {},
   removeIsLogged: () => {},
-  nomeUsuario: '',
-  setNomeUsuario: () => {},
-  removeNomeUsuario: () => {},
+  usuarioLogado: {},
+  setUsuarioLogado: () => {},
+  removeUsuarioLogado: () => {},
   getUsuarios: {},
   setGetUsuarios: () => {},
+  removeGetUsuarios: () => {},
   getKits: {},
   setGetKits: () => {},
+  removeGetKits: () => {},
 });
 
 export default StoreContext;

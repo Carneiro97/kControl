@@ -11,6 +11,10 @@ export const HeaderContainer = styled.div`
 export const BodyContainer = styled.div`
   display: flex;
   justify-content: center;
+  border-left: solid;
+  border-right: solid;
+  border-width: thin;
+  border-color: blue;
 `;
 
 export const KitsHeader = styled.div`
@@ -28,7 +32,6 @@ export const KitsContainer = styled.div`
   /* width: 100%; */
   width: 70%;
   display: block;
-  border-left: solid;
   border-right: solid;
   border-width: thin;
   border-color: blue;
@@ -36,7 +39,7 @@ export const KitsContainer = styled.div`
 `;
 export const KitsRows = styled.div`
   overflow: auto;
-  max-height: 700px;
+  max-height: 760px;
 `;
 export const KitsRow = styled.div`
   /* background-color: green; */
@@ -56,14 +59,12 @@ export const KitsRow = styled.div`
 
 export const UsuariosContainer = styled.div`
   padding: 15px;
-  border-right: solid;
   border-width: thin;
   border-color: ${theme.mainColor};
   min-height: 497px;
 `;
 export const EmprestimosContainer = styled.div`
   padding: 15px;
-  border-right: solid;
   border-width: thin;
   border-color: ${theme.mainColor};
 `;

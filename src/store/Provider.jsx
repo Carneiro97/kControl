@@ -13,20 +13,25 @@ import {
   AuthToast,
 } from '../components/Toast';
 
+import theme from '../styles/theme';
+import { Error } from '@material-ui/icons';
+
 const StoreProvider = ({ children }) => {
   const [isLogged, setIsLogged, removeIsLogged] = useStorage('isLogged');
-  const [nomeUsuario, setNomeUsuario, removeNomeUsuario] = useStorage(
-    'nomeUsuario'
+  const [usuarioLogado, setUsuarioLogado, removeUsuarioLogado] = useStorage(
+    'usuarioLogado'
   );
-  const [getUsuarios, setGetUsuarios] = useStorage('usuarios');
-  const [getKits, setGetKits] = useStorage('kits');
+  const [getUsuarios, setGetUsuarios, removeGetUsuarios] = useStorage(
+    'usuarios'
+  );
+  const [getKits, setGetKits, removeGetKits] = useStorage('kits');
 
   useEffect(() => {
     handleGetUsuarios();
     handleGetKits();
   }, []);
 
-  const resetarFlagsUsuario = (usuario) => {
+  const resetarFlagsDigitalUsuario = (usuario) => {
     const params = [
       {
         propName: 'btKit',
@@ -37,7 +42,7 @@ const StoreProvider = ({ children }) => {
         value: false,
       },
     ];
-    handlePatchUsuario(usuario, params);
+    handlePatchUsuario(usuario._id, params);
   };
 
   const handleGetUsuarios = () => {
@@ -45,7 +50,6 @@ const StoreProvider = ({ children }) => {
       .get('http://localhost:3030/usuarios/')
       .then(function (response) {
         setGetUsuarios(response.data);
-        console.log('HANDLE GET USUARIOS');
       })
       .catch(function (error) {
         console.log(error);
@@ -59,6 +63,13 @@ const StoreProvider = ({ children }) => {
 
   const handlePostNovoEmprestimo = (params) => {
     console.log(params);
+    // params = {
+    //   kits: [],
+    //   idAluno: 'dqwdqwdqwdqwdqwd',
+    //   idMonitorLiberacao: usuarioLogado._id,
+    // };
+
+    //dentro do success do postNovoEmprestimo
     params.kits.map((kitId) => {
       const kitParams = [
         {
@@ -68,13 +79,15 @@ const StoreProvider = ({ children }) => {
       ];
       handlePatchAssociarKits(kitId, kitParams);
     });
+    toast.error(
+      <SuccessToast size="40">
+        <strong> Empréstimo criado com sucesso. </strong>
+      </SuccessToast>
+    );
+    //dentro do success do postNovoEmprestimo
   };
 
-  const handleGetBtDigitalUsuario = (
-    usuario,
-    clearInterval,
-    handleAssociarKits
-  ) => {
+  const handleGetBtDigitalUsuario = (usuario, handleAssociarKits) => {
     axios
       .get(`http://localhost:3030/usuarios/btdigital/id/${usuario._id}`)
       .then(function (response) {
@@ -85,9 +98,15 @@ const StoreProvider = ({ children }) => {
               <strong> Autenticação por digital concluída! </strong>
             </AuthToast>
           );
-          clearInterval();
-          resetarFlagsUsuario(usuario);
           handleAssociarKits();
+          console.log(usuario);
+          resetarFlagsDigitalUsuario(usuario);
+        } else {
+          toast.error(
+            <ErrorToast size="40">
+              <strong> Aluno não autenticado no aplicativo. </strong>
+            </ErrorToast>
+          );
         }
       })
       .catch(function (error) {
@@ -100,22 +119,19 @@ const StoreProvider = ({ children }) => {
             </strong>
           </ErrorToast>
         );
-        clearInterval();
-        resetarFlagsUsuario(usuario);
+        resetarFlagsDigitalUsuario(usuario);
       });
   };
 
-  const handlePatchUsuario = (usuario, params) => {
+  const handlePatchUsuario = (idUsuario, params) => {
     axios
-      .patch(`http://localhost:3030/usuarios/${usuario._id}`, params)
-      .then(function (response) {
-        console.log('desligado');
-        handleGetUsuarios();
-      })
+      .patch(`http://localhost:3030/usuarios/${idUsuario}`, params)
+      .then(function (response) {})
       .catch(function (error) {
         console.log(error);
       });
   };
+
   const handlePatchDigitalUsuario = (usuario, params) => {
     axios
       .patch(`http://localhost:3030/usuarios/${usuario._id}`, params)
@@ -123,7 +139,10 @@ const StoreProvider = ({ children }) => {
         if (params[0]['value']) {
           toast.error(
             <WarningToast size="40">
-              <strong> Empréstimo habilitado no aplicativo. </strong>
+              <strong>
+                {' '}
+                Solicite o empréstimo pelo aplicativo e-Carteirinha.{' '}
+              </strong>
             </WarningToast>
           );
         }
@@ -144,7 +163,6 @@ const StoreProvider = ({ children }) => {
       .get('http://localhost:3030/kits/')
       .then(function (response) {
         setGetKits(response.data);
-        console.log('HANDLE GET KITS');
       })
       .catch(function (error) {
         console.log(error);
@@ -171,6 +189,7 @@ const StoreProvider = ({ children }) => {
         );
       });
   };
+
   const handlePatchKit = (kitId, params) => {
     axios
       .patch(`http://localhost:3030/kits/${kitId}`, params)
@@ -240,14 +259,19 @@ const StoreProvider = ({ children }) => {
         isLogged,
         setIsLogged,
         removeIsLogged,
-        nomeUsuario,
-        setNomeUsuario,
-        removeNomeUsuario,
+        usuarioLogado,
+        setUsuarioLogado,
+        removeUsuarioLogado,
         getUsuarios,
+        removeGetUsuarios,
+        setGetUsuarios,
         handleGetUsuarios,
         handlePatchDigitalUsuario,
         handleGetBtDigitalUsuario,
+        resetarFlagsDigitalUsuario,
         getKits,
+        setGetKits,
+        removeGetKits,
         handleGetKits,
         handlePatchKit,
         handleNewKit,

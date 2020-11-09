@@ -16,10 +16,10 @@ function Toast(props) {
   return <Container {...props} />;
 }
 
-export const WarningToast = ({ children }) => {
+export const WarningToast = ({ children, size, color }) => {
   return (
     <InfoContainer>
-      <WarningToastContainer size="40" />
+      <WarningToastContainer color size={size} />
       <span>{children}</span>
     </InfoContainer>
   );

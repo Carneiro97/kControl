@@ -1,4 +1,4 @@
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import { ToastContainer } from 'react-toastify';
 
 import {
@@ -74,8 +74,8 @@ export const WarningToastContainer = styled(RiErrorWarningLine).attrs(
     size: props.size,
   })
 )`
-  color: ${theme.yellowDefault};
   margin: 0;
+  color: ${theme.yellowDefault};
 `;
 
 export const ErrorToastContainer = styled(GiCancel).attrs((props) => ({
