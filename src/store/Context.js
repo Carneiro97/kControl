@@ -13,6 +13,9 @@ const StoreContext = createContext({
   getKits: {},
   setGetKits: () => {},
   removeGetKits: () => {},
+  getEmprestimos: {},
+  setGetEmprestimos: () => {},
+  removeGetEmprestimos: () => {},
 });
 
 export default StoreContext;

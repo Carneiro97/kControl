@@ -120,16 +120,19 @@ export default function CollapsibleTable({
       codigo,
       adm,
       _id,
-      info: [{ curso: curso, cpf: cpf, dtNascimento: dtNascimento }],
+      info: [{ curso, cpf, dtNascimento }],
     };
   }
 
   let rows = [];
 
+  // usuarios
+  //   .filter((usuario) =>
+  //     usuario.nome.toLowerCase().includes(searchUsuario.toLowerCase())
+  //   )
+
   usuarios
-    .filter((usuario) =>
-      usuario.nome.toLowerCase().includes(searchUsuario.toLowerCase())
-    )
+    .filter((usuario) => usuario.codigo.toString().includes(searchUsuario))
     .map((usuario) => {
       rows.push(
         createData(
@@ -151,7 +154,7 @@ export default function CollapsibleTable({
           <TableRow>
             <TableCell />
             <TableCell>Nome</TableCell>
-            <TableCell align="right">RA</TableCell>
+            <TableCell align="right">Código</TableCell>
             <TableCell align="right">Perfil</TableCell>
           </TableRow>
         </TableHead>

@@ -13,8 +13,7 @@ import {
   AuthToast,
 } from '../components/Toast';
 
-import theme from '../styles/theme';
-import { Error } from '@material-ui/icons';
+import { StatusEmprestimoEnum } from '../enums/StatusEmprestimoEnum';
 
 const StoreProvider = ({ children }) => {
   const [isLogged, setIsLogged, removeIsLogged] = useStorage('isLogged');
@@ -25,10 +24,14 @@ const StoreProvider = ({ children }) => {
     'usuarios'
   );
   const [getKits, setGetKits, removeGetKits] = useStorage('kits');
+  const [getEmprestimos, setGetEmprestimos, removeGetEmprestimos] = useStorage(
+    'emprestimos'
+  );
 
   useEffect(() => {
     handleGetUsuarios();
     handleGetKits();
+    handleGetEmprestimos();
   }, []);
 
   const resetarFlagsDigitalUsuario = (usuario) => {
@@ -61,33 +64,7 @@ const StoreProvider = ({ children }) => {
       });
   };
 
-  const handlePostNovoEmprestimo = (params) => {
-    console.log(params);
-    // params = {
-    //   kits: [],
-    //   idAluno: 'dqwdqwdqwdqwdqwd',
-    //   idMonitorLiberacao: usuarioLogado._id,
-    // };
-
-    //dentro do success do postNovoEmprestimo
-    params.kits.map((kitId) => {
-      const kitParams = [
-        {
-          propName: 'status',
-          value: 'Emprestado',
-        },
-      ];
-      handlePatchAssociarKits(kitId, kitParams);
-    });
-    toast.error(
-      <SuccessToast size="40">
-        <strong> Empréstimo criado com sucesso. </strong>
-      </SuccessToast>
-    );
-    //dentro do success do postNovoEmprestimo
-  };
-
-  const handleGetBtDigitalUsuario = (usuario, handleAssociarKits) => {
+  const handleGetBtDigitalUsuario = (usuario, handleAcaoEmprestimo) => {
     axios
       .get(`http://localhost:3030/usuarios/btdigital/id/${usuario._id}`)
       .then(function (response) {
@@ -98,8 +75,7 @@ const StoreProvider = ({ children }) => {
               <strong> Autenticação por digital concluída! </strong>
             </AuthToast>
           );
-          handleAssociarKits();
-          console.log(usuario);
+          handleAcaoEmprestimo();
           resetarFlagsDigitalUsuario(usuario);
         } else {
           toast.error(
@@ -139,10 +115,7 @@ const StoreProvider = ({ children }) => {
         if (params[0]['value']) {
           toast.error(
             <WarningToast size="40">
-              <strong>
-                {' '}
-                Solicite o empréstimo pelo aplicativo e-Carteirinha.{' '}
-              </strong>
+              <strong> Autentique-se pelo aplicativo e-Carteirinha. </strong>
             </WarningToast>
           );
         }
@@ -168,7 +141,7 @@ const StoreProvider = ({ children }) => {
         console.log(error);
         toast.error(
           <ErrorToast size="40">
-            <strong> Erro ao carregar kits. </strong>
+            <strong> Erro ao carregar os kits cadastrados. </strong>
           </ErrorToast>
         );
       });
@@ -253,6 +226,104 @@ const StoreProvider = ({ children }) => {
       });
   };
 
+  const handlePostNovoEmprestimo = (params) => {
+    console.log(params);
+    params = {
+      idAluno: params.idAluno,
+      idKits: params.kits,
+      codigoMonitorEmprestimo: usuarioLogado._id,
+    };
+
+    axios
+      .post('http://localhost:3030/emprestimos', params)
+      .then(function (response) {
+        params.idKits.map((kitId) => {
+          const kitParams = [
+            {
+              propName: 'status',
+              value: 'Emprestado',
+            },
+          ];
+          handlePatchAssociarKits(kitId, kitParams);
+        });
+        toast.error(
+          <SuccessToast size="40">
+            <strong> Empréstimo criado com sucesso. </strong>
+          </SuccessToast>
+        );
+        handleGetEmprestimos();
+      })
+      .catch(function (error) {
+        console.log(error);
+        toast.error(
+          <ErrorToast size="40">
+            <strong> Erro ao criar empréstimo. </strong>
+          </ErrorToast>
+        );
+      });
+  };
+
+  const handleGetEmprestimos = () => {
+    axios
+      .get('http://localhost:3030/emprestimos/')
+      .then(function (response) {
+        setGetEmprestimos(response.data);
+      })
+      .catch(function (error) {
+        console.log(error);
+        toast.error(
+          <ErrorToast size="40">
+            <strong> Erro ao carregar os empréstimos cadastrados. </strong>
+          </ErrorToast>
+        );
+      });
+  };
+
+  const handlePatchFinalizarEmprestimo = (emprestimoId, idKits) => {
+    var date = new Date();
+    const params = [
+      {
+        propName: 'status',
+        value: 'Finalizado',
+      },
+      {
+        propName: 'codigoMonitorFinalizacao',
+        value: usuarioLogado._id,
+      },
+      {
+        propName: 'dtFinalizacaoEmprestimo',
+        value: date,
+      },
+    ];
+    idKits.map((kitId) => {
+      const kitParams = [
+        {
+          propName: 'status',
+          value: 'Disponível',
+        },
+      ];
+      handlePatchAssociarKits(kitId, kitParams);
+    });
+    axios
+      .patch(`http://localhost:3030/emprestimos/${emprestimoId}`, params)
+      .then(function (response) {
+        toast.error(
+          <UpdateToast size="40">
+            <strong> Empréstimo atualizado com sucesso! </strong>
+          </UpdateToast>
+        );
+        handleGetEmprestimos();
+      })
+      .catch(function (error) {
+        console.log(error);
+        toast.error(
+          <ErrorToast size="40">
+            <strong> Erro ao atualizar o empréstimo. </strong>
+          </ErrorToast>
+        );
+      });
+  };
+
   return (
     <Context.Provider
       value={{
@@ -276,7 +347,12 @@ const StoreProvider = ({ children }) => {
         handlePatchKit,
         handleNewKit,
         handleDeleteKit,
+        getEmprestimos,
+        setGetEmprestimos,
+        removeGetEmprestimos,
+        handleGetEmprestimos,
         handlePostNovoEmprestimo,
+        handlePatchFinalizarEmprestimo,
       }}
     >
       {children}

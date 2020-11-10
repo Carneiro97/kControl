@@ -6,12 +6,12 @@ import Button from '../../components/Button';
 import Card from '../../components/Card';
 import StoreContext from '../../store/Context';
 import CollapsibleTable from '../../components/CollapsibleTable';
+import CollapsibleTableEmprestimos from '../../components/CollapsibleTableEmprestimos';
 import ModalKit from '../../components/ModalKit';
 import ModalNovoKit from '../../components/ModalNovoKit';
 import ModalCancelAction from '../../components/ModalCancelAction';
 import ModalEmprestimoValidation from '../../components/ModalEmprestimoValidation';
 import MySwitch from '../../components/Switch';
-import { StatusKitEnum } from '../../enums';
 import { toast } from 'react-toastify';
 import { ErrorToast, SuccessToast } from '../../components/Toast';
 
@@ -20,7 +20,7 @@ import {
   HeaderContainer,
   BodyContainer,
   UsuariosContainer,
-  EmprestimosContainer,
+  Side,
   SideHeader,
   SideBody,
   KitsRow,
@@ -40,23 +40,35 @@ function Home() {
     handleGetKits,
     getKits,
     handleDeleteKit,
+    handleGetEmprestimos,
+    getEmprestimos,
     handlePostNovoEmprestimo,
+    handlePatchFinalizarEmprestimo,
   } = useContext(StoreContext);
-  const [selectedKits, setSelectedKits] = useState([]);
+
   const kits = getKits?.kits;
   const usuarios = getUsuarios?.usuarios;
+  const emprestimos = getEmprestimos?.emprestimos;
 
   const [countUsuarios, setCountUsuarios] = useState(getUsuarios?.count);
+  const [countKits, setCountKits] = useState(getKits?.count);
+  const [countEmprestimos, setCountEmprestimos] = useState(
+    getEmprestimos?.count
+  );
   const [isSelectedRow, setIsSelectedRow] = useState(false);
+  const [isSelectedRowEmprestimo, setIsSelectedRowEmprestimo] = useState(false);
   const [selectedUsuario, setSelectedUsuario] = useState();
+  const [selectedKits, setSelectedKits] = useState([]);
+  const [selectedEmprestimo, setSelectedEmprestimo] = useState([]);
+  const [alunoSelectedEmprestimo, setAlunoSelectedEmprestimo] = useState({});
   const [searchUsuario, setSearchUsuario] = useState('');
   const [searchKit, setSearchKit] = useState('');
+  const [searchEmprestimo, setSearchEmprestimo] = useState('');
   const [isOpenModalKit, setIsOpenModalKit] = useState(false);
   const [isOpenModalNovoKit, setIsOpenModalNovoKit] = useState(false);
   const [isOpenModalCancelAction, setIsOpenModalCancelAction] = useState(false);
   const [modalKit, setModalKit] = useState('');
   const [selectedParametersOk, setSelectedParametersOk] = useState(false);
-  const [countKits, setCountKits] = useState(getKits?.count);
   const [kitToBeDeleted, setKitToBeDeleted] = useState([]);
   const [isBiometria, setIsBiometria] = useState(false);
   const [showEmprestimos, setShowEmprestimos] = useState(false);
@@ -65,10 +77,10 @@ function Home() {
     setIsOpenModalEmprestimoValidation,
   ] = useState(false);
   const [autenticacaoAluno, setAutenticacaoAluno] = useState('');
+
   const editedKits = [];
   let rows = [];
   let filteredEditedKits;
-  let interval;
 
   kits.map((kit) => {
     editedKits.push(
@@ -99,6 +111,10 @@ function Home() {
     setSearchKit(e.target.value);
   }
 
+  function handleSearchEmprestimo(e) {
+    setSearchEmprestimo(e.target.value);
+  }
+
   function handleOnClickInfo(kit, e) {
     e.stopPropagation();
     setModalKit(kit);
@@ -119,24 +135,37 @@ function Home() {
   }
 
   function rowClick(row) {
-    setSelectedUsuario(
-      usuarios.filter((usuario) => usuario._id === row._id)[0]
-    );
-    setIsSelectedRow(true);
+    if (showEmprestimos) {
+      setAlunoSelectedEmprestimo(row.alunoEmprestimo[0]);
+      setSelectedEmprestimo(
+        emprestimos.filter((emprestimo) => emprestimo._id === row._id)[0]
+      );
+      setIsSelectedRowEmprestimo(true);
+    } else {
+      setSelectedUsuario(
+        usuarios.filter((usuario) => usuario._id === row._id)[0]
+      );
+      setIsSelectedRow(true);
+    }
   }
 
-  function handleAssociarKits() {
-    let selectedKitsIds = [];
-    selectedKits
-      .filter((selectedKit) => selectedKit.selected === true)
-      .map((selectedKit) => selectedKitsIds.push(selectedKit.id));
-    const associarParams = {
-      kits: selectedKitsIds,
-      idAluno: selectedUsuario,
-    };
-    handlePostNovoEmprestimo(associarParams);
+  function handleAcaoEmprestimo() {
+    if (!showEmprestimos) {
+      let selectedKitsIds = [];
+      selectedKits
+        .filter((selectedKit) => selectedKit.selected === true)
+        .map((selectedKit) => selectedKitsIds.push(selectedKit.id));
+      const associarParams = {
+        kits: selectedKitsIds,
+        idAluno: selectedUsuario,
+      };
+      handlePostNovoEmprestimo(associarParams);
+      setSelectedKits([]);
+    } else {
+      handlePatchFinalizarEmprestimo(selectedEmprestimo._id, selectedEmprestimo.idKits);
+      setIsSelectedRowEmprestimo(false);
+    }
     setIsOpenModalEmprestimoValidation(false);
-    setSelectedKits([]);
   }
 
   function clearUsuarioSelection() {
@@ -182,7 +211,7 @@ function Home() {
   function handleModalEmprestimoValidationSubmit(data) {
     setAutenticacaoAluno(data.autenticacao);
     if (isBiometria)
-      handleGetBtDigitalUsuario(selectedUsuario, handleAssociarKits);
+      handleGetBtDigitalUsuario(selectedUsuario, handleAcaoEmprestimo);
   }
 
   function handleDigitalUsuario() {
@@ -199,6 +228,12 @@ function Home() {
     setIsBiometria(e.target.checked);
   }
 
+  function handleShowEmprestimos(e) {
+    setShowEmprestimos(e.target.checked);
+    setSearchEmprestimo('');
+    setSearchUsuario('');
+  }
+
   useEffect(() => {
     editedKits.map((kit) => selectedKits.push({ id: kit.id, selected: false }));
   }, []);
@@ -212,7 +247,20 @@ function Home() {
   }, [selectedUsuario, selectedKits]);
 
   useEffect(() => {
-    if (selectedUsuario && autenticacaoAluno) {
+    if (showEmprestimos) {
+      if (selectedEmprestimo && autenticacaoAluno) {
+        if (autenticacaoAluno !== selectedEmprestimo?.idAluno) {
+          toast.error(
+            <ErrorToast size="40">
+              <strong> Autenticação inválida. </strong>
+            </ErrorToast>
+          );
+          setIsOpenModalEmprestimoValidation(false);
+        } else {
+          handleAcaoEmprestimo();
+        }
+      }
+    } else if (selectedUsuario && autenticacaoAluno) {
       if (autenticacaoAluno !== selectedUsuario?._id) {
         toast.error(
           <ErrorToast size="40">
@@ -221,7 +269,7 @@ function Home() {
         );
         setIsOpenModalEmprestimoValidation(false);
       } else {
-        handleAssociarKits();
+        handleAcaoEmprestimo();
       }
     }
   }, [autenticacaoAluno]);
@@ -229,6 +277,7 @@ function Home() {
   useEffect(() => {
     handleGetUsuarios();
     handleGetKits();
+    handleGetEmprestimos();
   }, []);
 
   useEffect(() => {
@@ -241,7 +290,7 @@ function Home() {
       <HeaderContainer />
       <BodyContainer>
         <KitsContainer>
-          <KitsHeader>{countKits} kits cadastrados</KitsHeader>
+          <KitsHeader>Kits cadastrados: {countKits} </KitsHeader>
           <InputSearch
             inputName="searchKit"
             onClickButtonAdd={handleAddClick}
@@ -273,41 +322,59 @@ function Home() {
             ))}
           </KitsRows>
         </KitsContainer>
-        {!showEmprestimos ? (
-          <SideUsuarios
-            searchUsuario={searchUsuario}
-            selectedUsuario={selectedUsuario}
-            isSelectedRow={isSelectedRow}
-            rowClick={rowClick}
-            usuarios={usuarios}
-            selectedParametersOk={selectedParametersOk}
-            handleIsOpenModalEmprestimoValidation={
-              handleIsOpenModalEmprestimoValidation
-            }
-            isBiometria={isBiometria}
-            handleDigitalUsuario={handleDigitalUsuario}
-            handleIsBiometria={handleIsBiometria}
-            countUsuarios={countUsuarios}
-            handleSearchUsuario={handleSearchUsuario}
-          />
-        ) : (
-          <SideEmprestimos
-            searchUsuario={searchUsuario}
-            selectedUsuario={selectedUsuario}
-            isSelectedRow={isSelectedRow}
-            rowClick={rowClick}
-            usuarios={usuarios}
-            selectedParametersOk={selectedParametersOk}
-            handleIsOpenModalEmprestimoValidation={
-              handleIsOpenModalEmprestimoValidation
-            }
-            isBiometria={isBiometria}
-            handleDigitalUsuario={handleDigitalUsuario}
-            handleIsBiometria={handleIsBiometria}
-            countUsuarios={countUsuarios}
-            handleSearchUsuario={handleSearchUsuario}
-          />
-        )}
+        <Side>
+          {!showEmprestimos ? (
+            <SideUsuarios
+              searchUsuario={searchUsuario}
+              selectedUsuario={selectedUsuario}
+              isSelectedRow={isSelectedRow}
+              rowClick={rowClick}
+              usuarios={usuarios}
+              selectedParametersOk={selectedParametersOk}
+              handleIsOpenModalEmprestimoValidation={
+                handleIsOpenModalEmprestimoValidation
+              }
+              isBiometria={isBiometria}
+              handleDigitalUsuario={handleDigitalUsuario}
+              handleIsBiometria={handleIsBiometria}
+              countUsuarios={countUsuarios}
+              handleSearchUsuario={handleSearchUsuario}
+            />
+          ) : (
+            <SideEmprestimos
+              searchEmprestimo={searchEmprestimo}
+              selectedEmprestimo={selectedEmprestimo}
+              isSelectedRowEmprestimo={isSelectedRowEmprestimo}
+              rowClick={rowClick}
+              emprestimos={emprestimos}
+              selectedParametersOk={selectedEmprestimo ? true : false}
+              handleIsOpenModalEmprestimoValidation={
+                handleIsOpenModalEmprestimoValidation
+              }
+              isBiometria={isBiometria}
+              handleDigitalUsuario={handleDigitalUsuario}
+              handleIsBiometria={handleIsBiometria}
+              countEmprestimos={countEmprestimos}
+              handleSearchEmprestimo={handleSearchEmprestimo}
+              kits={kits}
+              usuarios={usuarios}
+            />
+          )}
+          <SideFooter>
+            <MySwitch
+              checked={showEmprestimos}
+              onChange={handleShowEmprestimos}
+              marginLeft="30px"
+              label="Visualizar empréstimos"
+            />
+            <MySwitch
+              checked={isBiometria}
+              onChange={handleIsBiometria}
+              marginLeft="30px"
+              label="Autenticação biométrica"
+            />
+          </SideFooter>
+        </Side>
       </BodyContainer>
       <ModalKit
         kit={modalKit}
@@ -336,10 +403,12 @@ function Home() {
             ? 'Autenticação do aluno via biometria digital.'
             : 'Autenticação do aluno via QR-Code'
         }
-        textTitle={selectedUsuario?.nome}
+        textTitle={
+          showEmprestimos ? alunoSelectedEmprestimo.nome : selectedUsuario?.nome
+        }
         text={
           isBiometria
-            ? 'Aguardando autenticação no app.'
+            ? 'Autentique-se no app e clique em "confirmar".'
             : 'Aguardando leitura do QR-Code'
         }
         onSubmit={handleModalEmprestimoValidationSubmit}
@@ -359,19 +428,18 @@ const SideUsuarios = ({
   handleIsOpenModalEmprestimoValidation,
   isBiometria,
   handleDigitalUsuario,
-  handleIsBiometria,
   countUsuarios,
   handleSearchUsuario,
 }) => {
   return (
     <UsuariosContainer>
-      <SideHeader>{countUsuarios} usuários cadastrados</SideHeader>
+      <SideHeader> Usuários cadastrados: {countUsuarios}</SideHeader>
       <InputSearch
         inputName="searchUsuario"
         hideAddButton
         padding="15px 0 15px 0"
         handleChange={handleSearchUsuario}
-        placeholder="Pesquise pelo nome do usuário"
+        placeholder="Pesquise pelo RA do aluno"
       />
       <SideBody>
         <CollapsibleTable
@@ -392,52 +460,49 @@ const SideUsuarios = ({
         >
           Realizar empréstimo
         </Button>
-        <MySwitch
-          checked={isBiometria}
-          onChange={handleIsBiometria}
-          marginLeft="30px"
-          label="Autenticação biométrica"
-        />
       </SideFooter>
     </UsuariosContainer>
   );
 };
+
 const SideEmprestimos = ({
-  searchUsuario,
-  selectedUsuario,
-  isSelectedRow,
+  searchEmprestimo,
+  selectedEmprestimo,
+  isSelectedRowEmprestimo,
   rowClick,
-  usuarios,
-  selectedParametersOk,
+  emprestimos,
   handleIsOpenModalEmprestimoValidation,
   isBiometria,
   handleDigitalUsuario,
-  handleIsBiometria,
-  countUsuarios,
-  handleSearchUsuario,
+  countEmprestimos,
+  handleSearchEmprestimo,
+  kits,
+  usuarios,
 }) => {
   return (
     <UsuariosContainer>
-      <SideHeader>{countUsuarios} empréstimos cadastrados</SideHeader>
+      <SideHeader>Empréstimos cadastrados: {countEmprestimos}</SideHeader>
       <InputSearch
-        inputName="searchUsuario"
+        inputName="searchEmprestimo"
         hideAddButton
         padding="15px 0 15px 0"
-        handleChange={handleSearchUsuario}
-        placeholder="Pesquise pelo nome do usuário"
+        handleChange={handleSearchEmprestimo}
+        placeholder="Pesquise pelo status do empréstimo"
       />
       <SideBody>
-        <CollapsibleTable
-          searchUsuario={searchUsuario}
-          clickedRowId={selectedUsuario?._id}
-          isSelectedRow={isSelectedRow}
+        <CollapsibleTableEmprestimos
+          searchEmprestimo={searchEmprestimo}
+          clickedRowId={selectedEmprestimo?._id}
+          isSelectedRow={isSelectedRowEmprestimo}
           rowClick={rowClick}
+          emprestimos={emprestimos}
+          kits={kits}
           usuarios={usuarios}
         />
       </SideBody>
       <SideFooter>
         <Button
-          disabled={!selectedParametersOk}
+          disabled={!isSelectedRowEmprestimo || selectedEmprestimo?.status === 'Finalizado'}
           onClick={() => {
             handleIsOpenModalEmprestimoValidation();
             if (isBiometria) handleDigitalUsuario();

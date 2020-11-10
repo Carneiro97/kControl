@@ -94,7 +94,7 @@ function ModalEmprestimoValidation({
             alignCenter
             width="121"
           />
-          {isBiometria ? (
+          {!isBiometria ? (
             <BsShieldLock color={theme.mainColor} size="40" />
           ) : null}
           <Button

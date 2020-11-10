@@ -57,6 +57,8 @@ export const KitsRow = styled.div`
         `}
 `;
 
+export const Side = styled.div``;
+
 export const UsuariosContainer = styled.div`
   padding: 15px;
   border-width: thin;
@@ -81,11 +83,11 @@ export const SideHeader = styled.div`
 export const SideBody = styled.div`
   height: 90%;
   overflow: auto;
-  max-height: 665px;
+  max-height: 650px;
   margin-bottom: 10px;
   min-width: 497px;
   width: 497px;
-  min-height: 700px;
+  min-height: 650px;
 `;
 
 export const SideFooter = styled.div`
