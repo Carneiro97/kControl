@@ -309,6 +309,26 @@ const StoreProvider = ({ children }) => {
       .then(function (response) {
         toast.error(
           <UpdateToast size="40">
+            <strong> Empréstimo finalizado com sucesso! </strong>
+          </UpdateToast>
+        );
+        handleGetEmprestimos();
+      })
+      .catch(function (error) {
+        console.log(error);
+        toast.error(
+          <ErrorToast size="40">
+            <strong> Erro ao atualizar o empréstimo. </strong>
+          </ErrorToast>
+        );
+      });
+  };
+  const handlePatchEmprestimo = (emprestimoId, params) => {
+    axios
+      .patch(`http://localhost:3030/emprestimos/${emprestimoId}`, params)
+      .then(function (response) {
+        toast.error(
+          <UpdateToast size="40">
             <strong> Empréstimo atualizado com sucesso! </strong>
           </UpdateToast>
         );
@@ -353,6 +373,7 @@ const StoreProvider = ({ children }) => {
         handleGetEmprestimos,
         handlePostNovoEmprestimo,
         handlePatchFinalizarEmprestimo,
+        handlePatchEmprestimo,
       }}
     >
       {children}

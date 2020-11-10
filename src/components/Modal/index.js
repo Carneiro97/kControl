@@ -56,12 +56,19 @@ const ModalHeader = ({ children, justifyContent, padding }) => {
   );
 };
 
-const ModalContentWrapper = ({ children, height, display, paddingTop }) => {
+const ModalContentWrapper = ({
+  children,
+  height,
+  display,
+  paddingTop,
+  minHeight,
+}) => {
   return (
     <ModalContentWrapperContainer
       paddingTop={paddingTop}
       height={height}
       display={display}
+      minHeight={minHeight}
     >
       {children}
     </ModalContentWrapperContainer>

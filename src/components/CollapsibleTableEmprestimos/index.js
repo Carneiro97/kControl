@@ -146,6 +146,7 @@ export default function CollapsibleTable({
   searchEmprestimo,
   kits,
   usuarios,
+  onClickObs,
 }) {
   function createData(
     _id,
@@ -261,6 +262,7 @@ export default function CollapsibleTable({
               onClick={rowClick}
               key={row._id}
               row={row}
+              onClickObs={onClickObs}
             />
           ))}
         </TableBody>

@@ -8,6 +8,7 @@ import StoreContext from '../../store/Context';
 import CollapsibleTable from '../../components/CollapsibleTable';
 import CollapsibleTableEmprestimos from '../../components/CollapsibleTableEmprestimos';
 import ModalKit from '../../components/ModalKit';
+import ModalEmprestimo from '../../components/ModalEmprestimo';
 import ModalNovoKit from '../../components/ModalNovoKit';
 import ModalCancelAction from '../../components/ModalCancelAction';
 import ModalEmprestimoValidation from '../../components/ModalEmprestimoValidation';
@@ -67,6 +68,7 @@ function Home() {
   const [isOpenModalKit, setIsOpenModalKit] = useState(false);
   const [isOpenModalNovoKit, setIsOpenModalNovoKit] = useState(false);
   const [isOpenModalCancelAction, setIsOpenModalCancelAction] = useState(false);
+  const [isOpenModalEmprestimo, setIsOpenModalEmprestimo] = useState(false);
   const [modalKit, setModalKit] = useState('');
   const [selectedParametersOk, setSelectedParametersOk] = useState(false);
   const [kitToBeDeleted, setKitToBeDeleted] = useState([]);
@@ -174,9 +176,10 @@ function Home() {
   }
 
   function handleIsOpenModalKit() {
-    if (isOpenModalKit) {
-    }
     setIsOpenModalKit(!isOpenModalKit);
+  }
+  function handleIsOpenModalEmprestimo() {
+    setIsOpenModalEmprestimo(!isOpenModalEmprestimo);
   }
 
   function handleIsOpenModalNovoKit() {
@@ -358,6 +361,7 @@ function Home() {
               handleSearchEmprestimo={handleSearchEmprestimo}
               kits={kits}
               usuarios={usuarios}
+              onClickObs={handleIsOpenModalEmprestimo}
             />
           )}
           <SideFooter>
@@ -381,6 +385,13 @@ function Home() {
         isOpen={isOpenModalKit}
         onClick={handleIsOpenModalKit}
         setIsOpen={setIsOpenModalKit}
+      />
+      <ModalEmprestimo
+        emprestimo={selectedEmprestimo}
+        isOpen={isOpenModalEmprestimo}
+        onClick={handleIsOpenModalEmprestimo}
+        setIsOpen={setIsOpenModalEmprestimo}
+        alunoEmprestimo={alunoSelectedEmprestimo}
       />
       <ModalNovoKit
         isOpen={isOpenModalNovoKit}
@@ -478,6 +489,7 @@ const SideEmprestimos = ({
   handleSearchEmprestimo,
   kits,
   usuarios,
+  onClickObs
 }) => {
   return (
     <UsuariosContainer>
@@ -498,6 +510,7 @@ const SideEmprestimos = ({
           emprestimos={emprestimos}
           kits={kits}
           usuarios={usuarios}
+          onClickObs={onClickObs}
         />
       </SideBody>
       <SideFooter>
