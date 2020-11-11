@@ -9,7 +9,7 @@ import { ErrorToast } from '../../components/Toast';
 
 import { Container, LoginContainer } from './styles';
 
-import { localAPI, herokuAPI } from '../services/api';
+import { localAPI, herokuAPI } from '../../services/api';
 
 function Login() {
   const history = useHistory();
