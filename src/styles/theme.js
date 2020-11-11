@@ -114,7 +114,9 @@ const common = {
 
   pinkDefault: '#D94FCC',
 
-  mainColor: '#005CB5',
+  // mainColor: '#005CB5',
+  mainColor: '#3C91E6',
+  mainColorLight: '#afd8ff',
   secondColor: '#AC162C',
 };
 

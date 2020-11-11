@@ -34,7 +34,7 @@ export const Container = styled.div`
           cursor: default;
           color: ${theme.mainColor};
           border-color: ${theme.mainColor};
-          background-color: ${theme.blueLight};
+          background-color: ${theme.mainColorLight};
         `
       : status === 'Em manutenção'
       ? css`

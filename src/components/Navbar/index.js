@@ -32,7 +32,7 @@ function Navbar() {
 
   return (
     <NavContainer className="navbar navbar-expand-lg navbar-light">
-      <TitleContainer>Retirada de kits</TitleContainer>
+      <TitleContainer>LabControl</TitleContainer>
       <UserContainer>
         <IconContainer>
           <FaUser />

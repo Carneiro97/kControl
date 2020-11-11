@@ -152,6 +152,8 @@ function Home() {
   }
 
   function handleAcaoEmprestimo() {
+    handleGetKits();
+    handleGetEmprestimos();
     if (!showEmprestimos) {
       let selectedKitsIds = [];
       let selectedTrueKits = [];

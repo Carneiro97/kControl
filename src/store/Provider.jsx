@@ -34,6 +34,25 @@ const StoreProvider = ({ children }) => {
     handleGetEmprestimos();
   }, []);
 
+  const handlePostLogin = (loginType, loginParams) => {
+    const res = herokuAPI
+      .post('/usuarios/login/' + loginType, loginParams)
+      .then(function (response) {
+        setIsLogged(true);
+        setUsuarioLogado(response.data.usuario);
+      })
+      .catch(function (error) {
+        console.log(error);
+        toast.error(
+          <ErrorToast size="40">
+            <strong> Erro nos dados inseridos. </strong>
+          </ErrorToast>
+        );
+        setIsLogged(false);
+        setUsuarioLogado(null);
+      });
+  };
+
   const resetarFlagsDigitalUsuario = (usuario) => {
     const params = [
       {
@@ -349,6 +368,7 @@ const StoreProvider = ({ children }) => {
         isLogged,
         setIsLogged,
         removeIsLogged,
+        handlePostLogin,
         usuarioLogado,
         setUsuarioLogado,
         removeUsuarioLogado,

@@ -14,7 +14,7 @@ export const BodyContainer = styled.div`
   border-left: solid;
   border-right: solid;
   border-width: thin;
-  border-color: blue;
+  border-color: ${theme.mainColor};
 `;
 
 export const KitsHeader = styled.div`
@@ -34,7 +34,7 @@ export const KitsContainer = styled.div`
   display: block;
   border-right: solid;
   border-width: thin;
-  border-color: blue;
+  border-color: ${theme.mainColor};
   padding: 15px;
 `;
 export const KitsRows = styled.div`

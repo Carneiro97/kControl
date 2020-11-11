@@ -13,7 +13,12 @@ import { localAPI, herokuAPI } from '../../services/api';
 
 function Login() {
   const history = useHistory();
-  const { setIsLogged, isLogged, setUsuarioLogado } = useContext(StoreContext);
+  const {
+    setIsLogged,
+    isLogged,
+    setUsuarioLogado,
+    handlePostLogin,
+  } = useContext(StoreContext);
   const [checked, setChecked] = useState(false);
   const [usuario, setUsuario] = useState(``);
   const [senha, setSenha] = useState(``);
@@ -29,25 +34,7 @@ function Login() {
 
   function handleSubmit(e) {
     e.preventDefault();
-    const res = herokuAPI
-      .post('/usuarios/login/' + loginType, loginParams)
-      .then(function (response) {
-        setIsLogged(true);
-        setUsuarioLogado(response.data.usuario);
-        setTimeout(function () {
-          history.push('/home');
-        }, 1500);
-      })
-      .catch(function (error) {
-        console.log(error);
-        toast.error(
-          <ErrorToast size="40">
-            <strong> Erro nos dados inseridos. </strong>
-          </ErrorToast>
-        );
-        setIsLogged(false);
-        setUsuarioLogado(null);
-      });
+    handlePostLogin(loginType, loginParams);
   }
 
   function handleUsuario(e) {
@@ -96,6 +83,7 @@ function Login() {
 
       <div className="sidenav">
         <div className="login-main-text">
+          <h1>Lab - Control</h1>
           <h2>Retirada de kits escolares</h2>
         </div>
       </div>
