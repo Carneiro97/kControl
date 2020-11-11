@@ -9,6 +9,8 @@ import { ErrorToast } from '../../components/Toast';
 
 import { Container, LoginContainer } from './styles';
 
+import { localAPI, herokuAPI } from '../services/api';
+
 function Login() {
   const history = useHistory();
   const { setIsLogged, isLogged, setUsuarioLogado } = useContext(StoreContext);
@@ -27,8 +29,8 @@ function Login() {
 
   function handleSubmit(e) {
     e.preventDefault();
-    const res = axios
-      .post('http://localhost:3030/usuarios/login/' + loginType, loginParams)
+    const res = herokuAPI
+      .post('/usuarios/login/' + loginType, loginParams)
       .then(function (response) {
         setIsLogged(true);
         setUsuarioLogado(response.data.usuario);
