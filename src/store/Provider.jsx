@@ -13,7 +13,7 @@ import {
   AuthToast,
 } from '../components/Toast';
 
-import { StatusEmprestimoEnum } from '../enums/StatusEmprestimoEnum';
+import { localAPI, herokuAPI } from '../services/api';
 
 const StoreProvider = ({ children }) => {
   const [isLogged, setIsLogged, removeIsLogged] = useStorage('isLogged');
@@ -49,8 +49,8 @@ const StoreProvider = ({ children }) => {
   };
 
   const handleGetUsuarios = () => {
-    axios
-      .get('http://localhost:3030/usuarios/')
+    herokuAPI
+      .get('/usuarios')
       .then(function (response) {
         setGetUsuarios(response.data);
       })
@@ -65,8 +65,8 @@ const StoreProvider = ({ children }) => {
   };
 
   const handleGetBtDigitalUsuario = (usuario, handleAcaoEmprestimo) => {
-    axios
-      .get(`http://localhost:3030/usuarios/btdigital/id/${usuario._id}`)
+    herokuAPI
+      .get(`/usuarios/btdigital/id/${usuario._id}`)
       .then(function (response) {
         const btDigital = response.data.btDigital;
         if (btDigital) {
@@ -100,8 +100,8 @@ const StoreProvider = ({ children }) => {
   };
 
   const handlePatchUsuario = (idUsuario, params) => {
-    axios
-      .patch(`http://localhost:3030/usuarios/${idUsuario}`, params)
+    herokuAPI
+      .patch(`/usuarios/${idUsuario}`, params)
       .then(function (response) {})
       .catch(function (error) {
         console.log(error);
@@ -109,8 +109,8 @@ const StoreProvider = ({ children }) => {
   };
 
   const handlePatchDigitalUsuario = (usuario, params) => {
-    axios
-      .patch(`http://localhost:3030/usuarios/${usuario._id}`, params)
+    herokuAPI
+      .patch(`/usuarios/${usuario._id}`, params)
       .then(function (response) {
         if (params[0]['value']) {
           toast.error(
@@ -132,8 +132,8 @@ const StoreProvider = ({ children }) => {
   };
 
   const handleGetKits = () => {
-    axios
-      .get('http://localhost:3030/kits/')
+    herokuAPI
+      .get('/kits/')
       .then(function (response) {
         setGetKits(response.data);
       })
@@ -148,8 +148,8 @@ const StoreProvider = ({ children }) => {
   };
 
   const handlePatchAssociarKits = (kitId, params) => {
-    axios
-      .patch(`http://localhost:3030/kits/${kitId}`, params)
+    herokuAPI
+      .patch(`/kits/${kitId}`, params)
       .then(function (response) {
         handleGetKits();
       })
@@ -164,8 +164,8 @@ const StoreProvider = ({ children }) => {
   };
 
   const handlePatchKit = (kitId, params) => {
-    axios
-      .patch(`http://localhost:3030/kits/${kitId}`, params)
+    herokuAPI
+      .patch(`/kits/${kitId}`, params)
       .then(function (response) {
         toast.error(
           <UpdateToast size="40">
@@ -185,8 +185,8 @@ const StoreProvider = ({ children }) => {
   };
 
   const handleNewKit = (params) => {
-    axios
-      .post('http://localhost:3030/kits', params)
+    herokuAPI
+      .post('/kits', params)
       .then(function (response) {
         toast.error(
           <AddToast size="40">
@@ -206,8 +206,8 @@ const StoreProvider = ({ children }) => {
   };
 
   const handleDeleteKit = (id) => {
-    axios
-      .delete(`http://localhost:3030/kits/${id}`)
+    herokuAPI
+      .delete(`/kits/${id}`)
       .then(function (response) {
         toast.error(
           <DeleteToast size="40">
@@ -233,8 +233,8 @@ const StoreProvider = ({ children }) => {
       nomeMonitorEmprestimo: usuarioLogado.nome,
     };
 
-    axios
-      .post('http://localhost:3030/emprestimos', params)
+    herokuAPI
+      .post('/emprestimos', params)
       .then(function (response) {
         params.idKits.map((kitId) => {
           const kitParams = [
@@ -263,8 +263,8 @@ const StoreProvider = ({ children }) => {
   };
 
   const handleGetEmprestimos = () => {
-    axios
-      .get('http://localhost:3030/emprestimos/')
+    herokuAPI
+      .get('/emprestimos/')
       .then(function (response) {
         setGetEmprestimos(response.data);
       })
@@ -303,8 +303,8 @@ const StoreProvider = ({ children }) => {
       ];
       handlePatchAssociarKits(kitId, kitParams);
     });
-    axios
-      .patch(`http://localhost:3030/emprestimos/${emprestimoId}`, params)
+    herokuAPI
+      .patch(`/emprestimos/${emprestimoId}`, params)
       .then(function (response) {
         toast.error(
           <UpdateToast size="40">
@@ -323,8 +323,8 @@ const StoreProvider = ({ children }) => {
       });
   };
   const handlePatchEmprestimo = (emprestimoId, params) => {
-    axios
-      .patch(`http://localhost:3030/emprestimos/${emprestimoId}`, params)
+    herokuAPI
+      .patch(`/emprestimos/${emprestimoId}`, params)
       .then(function (response) {
         toast.error(
           <UpdateToast size="40">
