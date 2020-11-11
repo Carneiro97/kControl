@@ -51,19 +51,16 @@ function Row({ onClick, key, row, isSelected, onClickObs }) {
             {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
           </IconButton>
           <ObsButton>
-            <CgDetailsMore
-              title={'Observações...'}
-              onClick={onClickObs}
-            />
+            <CgDetailsMore title={'Observações...'} onClick={onClickObs} />
           </ObsButton>
         </TableCell>
         <TableCell component="th" scope="row">
-          {row.alunoEmprestimo[0]?.nome}
+          {row.nomeAluno}
         </TableCell>
         <TableCell align="right">
           <ul>
-            {row.kitsEmprestimo.map((kit, index) => {
-              return <li key={index}>{kit[0]?.nome}</li>;
+            {row.nomeKits.map((kit, index) => {
+              return <li key={index}>{kit}</li>;
             })}
           </ul>
         </TableCell>
@@ -89,13 +86,13 @@ function Row({ onClick, key, row, isSelected, onClickObs }) {
                   {row.info.map((infoRow, index) => (
                     <TableRow key={index}>
                       <TableCell component="th" scope="row">
-                        {infoRow.monitorEmprestimo
-                          ? infoRow.monitorEmprestimo[0]?.nome
+                        {infoRow.nomeMonitorEmprestimo
+                          ? infoRow.nomeMonitorEmprestimo
                           : '-'}
                       </TableCell>
                       <TableCell>
-                        {infoRow.monitorFinalizacao
-                          ? infoRow.monitorFinalizacao[0]?.nome
+                        {infoRow.nomeMonitorFinalizacao
+                          ? infoRow.nomeMonitorFinalizacao
                           : '-'}
                       </TableCell>
                       <TableCell>
@@ -119,20 +116,21 @@ Row.propTypes = {
   row: PropTypes.shape({
     _id: PropTypes.number,
     idAluno: PropTypes.number.isRequired,
-    alunoEmprestimo: PropTypes.object.isRequired,
+    nomeAluno: PropTypes.string.isRequired,
     idKits: PropTypes.arrayOf(PropTypes.number.isRequired),
-    kitsEmprestimo: PropTypes.arrayOf(PropTypes.object.isRequired),
+    nomeKits: PropTypes.arrayOf(PropTypes.object.isRequired),
     status: PropTypes.string.isRequired,
     descricao: PropTypes.string,
     ocorrencia: PropTypes.string,
     dtEmprestimo: PropTypes.string.isRequired,
+    alunoEmprestimo: PropTypes.object.isRequired,
     info: PropTypes.arrayOf(
       PropTypes.shape({
         dtFinalizacaoEmprestimo: PropTypes.string,
         codigoMonitorEmprestimo: PropTypes.number.isRequired,
-        monitorEmprestimo: PropTypes.object.isRequired,
+        nomeMonitorEmprestimo: PropTypes.string.isRequired,
         codigoMonitorFinalizacao: PropTypes.number,
-        monitorFinalizacao: PropTypes.object,
+        nomeMonitorFinalizacao: PropTypes.string,
       })
     ).isRequired,
   }).isRequired,
@@ -151,40 +149,45 @@ export default function CollapsibleTable({
   function createData(
     _id,
     idAluno,
-    alunoEmprestimo,
+    nomeAluno,
     codigoMonitorEmprestimo,
-    monitorEmprestimo,
-    monitorFinalizacao,
+    nomeMonitorEmprestimo,
+    nomeMonitorFinalizacao,
     codigoMonitorFinalizacao,
     idKits,
-    kitsEmprestimo,
+    nomeKits,
     status,
     descricao,
     ocorrencia,
     dtEmprestimo,
-    dtFinalizacaoEmprestimo
+    dtFinalizacaoEmprestimo,
+    alunoEmprestimo
   ) {
     return {
       _id,
       idAluno,
-      alunoEmprestimo,
+      nomeAluno,
+
       idKits,
-      kitsEmprestimo,
+      nomeKits,
       descricao: descricao ? descricao : null,
       ocorrencia: ocorrencia ? ocorrencia : null,
       dtEmprestimo: moment(dtEmprestimo).format('DD/MM/YY'),
       status,
+      alunoEmprestimo,
       info: [
         {
           dtFinalizacaoEmprestimo: dtFinalizacaoEmprestimo
             ? moment(dtFinalizacaoEmprestimo).format('DD/MM/YY')
             : null,
           codigoMonitorEmprestimo,
-          monitorEmprestimo,
+          nomeMonitorEmprestimo,
           codigoMonitorFinalizacao: codigoMonitorFinalizacao
             ? codigoMonitorFinalizacao
             : null,
-          monitorFinalizacao: monitorFinalizacao ? monitorFinalizacao : null,
+          nomeMonitorFinalizacao: nomeMonitorFinalizacao
+            ? nomeMonitorFinalizacao
+            : null,
         },
       ],
     };
@@ -206,39 +209,40 @@ export default function CollapsibleTable({
       emprestimo.status.toLowerCase().includes(searchEmprestimo.toLowerCase())
     )
     .map((emprestimo) => {
-      let idKitsLength = emprestimo.idKits.length;
-      let kitsEmprestimo = [];
-      for (let i = 0; i < idKitsLength; i++) {
-        kitsEmprestimo.push(
-          kits.filter((kit) => kit._id === emprestimo.idKits[i])
-        );
-      }
+      // let idKitsLength = emprestimo.idKits?.length;
+      // let kitsEmprestimo = [];
+      // for (let i = 0; i < idKitsLength; i++) {
+      //   kitsEmprestimo.push(
+      //     kits.filter((kit) => kit._id === emprestimo.idKits[i])
+      //   );
+      // }
+      // let monitorEmprestimo = usuarios.filter((usuario) => {
+      //   return usuario._id === emprestimo.codigoMonitorEmprestimo;
+      // });
+      // let monitorFinalizacao = usuarios.filter((usuario) => {
+      //   return usuario._id === emprestimo.codigoMonitorFinalizacao;
+      // });
       let alunoEmprestimo = usuarios.filter((usuario) => {
         return usuario._id === emprestimo.idAluno;
-      });
-      let monitorEmprestimo = usuarios.filter((usuario) => {
-        return usuario._id === emprestimo.codigoMonitorEmprestimo;
-      });
-      let monitorFinalizacao = usuarios.filter((usuario) => {
-        return usuario._id === emprestimo.codigoMonitorFinalizacao;
       });
 
       rows.push(
         createData(
           emprestimo._id,
           emprestimo.idAluno,
-          alunoEmprestimo,
+          emprestimo.nomeAluno,
           emprestimo.codigoMonitorEmprestimo,
-          monitorEmprestimo,
-          monitorFinalizacao,
+          emprestimo.nomeMonitorEmprestimo,
+          emprestimo.nomeMonitorFinalizacao,
           emprestimo.codigoMonitorFinalizacao,
           emprestimo.idKits,
-          kitsEmprestimo,
+          emprestimo.nomeKits,
           emprestimo.status,
           emprestimo.descricao,
           emprestimo.ocorrencia,
           emprestimo.dtEmprestimo,
-          emprestimo.dtFinalizacaoEmprestimo
+          emprestimo.dtFinalizacaoEmprestimo,
+          alunoEmprestimo
         )
       );
     });

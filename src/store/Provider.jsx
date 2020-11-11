@@ -227,11 +227,10 @@ const StoreProvider = ({ children }) => {
   };
 
   const handlePostNovoEmprestimo = (params) => {
-    console.log(params);
     params = {
-      idAluno: params.idAluno,
-      idKits: params.kits,
+      ...params,
       codigoMonitorEmprestimo: usuarioLogado._id,
+      nomeMonitorEmprestimo: usuarioLogado.nome,
     };
 
     axios

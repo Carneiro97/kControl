@@ -154,17 +154,34 @@ function Home() {
   function handleAcaoEmprestimo() {
     if (!showEmprestimos) {
       let selectedKitsIds = [];
+      let selectedTrueKits = [];
+      let selectedKitsNomes = [];
+
       selectedKits
         .filter((selectedKit) => selectedKit.selected === true)
         .map((selectedKit) => selectedKitsIds.push(selectedKit.id));
+
+      let idKitsLength = selectedKitsIds.length;
+
+      for (let i = 0; i < idKitsLength; i++) {
+        selectedTrueKits.push(
+          kits.filter((kit) => kit._id === selectedKitsIds[i])
+        );
+      }
+      selectedTrueKits.map((selectedTrueKit) => selectedKitsNomes.push(selectedTrueKit[0].nome));
       const associarParams = {
-        kits: selectedKitsIds,
-        idAluno: selectedUsuario,
+        idAluno: selectedUsuario._id,
+        nomeAluno: selectedUsuario.nome,
+        idKits: selectedKitsIds,
+        nomeKits: selectedKitsNomes,
       };
       handlePostNovoEmprestimo(associarParams);
       setSelectedKits([]);
     } else {
-      handlePatchFinalizarEmprestimo(selectedEmprestimo._id, selectedEmprestimo.idKits);
+      handlePatchFinalizarEmprestimo(
+        selectedEmprestimo._id,
+        selectedEmprestimo.idKits
+      );
       setIsSelectedRowEmprestimo(false);
     }
     setIsOpenModalEmprestimoValidation(false);
@@ -197,7 +214,9 @@ function Home() {
 
   function handleIsOpenModalEmprestimoValidation() {
     if (isBiometria && isOpenModalEmprestimoValidation) {
-      resetarFlagsDigitalUsuario(selectedUsuario);
+      resetarFlagsDigitalUsuario(
+        showEmprestimos ? alunoSelectedEmprestimo : selectedUsuario
+      );
     }
     setIsOpenModalEmprestimoValidation(!isOpenModalEmprestimoValidation);
   }
@@ -214,7 +233,10 @@ function Home() {
   function handleModalEmprestimoValidationSubmit(data) {
     setAutenticacaoAluno(data.autenticacao);
     if (isBiometria)
-      handleGetBtDigitalUsuario(selectedUsuario, handleAcaoEmprestimo);
+      handleGetBtDigitalUsuario(
+        showEmprestimos ? alunoSelectedEmprestimo : selectedUsuario,
+        handleAcaoEmprestimo
+      );
   }
 
   function handleDigitalUsuario() {
@@ -224,7 +246,10 @@ function Home() {
         value: true,
       },
     ];
-    handlePatchDigitalUsuario(selectedUsuario, params);
+    handlePatchDigitalUsuario(
+      showEmprestimos ? alunoSelectedEmprestimo : selectedUsuario,
+      params
+    );
   }
 
   function handleIsBiometria(e) {
@@ -252,7 +277,7 @@ function Home() {
   useEffect(() => {
     if (showEmprestimos) {
       if (selectedEmprestimo && autenticacaoAluno) {
-        if (autenticacaoAluno !== selectedEmprestimo?.idAluno) {
+        if (autenticacaoAluno != alunoSelectedEmprestimo?.codigo) {
           toast.error(
             <ErrorToast size="40">
               <strong> Autenticação inválida. </strong>
@@ -264,12 +289,15 @@ function Home() {
         }
       }
     } else if (selectedUsuario && autenticacaoAluno) {
-      if (autenticacaoAluno !== selectedUsuario?._id) {
+      if (autenticacaoAluno != selectedUsuario?.codigo) {
+        console.log(autenticacaoAluno);
+        console.log(selectedUsuario?.codigo);
         toast.error(
           <ErrorToast size="40">
             <strong> Autenticação inválida. </strong>
           </ErrorToast>
         );
+
         setIsOpenModalEmprestimoValidation(false);
       } else {
         handleAcaoEmprestimo();
@@ -286,6 +314,10 @@ function Home() {
   useEffect(() => {
     setCountKits(getKits?.count);
   }, [kits]);
+
+  useEffect(() => {
+    setAutenticacaoAluno('');
+  }, [isOpenModalEmprestimoValidation]);
 
   return (
     <Container>
@@ -489,7 +521,7 @@ const SideEmprestimos = ({
   handleSearchEmprestimo,
   kits,
   usuarios,
-  onClickObs
+  onClickObs,
 }) => {
   return (
     <UsuariosContainer>
@@ -515,7 +547,10 @@ const SideEmprestimos = ({
       </SideBody>
       <SideFooter>
         <Button
-          disabled={!isSelectedRowEmprestimo || selectedEmprestimo?.status === 'Finalizado'}
+          disabled={
+            !isSelectedRowEmprestimo ||
+            selectedEmprestimo?.status === 'Finalizado'
+          }
           onClick={() => {
             handleIsOpenModalEmprestimoValidation();
             if (isBiometria) handleDigitalUsuario();

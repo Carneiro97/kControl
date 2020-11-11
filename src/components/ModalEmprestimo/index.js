@@ -45,7 +45,7 @@ function ModalEmprestimo({
 
   return (
     <Modal isOpen={isOpen} onClick={onClick} height={height} width="460">
-      <ModalHeader>{alunoEmprestimo.nome}</ModalHeader>
+      <ModalHeader>{alunoEmprestimo?.nome}</ModalHeader>
       <Form onSubmit={handleSubmit}>
         <ModalContentWrapper minHeight="0">
           <LabelContainer text="Observações">
