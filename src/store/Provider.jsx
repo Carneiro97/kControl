@@ -312,6 +312,10 @@ const StoreProvider = ({ children }) => {
         propName: 'dtFinalizacaoEmprestimo',
         value: date,
       },
+      {
+        propName: 'nomeMonitorFinalizacao',
+        value: usuarioLogado.nome,
+      },
     ];
     idKits.map((kitId) => {
       const kitParams = [
