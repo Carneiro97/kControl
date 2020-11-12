@@ -172,13 +172,13 @@ export default function CollapsibleTable({
       nomeKits,
       descricao: descricao ? descricao : null,
       ocorrencia: ocorrencia ? ocorrencia : null,
-      dtEmprestimo: moment(dtEmprestimo).format('DD/MM/YY'),
+      dtEmprestimo: moment(dtEmprestimo).format('DD/MM/YYYY HH:mm'),
       status,
       alunoEmprestimo,
       info: [
         {
           dtFinalizacaoEmprestimo: dtFinalizacaoEmprestimo
-            ? moment(dtFinalizacaoEmprestimo).format('DD/MM/YY')
+            ? moment(dtFinalizacaoEmprestimo).format('DD/MM/YYYY HH:mm')
             : null,
           codigoMonitorEmprestimo,
           nomeMonitorEmprestimo,
