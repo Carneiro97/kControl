@@ -152,8 +152,6 @@ function Home() {
   }
 
   function handleAcaoEmprestimo() {
-    handleGetKits();
-    handleGetEmprestimos();
     if (!showEmprestimos) {
       let selectedKitsIds = [];
       let selectedTrueKits = [];
@@ -321,6 +319,14 @@ function Home() {
   useEffect(() => {
     setAutenticacaoAluno('');
   }, [isOpenModalEmprestimoValidation]);
+
+  useEffect(() => {
+    setCountEmprestimos(getEmprestimos.count);
+  }, [getEmprestimos]);
+
+  useEffect(() => {
+    setCountKits(getKits.count);
+  }, [getKits]);
 
   return (
     <Container>
