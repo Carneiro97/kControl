@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import moment from 'moment';
 import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/core/styles';
 import Box from '@material-ui/core/Box';
@@ -77,7 +78,9 @@ function Row({ onClick, key, row, isSelected }) {
                       </TableCell>
                       <TableCell>{infoRow.cpf}</TableCell>
                       <TableCell align="right">
-                        {infoRow.dtNascimento}
+                        {moment(
+                          moment(infoRow.dtNascimento, 'DD/MM/YYYY', 'pt')
+                        ).format('DD/MM/YYYY')}
                       </TableCell>
                     </TableRow>
                   ))}

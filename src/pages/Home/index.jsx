@@ -174,6 +174,7 @@ function Home() {
       const associarParams = {
         idAluno: selectedUsuario._id,
         nomeAluno: selectedUsuario.nome,
+        codigoAluno: selectedUsuario.codigo,
         idKits: selectedKitsIds,
         nomeKits: selectedKitsNomes,
       };
@@ -533,7 +534,7 @@ const SideEmprestimos = ({
         hideAddButton
         padding="15px 0 15px 0"
         handleChange={handleSearchEmprestimo}
-        placeholder="Pesquise pelo status do empréstimo"
+        placeholder="Pesquise pelo RA do aluno"
       />
       <SideBody>
         <CollapsibleTableEmprestimos

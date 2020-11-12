@@ -117,6 +117,7 @@ Row.propTypes = {
     _id: PropTypes.number,
     idAluno: PropTypes.number.isRequired,
     nomeAluno: PropTypes.string.isRequired,
+    codigoAluno: PropTypes.string.isRequired,
     idKits: PropTypes.arrayOf(PropTypes.number.isRequired),
     nomeKits: PropTypes.arrayOf(PropTypes.object.isRequired),
     status: PropTypes.string.isRequired,
@@ -150,6 +151,7 @@ export default function CollapsibleTable({
     _id,
     idAluno,
     nomeAluno,
+    codigoAluno,
     codigoMonitorEmprestimo,
     nomeMonitorEmprestimo,
     nomeMonitorFinalizacao,
@@ -167,7 +169,7 @@ export default function CollapsibleTable({
       _id,
       idAluno,
       nomeAluno,
-
+      codigoAluno,
       idKits,
       nomeKits,
       descricao: descricao ? descricao : null,
@@ -206,7 +208,7 @@ export default function CollapsibleTable({
 
   emprestimos
     .filter((emprestimo) =>
-      emprestimo.status.toLowerCase().includes(searchEmprestimo.toLowerCase())
+      emprestimo.codigoAluno.includes(searchEmprestimo)
     )
     .map((emprestimo) => {
       // let idKitsLength = emprestimo.idKits?.length;
@@ -231,6 +233,7 @@ export default function CollapsibleTable({
           emprestimo._id,
           emprestimo.idAluno,
           emprestimo.nomeAluno,
+          emprestimo.codigoAluno,
           emprestimo.codigoMonitorEmprestimo,
           emprestimo.nomeMonitorEmprestimo,
           emprestimo.nomeMonitorFinalizacao,
