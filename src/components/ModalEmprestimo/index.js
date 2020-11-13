@@ -16,7 +16,7 @@ function ModalEmprestimo({
   setIsOpen,
   alunoEmprestimo,
 }) {
-  const [descricao, setDescricao] = useState('');
+  const [descricao, setDescricao] = useState(emprestimo.descricao);
   const { handlePatchEmprestimo } = useContext(StoreContext);
   const [isDataOkToUpdate, setIsDataOkToUpdate] = useState(false);
 
@@ -50,7 +50,7 @@ function ModalEmprestimo({
         <ModalContentWrapper minHeight="0">
           <LabelContainer text="Observações">
             <TextArea
-              name="observacao"
+              name="descricao"
               handleChange={handleDescricao}
               placeholder="Insira observações do empréstimo"
               lessHover

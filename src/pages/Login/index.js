@@ -6,10 +6,12 @@ import 'react-toastify/dist/ReactToastify.css';
 import MySwitch from '../../components/Switch';
 import StoreContext from '../../store/Context';
 import { ErrorToast } from '../../components/Toast';
+import InputPassword from '../../components/InputPassword';
+import LabelContainer from '../../components/LabelContainer';
+import InputForm from '../../components/InputForm';
+import { Form } from '@unform/web';
 
 import { Container, LoginContainer } from './styles';
-
-import { localAPI, herokuAPI } from '../../services/api';
 
 function Login() {
   const history = useHistory();
@@ -33,7 +35,6 @@ function Login() {
   }
 
   function handleSubmit(e) {
-    e.preventDefault();
     handlePostLogin(loginType, loginParams);
   }
 
@@ -90,25 +91,31 @@ function Login() {
       <div className="main">
         <div className="col-md-6 col-sm-12">
           <div className="login-form">
-            <form onSubmit={handleSubmit}>
+            <Form onSubmit={handleSubmit}>
               <div className="form-group">
-                <label>Usuário</label>
-                <input
-                  type="text"
-                  className="form-control"
-                  placeholder={
-                    checked ? 'Digite seu CPF' : 'Digite seu código de usuário'
-                  }
-                  onChange={handleUsuario}
-                />
+                <LabelContainer text="Usuário">
+                  <InputForm
+                    font="16px Calibri Regular"
+                    width="510px"
+                    height="40px"
+                    name="usuario"
+                    handleChange={handleUsuario}
+                    placeholder={checked ? 'Digite seu CPF' : 'Digite seu RA'}
+                    value={usuario}
+                  />
+                </LabelContainer>
               </div>
               <div className="form-group">
-                <label>Senha</label>
-                <input
-                  type="password"
-                  className="form-control"
+                <InputPassword
+                  font="18px Calibri Regular"
+                  handleChange={handleSenha}
+                  width="510"
+                  height="40"
                   placeholder="Digite sua senha"
-                  onChange={handleSenha}
+                  name="senha"
+                  labelName="Senha"
+                  value={senha}
+                  isLogin
                 />
               </div>
               <LoginContainer>
@@ -122,7 +129,7 @@ function Login() {
                   label="Login por CPF"
                 />
               </LoginContainer>
-            </form>
+            </Form>
           </div>
         </div>
       </div>

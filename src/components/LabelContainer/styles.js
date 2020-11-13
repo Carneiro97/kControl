@@ -19,7 +19,7 @@ export const Container = styled.label`
       ? css`
           margin: ${margin}px;
         `
-      : `margin: 5px`};
+      : ``};
 
   ${({ marginRight }) =>
     marginRight

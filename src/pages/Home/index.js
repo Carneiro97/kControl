@@ -196,7 +196,8 @@ function Home() {
   function handleIsOpenModalKit() {
     setIsOpenModalKit(!isOpenModalKit);
   }
-  function handleIsOpenModalEmprestimo() {
+  function handleIsOpenModalEmprestimo(e) {
+    // console.log(e.target.parent);
     setIsOpenModalEmprestimo(!isOpenModalEmprestimo);
   }
 
@@ -291,8 +292,6 @@ function Home() {
       }
     } else if (selectedUsuario && autenticacaoAluno) {
       if (autenticacaoAluno != selectedUsuario?.codigo) {
-        console.log(autenticacaoAluno);
-        console.log(selectedUsuario?.codigo);
         toast.error(
           <ErrorToast size="40">
             <strong> Autenticação inválida. </strong>
