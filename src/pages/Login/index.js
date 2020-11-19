@@ -1,11 +1,8 @@
 import React, { useEffect, useState, useContext } from 'react';
 import { useHistory } from 'react-router-dom';
-import axios from 'axios';
-import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import MySwitch from '../../components/Switch';
 import StoreContext from '../../store/Context';
-import { ErrorToast } from '../../components/Toast';
 import InputPassword from '../../components/InputPassword';
 import LabelContainer from '../../components/LabelContainer';
 import InputForm from '../../components/InputForm';
@@ -15,12 +12,7 @@ import { Container, LoginContainer } from './styles';
 
 function Login() {
   const history = useHistory();
-  const {
-    setIsLogged,
-    isLogged,
-    setUsuarioLogado,
-    handlePostLogin,
-  } = useContext(StoreContext);
+  const { isLogged, handlePostLogin } = useContext(StoreContext);
   const [checked, setChecked] = useState(false);
   const [usuario, setUsuario] = useState(``);
   const [senha, setSenha] = useState(``);
@@ -107,7 +99,7 @@ function Login() {
               </div>
               <div className="form-group">
                 <InputPassword
-                  font="18px Calibri Regular"
+                  font="16px Calibri Regular"
                   handleChange={handleSenha}
                   width="510"
                   height="40"

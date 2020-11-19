@@ -11,14 +11,15 @@ module.exports = {
     },
     extends: [
       'plugin:react/recommended',
-      'plugin:prettier/recommended'
+      'plugin:prettier/recommended',
+      'eslint:recommended'
     ],
-    plugins: [],
+    plugins: ['eslint-plugin-react'],
     // add your custom rules here
     rules: {
         "react/prop-types": 1,
         "prettier/prettier": ["error", {
-         "endOfLine":"auto"
+         "endOfLine":"auto" 
        }],
     }
   }

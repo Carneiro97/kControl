@@ -168,7 +168,9 @@ function Home() {
           kits.filter((kit) => kit._id === selectedKitsIds[i])
         );
       }
-      selectedTrueKits.map((selectedTrueKit) => selectedKitsNomes.push(selectedTrueKit[0].nome));
+      selectedTrueKits.map((selectedTrueKit) =>
+        selectedKitsNomes.push(selectedTrueKit[0].nome)
+      );
       const associarParams = {
         idAluno: selectedUsuario._id,
         nomeAluno: selectedUsuario.nome,

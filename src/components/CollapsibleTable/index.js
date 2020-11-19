@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import moment from 'moment';
 import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/core/styles';
@@ -15,8 +15,7 @@ import Typography from '@material-ui/core/Typography';
 import Paper from '@material-ui/core/Paper';
 import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@material-ui/icons/KeyboardArrowUp';
-import { RowContainer } from './styles';
-import produce from 'immer';
+import PerfilUsuarioEnum from '../../enums/PerfilUsuarioEnum';
 
 const useRowStyles = makeStyles({
   root: {
@@ -52,7 +51,7 @@ function Row({ onClick, key, row, isSelected }) {
         </TableCell>
         <TableCell align="right">{row.codigo}</TableCell>
         <TableCell align="right">
-          {row.adm == 1 ? 'Administrador' : 'Padrão'}{' '}
+          {PerfilUsuarioEnum.returnName[row.perfil]}
         </TableCell>
       </TableRow>
       <TableRow>
@@ -98,7 +97,7 @@ Row.propTypes = {
   row: PropTypes.shape({
     nome: PropTypes.string.isRequired,
     codigo: PropTypes.number.isRequired,
-    adm: PropTypes.number.isRequired,
+    perfil: PropTypes.number.isRequired,
     _id: PropTypes.number.isRequired,
     info: PropTypes.arrayOf(
       PropTypes.shape({
@@ -117,11 +116,11 @@ export default function CollapsibleTable({
   clickedRowId,
   searchUsuario,
 }) {
-  function createData(nome, codigo, adm, curso, dtNascimento, _id, cpf) {
+  function createData(nome, codigo, perfil, curso, dtNascimento, _id, cpf) {
     return {
       nome,
       codigo,
-      adm,
+      perfil,
       _id,
       info: [{ curso, cpf, dtNascimento }],
     };
@@ -141,7 +140,7 @@ export default function CollapsibleTable({
         createData(
           usuario.nome,
           usuario.codigo,
-          usuario.btAdm,
+          usuario.perfil,
           usuario.curso,
           usuario.dtNascimento,
           usuario._id,
