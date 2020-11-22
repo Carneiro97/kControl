@@ -502,6 +502,7 @@ const SideUsuarios = ({
       />
       <SideFooter>
         <Button
+          width="270px"
           marginTop="8px"
           height="30px"
           disabled={!selectedParametersOk}
@@ -580,6 +581,7 @@ const SideEmprestimos = ({
       />
       <SideFooter>
         <Button
+          width="270px"
           marginTop="8px"
           height="30px"
           disabled={

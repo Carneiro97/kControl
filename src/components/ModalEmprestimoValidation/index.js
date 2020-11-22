@@ -40,7 +40,7 @@ function ModalEmprestimoValidation({
   }
 
   return (
-    <Modal isOpen={isOpen} onClick={onClick} height="345" width="460">
+    <Modal isOpen={isOpen} onClick={onClick} width="460">
       <ModalHeader padding="10px">{textHeader}</ModalHeader>
       <Form onInvalid={handleOnInValid} autoComplete="off" onSubmit={onSubmit}>
         <ModalContentWrapper paddingTop="50px">
