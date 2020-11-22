@@ -10,6 +10,7 @@ import {
 } from './styles';
 
 import theme from '../../styles/theme';
+import PerfilUsuarioEnum from '../../enums/PerfilUsuarioEnum';
 
 const Card = ({
   onClick,
@@ -19,6 +20,7 @@ const Card = ({
   onClickDelete,
   status,
   disableDelete,
+  usuarioLogado,
 }) => (
   <Container status={status} onClick={onClick} selected={selected}>
     <CardHeader>
@@ -27,6 +29,12 @@ const Card = ({
           color={disableDelete ? theme.grey : theme.secondColor}
           title={'Excluir kit'}
           onClick={disableDelete ? null : onClickDelete}
+          display={
+            PerfilUsuarioEnum.returnName[usuarioLogado?.perfil] !==
+            'Administrador'
+              ? 'none'
+              : null
+          }
         />
       </CardDeleteIconContainer>
     </CardHeader>

@@ -90,6 +90,15 @@ ${({ disabled }) =>
       : `background: ${theme.secondColor}`};
     }
   }
+
+  ${({ marginTop }) =>
+    marginTop
+      ? css`
+          margin-top: ${marginTop};
+        `
+      : ''};
+    }
+  }
   ${({ marginLeft }) =>
     marginLeft
       ? css`

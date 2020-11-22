@@ -207,9 +207,7 @@ export default function CollapsibleTable({
   // filtrar emprestimos por nome do aluno try
 
   emprestimos
-    .filter((emprestimo) =>
-      emprestimo.codigoAluno.includes(searchEmprestimo)
-    )
+    .filter((emprestimo) => emprestimo.codigoAluno.includes(searchEmprestimo))
     .map((emprestimo) => {
       // let idKitsLength = emprestimo.idKits?.length;
       // let kitsEmprestimo = [];

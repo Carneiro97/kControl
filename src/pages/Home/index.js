@@ -15,6 +15,7 @@ import ModalEmprestimoValidation from '../../components/ModalEmprestimoValidatio
 import MySwitch from '../../components/Switch';
 import { toast } from 'react-toastify';
 import { ErrorToast, SuccessToast } from '../../components/Toast';
+import PerfilUsuarioEnum from '../../enums/PerfilUsuarioEnum';
 
 import {
   Container,
@@ -33,6 +34,7 @@ import {
 
 function Home() {
   const {
+    usuarioLogado,
     handleGetUsuarios,
     getUsuarios,
     handlePatchDigitalUsuario,
@@ -361,6 +363,7 @@ function Home() {
                     onClickDelete={(e) => handleIsOpenModalCancelAction(e, kit)}
                     status={kit.status}
                     disableDelete={kit.status === 'Emprestado'}
+                    usuarioLogado={usuarioLogado}
                   />
                 ))}
               </KitsRow>
@@ -384,6 +387,11 @@ function Home() {
               handleIsBiometria={handleIsBiometria}
               countUsuarios={countUsuarios}
               handleSearchUsuario={handleSearchUsuario}
+              usuarioLogado={usuarioLogado}
+              handleAcaoEmprestimo={handleAcaoEmprestimo}
+              showEmprestimos={showEmprestimos}
+              handleIsBiometria={handleIsBiometria}
+              handleShowEmprestimos={handleShowEmprestimos}
             />
           ) : (
             <SideEmprestimos
@@ -404,22 +412,13 @@ function Home() {
               kits={kits}
               usuarios={usuarios}
               onClickObs={handleIsOpenModalEmprestimo}
+              usuarioLogado={usuarioLogado}
+              handleAcaoEmprestimo={handleAcaoEmprestimo}
+              showEmprestimos={showEmprestimos}
+              handleIsBiometria={handleIsBiometria}
+              handleShowEmprestimos={handleShowEmprestimos}
             />
           )}
-          <SideFooter>
-            <MySwitch
-              checked={showEmprestimos}
-              onChange={handleShowEmprestimos}
-              marginLeft="30px"
-              label="Visualizar empréstimos"
-            />
-            <MySwitch
-              checked={isBiometria}
-              onChange={handleIsBiometria}
-              marginLeft="30px"
-              label="Autenticação biométrica"
-            />
-          </SideFooter>
         </Side>
       </BodyContainer>
       <ModalKit
@@ -457,7 +456,9 @@ function Home() {
             : 'Autenticação do aluno via QR-Code'
         }
         textTitle={
-          showEmprestimos ? alunoSelectedEmprestimo.nome : selectedUsuario?.nome
+          showEmprestimos
+            ? alunoSelectedEmprestimo?.nome
+            : selectedUsuario?.nome
         }
         text={
           isBiometria
@@ -483,6 +484,11 @@ const SideUsuarios = ({
   handleDigitalUsuario,
   countUsuarios,
   handleSearchUsuario,
+  usuarioLogado,
+  handleAcaoEmprestimo,
+  handleIsBiometria,
+  handleShowEmprestimos,
+  showEmprestimos,
 }) => {
   return (
     <UsuariosContainer>
@@ -494,6 +500,41 @@ const SideUsuarios = ({
         handleChange={handleSearchUsuario}
         placeholder="Pesquise pelo RA do aluno"
       />
+      <SideFooter>
+        <Button
+          marginTop="8px"
+          height="30px"
+          disabled={!selectedParametersOk}
+          onClick={() => {
+            if (
+              PerfilUsuarioEnum.returnName[usuarioLogado?.perfil] !==
+              'Administrador'
+            ) {
+              handleIsOpenModalEmprestimoValidation();
+              if (isBiometria) handleDigitalUsuario();
+            } else {
+              handleAcaoEmprestimo();
+            }
+          }}
+        >
+          Realizar empréstimo
+        </Button>
+        <MySwitch
+          checked={showEmprestimos}
+          onChange={handleShowEmprestimos}
+          marginLeft="30px"
+          label="Visualizar empréstimos"
+        />
+        {PerfilUsuarioEnum.returnName[usuarioLogado?.perfil] !==
+        'Administrador' ? (
+          <MySwitch
+            checked={isBiometria}
+            onChange={handleIsBiometria}
+            marginLeft="30px"
+            label="Autenticação biométrica"
+          />
+        ) : null}
+      </SideFooter>
       <SideBody>
         <CollapsibleTable
           searchUsuario={searchUsuario}
@@ -503,17 +544,6 @@ const SideUsuarios = ({
           usuarios={usuarios}
         />
       </SideBody>
-      <SideFooter>
-        <Button
-          disabled={!selectedParametersOk}
-          onClick={() => {
-            handleIsOpenModalEmprestimoValidation();
-            if (isBiometria) handleDigitalUsuario();
-          }}
-        >
-          Realizar empréstimo
-        </Button>
-      </SideFooter>
     </UsuariosContainer>
   );
 };
@@ -532,6 +562,11 @@ const SideEmprestimos = ({
   kits,
   usuarios,
   onClickObs,
+  usuarioLogado,
+  handleAcaoEmprestimo,
+  handleIsBiometria,
+  handleShowEmprestimos,
+  showEmprestimos,
 }) => {
   return (
     <UsuariosContainer>
@@ -543,6 +578,44 @@ const SideEmprestimos = ({
         handleChange={handleSearchEmprestimo}
         placeholder="Pesquise pelo RA do aluno"
       />
+      <SideFooter>
+        <Button
+          marginTop="8px"
+          height="30px"
+          disabled={
+            !isSelectedRowEmprestimo ||
+            selectedEmprestimo?.status === 'Finalizado'
+          }
+          onClick={() => {
+            if (
+              PerfilUsuarioEnum.returnName[usuarioLogado?.perfil] !==
+              'Administrador'
+            ) {
+              handleIsOpenModalEmprestimoValidation();
+              if (isBiometria) handleDigitalUsuario();
+            } else {
+              handleAcaoEmprestimo();
+            }
+          }}
+        >
+          Finalizar empréstimo
+        </Button>
+        <MySwitch
+          checked={showEmprestimos}
+          onChange={handleShowEmprestimos}
+          marginLeft="30px"
+          label="Visualizar empréstimos"
+        />
+        {PerfilUsuarioEnum.returnName[usuarioLogado?.perfil] !==
+        'Administrador' ? (
+          <MySwitch
+            checked={isBiometria}
+            onChange={handleIsBiometria}
+            marginLeft="30px"
+            label="Autenticação biométrica"
+          />
+        ) : null}
+      </SideFooter>
       <SideBody>
         <CollapsibleTableEmprestimos
           searchEmprestimo={searchEmprestimo}
@@ -555,20 +628,6 @@ const SideEmprestimos = ({
           onClickObs={onClickObs}
         />
       </SideBody>
-      <SideFooter>
-        <Button
-          disabled={
-            !isSelectedRowEmprestimo ||
-            selectedEmprestimo?.status === 'Finalizado'
-          }
-          onClick={() => {
-            handleIsOpenModalEmprestimoValidation();
-            if (isBiometria) handleDigitalUsuario();
-          }}
-        >
-          Finalizar empréstimo
-        </Button>
-      </SideFooter>
     </UsuariosContainer>
   );
 };

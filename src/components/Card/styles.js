@@ -3,8 +3,8 @@ import styled, { css } from 'styled-components';
 import theme from '../../styles/theme';
 
 export const Container = styled.div`
-  height: 200px;
-  width: 200px;
+  height: 150px;
+  width: 150px;
   border-radius: 30px;
   margin-left: 22px;
   border: ridge;
@@ -66,7 +66,7 @@ export const CardContent = styled.div`
 `;
 
 export const CardIconContainer = styled.div`
-  margin-top: 15px;
+  margin-top: 10px;
   width: fit-content;
   cursor: pointer;
 `;
@@ -76,6 +76,13 @@ export const CardDeleteIconContainer = styled.div`
   margin-bottom: 15%;
   text-align: end;
   padding: 5%;
+
+  ${({ display }) =>
+    display
+      ? css`
+          display: ${display};
+        `
+      : ``};
 
   ${({ disableCursor }) =>
     !disableCursor

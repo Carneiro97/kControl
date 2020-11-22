@@ -18,6 +18,7 @@ const Button = ({
   marginLeft,
   type,
   display,
+  marginTop,
   ...props
 }) => (
   <Container
@@ -36,6 +37,7 @@ const Button = ({
     marginLeft={marginLeft}
     onClick={onClick}
     type={type}
+    marginTop={marginTop}
   >
     {children}
     {text}

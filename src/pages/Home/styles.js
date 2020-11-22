@@ -29,8 +29,7 @@ export const KitsHeader = styled.div`
 `;
 
 export const KitsContainer = styled.div`
-  /* width: 100%; */
-  width: 70%;
+  width: 55%;
   display: block;
   border-right: solid;
   border-width: thin;
@@ -39,10 +38,9 @@ export const KitsContainer = styled.div`
 `;
 export const KitsRows = styled.div`
   overflow: auto;
-  max-height: 760px;
+  max-height: 400px;
 `;
 export const KitsRow = styled.div`
-  /* background-color: green; */
   height: fit-content;
   padding: 30px;
   display: flex;
@@ -57,16 +55,16 @@ export const KitsRow = styled.div`
         `}
 `;
 
-export const Side = styled.div``;
+export const Side = styled.div`
+  padding: 15px;
+`;
 
 export const UsuariosContainer = styled.div`
-  padding: 15px;
   border-width: thin;
   border-color: ${theme.mainColor};
-  min-height: 497px;
+  height: 350px;
 `;
 export const EmprestimosContainer = styled.div`
-  padding: 15px;
   border-width: thin;
   border-color: ${theme.mainColor};
 `;
@@ -83,14 +81,12 @@ export const SideHeader = styled.div`
 export const SideBody = styled.div`
   height: 90%;
   overflow: auto;
-  max-height: 650px;
+  height: 350px;
   margin-bottom: 10px;
-  min-width: 497px;
-  width: 497px;
-  min-height: 650px;
 `;
 
 export const SideFooter = styled.div`
   display: flex;
   justify-content: space-between;
+  margin-bottom: 10px;
 `;
