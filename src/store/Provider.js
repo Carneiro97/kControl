@@ -13,7 +13,7 @@ import {
   AuthToast,
 } from '../components/Toast';
 
-import { localAPI, herokuAPI } from '../services/api';
+import { herokuAPI, localAPI } from '../services/api';
 
 const StoreProvider = ({ children }) => {
   const [isLogged, setIsLogged, removeIsLogged] = useStorage('isLogged');
@@ -35,7 +35,7 @@ const StoreProvider = ({ children }) => {
   }, []);
 
   const handlePostLogin = (loginType, loginParams) => {
-    const res = herokuAPI
+    herokuAPI
       .post('/usuarios/login/' + loginType, loginParams)
       .then(function (response) {
         setIsLogged(true);

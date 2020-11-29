@@ -28,6 +28,7 @@
     "react-scripts": "3.4.3",
     "react-tap-event-plugin": "^3.0.3",
     "react-toastify": "^6.0.8",
+    "socket.io-client": "^3.0.3",
     "styled-components": "^5.2.0",
     "unform": "^1.2.3"
   },
