@@ -16,6 +16,7 @@ function ModalKit({ onClick, isOpen, height, kit, setIsOpen }) {
   const [nome, setNome] = useState('');
   const [descricao, setDescricao] = useState('');
   const [status, setStatus] = useState('');
+  const [ocorrencia, setOcorrencia] = useState('');
   const { handlePatchKit } = useContext(StoreContext);
   const [isDataOkToUpdate, setIsDataOkToUpdate] = useState(false);
 
@@ -29,10 +30,17 @@ function ModalKit({ onClick, isOpen, height, kit, setIsOpen }) {
 
   function handleSelectedStatus(e) {
     setStatus(e.target.dataset.text);
+    setOcorrencia(
+      e.target.dataset.text === StatusKitEnum.returnName[1] ? null : ocorrencia
+    );
+  }
+
+  function handleOcorrencia(e) {
+    setOcorrencia(e.target.value);
   }
 
   function handleSubmit(data) {
-    const camposForm = ['descricao', 'nome', 'status'];
+    const camposForm = ['descricao', 'nome', 'status', 'ocorrencia'];
     const params = camposForm.map((campo) => {
       return {
         propName: campo,
@@ -45,28 +53,29 @@ function ModalKit({ onClick, isOpen, height, kit, setIsOpen }) {
 
   useEffect(() => {
     setNome(kit.nome);
-  }, [kit]);
-
-  useEffect(() => {
     setDescricao(kit.descricao);
-  }, [kit]);
-
-  useEffect(() => {
     setStatus(kit.status);
+    setOcorrencia(kit.ocorrencia);
   }, [kit]);
 
   useEffect(() => {
     const dataHasChanged = !(
       kit.nome === nome &&
       kit.descricao === descricao &&
-      kit.status === status
+      kit.status === status &&
+      kit.ocorrencia === ocorrencia
     );
-    if (nome === '' || descricao === '' || status === '') {
+    if (nome === '' || descricao === '' || status === '' || ocorrencia === '') {
       setIsDataOkToUpdate(false);
-    } else if (nome !== '' && descricao !== '' && status !== '') {
+    } else if (
+      nome !== '' &&
+      descricao !== '' &&
+      status !== '' &&
+      ocorrencia !== ''
+    ) {
       setIsDataOkToUpdate(true && dataHasChanged);
     }
-  }, [nome, descricao, status]);
+  }, [nome, descricao, status, ocorrencia]);
 
   useEffect(() => {
     setNome(kit.nome);
@@ -106,6 +115,17 @@ function ModalKit({ onClick, isOpen, height, kit, setIsOpen }) {
             name="status"
             disable={kit.status === 'Emprestado'}
           />
+          {status === StatusKitEnum.returnName[3] ? (
+            <LabelContainer text="Ocorrência">
+              <TextArea
+                name="ocorrencia"
+                handleChange={handleOcorrencia}
+                placeholder="Insira a ocorrência do kit"
+                lessHover
+                value={ocorrencia}
+              />
+            </LabelContainer>
+          ) : null}
         </ModalContentWrapper>
         <ModalFooter
           justifyContent={'space-between'}
