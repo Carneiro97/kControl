@@ -16,7 +16,7 @@ function ModalEmprestimo({
   setIsOpen,
   alunoEmprestimo,
 }) {
-  const [descricao, setDescricao] = useState(emprestimo.descricao);
+  const [descricao, setDescricao] = useState(emprestimo?.descricao);
   const { handlePatchEmprestimo } = useContext(StoreContext);
   const [isDataOkToUpdate, setIsDataOkToUpdate] = useState(false);
 
@@ -31,17 +31,20 @@ function ModalEmprestimo({
         value: data.descricao,
       },
     ];
-    handlePatchEmprestimo(emprestimo._id, params);
-    setIsOpen(false);
+    handlePatchEmprestimo(emprestimo?._id, params);
   }
 
   useEffect(() => {
-    setDescricao(emprestimo.descricao);
+    setDescricao(emprestimo?.descricao);
   }, [emprestimo]);
 
   useEffect(() => {
-    setIsDataOkToUpdate(!(emprestimo.descricao === descricao));
+    setIsDataOkToUpdate(!(emprestimo?.descricao === descricao));
   }, [descricao]);
+
+  useEffect(() => {
+    setDescricao(emprestimo?.descricao);
+  }, []);
 
   return (
     <Modal isOpen={isOpen} onClick={onClick} height={height} width="460">
@@ -55,7 +58,7 @@ function ModalEmprestimo({
               placeholder="Insira observações do empréstimo"
               lessHover
               value={descricao}
-              disabled={emprestimo.status === 'Finalizado'}
+              disabled={emprestimo?.status === 'Finalizado'}
             />
           </LabelContainer>
         </ModalContentWrapper>
@@ -70,7 +73,7 @@ function ModalEmprestimo({
             marginBottom="30px"
           />
           <Button
-            disabled={emprestimo.status === 'Finalizado' || !isDataOkToUpdate}
+            disabled={emprestimo?.status === 'Finalizado' || !isDataOkToUpdate}
             text="atualizar"
             marginBottom="30px"
             type="submit"

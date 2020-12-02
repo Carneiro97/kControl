@@ -200,8 +200,11 @@ function Home() {
   function handleIsOpenModalKit() {
     setIsOpenModalKit(!isOpenModalKit);
   }
-  function handleIsOpenModalEmprestimo(e) {
-    // console.log(e.target.parent);
+
+  function handleIsOpenModalEmprestimo(row) {
+    setSelectedEmprestimo(
+      emprestimos.filter((emprestimo) => emprestimo._id === row._id)[0]
+    );
     setIsOpenModalEmprestimo(!isOpenModalEmprestimo);
   }
 

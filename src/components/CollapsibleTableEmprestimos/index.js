@@ -267,7 +267,7 @@ export default function CollapsibleTable({
               onClick={rowClick}
               key={row._id}
               row={row}
-              onClickObs={onClickObs}
+              onClickObs={() => onClickObs(row)}
             />
           ))}
         </TableBody>
