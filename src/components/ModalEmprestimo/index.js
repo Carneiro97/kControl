@@ -32,6 +32,7 @@ function ModalEmprestimo({
       },
     ];
     handlePatchEmprestimo(emprestimo?._id, params);
+    setIsOpen(false);
   }
 
   useEffect(() => {
