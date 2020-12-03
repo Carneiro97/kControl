@@ -55,17 +55,29 @@ function ModalNovoKit({ setIsOpen, isOpen, onClick, height }) {
   }, [isOpen]);
 
   useEffect(() => {
-    setAllFieldsOk(
-      nome !== null &&
-        nome !== '' &&
-        descricao !== null &&
-        descricao !== '' &&
-        ocorrencia !== null &&
-        ocorrencia !== '' &&
-        selectedStatus !== null
-        ? true
-        : false
-    );
+    if (selectedStatus === StatusKitEnum.returnName[3]) {
+      setAllFieldsOk(
+        nome !== null &&
+          nome !== '' &&
+          descricao !== null &&
+          descricao !== '' &&
+          ocorrencia !== null &&
+          ocorrencia !== '' &&
+          selectedStatus !== null
+          ? true
+          : false
+      );
+    } else {
+      setAllFieldsOk(
+        nome !== null &&
+          nome !== '' &&
+          descricao !== null &&
+          descricao !== '' &&
+          selectedStatus !== null
+          ? true
+          : false
+      );
+    }
   }, [nome, descricao, selectedStatus, ocorrencia]);
 
   return (
