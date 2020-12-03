@@ -15,6 +15,7 @@ import StoreContext from '../../store/Context';
 function ModalNovoKit({ setIsOpen, isOpen, onClick, height }) {
   const [descricao, setDescricao] = useState('');
   const [nome, setNome] = useState('');
+  const [ocorrencia, setOcorrencia] = useState('');
   const [selectedStatus, setSelectedStatus] = useState(null);
   const [allFieldsOk, setAllFieldsOk] = useState(false);
   const { handleNewKit } = useContext(StoreContext);
@@ -22,6 +23,7 @@ function ModalNovoKit({ setIsOpen, isOpen, onClick, height }) {
   function handleNome(e) {
     setNome(e.target.value);
   }
+
   function handleDescricao(e) {
     setDescricao(e.target.value);
   }
@@ -30,13 +32,17 @@ function ModalNovoKit({ setIsOpen, isOpen, onClick, height }) {
     setSelectedStatus(e.target.dataset.text);
   }
 
+  function handleOcorrencia(e) {
+    setOcorrencia(e.target.value);
+  }
+
   function handleSubmit(data) {
     const params = {
       nome: data.nome,
       descricao: data.descricao,
       status: data.status,
+      ocorrencia: data.ocorrencia,
     };
-    console.log(params);
     handleNewKit(params);
     setIsOpen(false);
   }
@@ -54,11 +60,13 @@ function ModalNovoKit({ setIsOpen, isOpen, onClick, height }) {
         nome !== '' &&
         descricao !== null &&
         descricao !== '' &&
+        ocorrencia !== null &&
+        ocorrencia !== '' &&
         selectedStatus !== null
         ? true
         : false
     );
-  }, [nome, descricao, selectedStatus]);
+  }, [nome, descricao, selectedStatus, ocorrencia]);
 
   return (
     <Modal isOpen={isOpen} onClick={onClick} height={height} width="460">
@@ -87,6 +95,16 @@ function ModalNovoKit({ setIsOpen, isOpen, onClick, height }) {
             headerText={selectedStatus || 'Selecione o status'}
             name="status"
           />
+          {selectedStatus === StatusKitEnum.returnName[3] ? (
+            <LabelContainer text="Ocorrência">
+              <TextArea
+                name="ocorrencia"
+                handleChange={handleOcorrencia}
+                placeholder="Insira a ocorrência do kit"
+                lessHover
+              />
+            </LabelContainer>
+          ) : null}
         </ModalContentWrapper>
         <ModalFooter
           justifyContent="space-between"
